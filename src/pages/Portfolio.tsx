@@ -82,9 +82,17 @@ const Portfolio = () => {
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Home</span>
             </button>
-            <div className="text-white/90">
-              <h2 className="text-xl font-semibold">Tue, October 07, 2025</h2>
-              <p className="text-sm">04:11 PM</p>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate("/goals")}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm border border-white/20"
+              >
+                My Goals
+              </button>
+              <div className="text-white/90">
+                <h2 className="text-xl font-semibold">Tue, October 07, 2025</h2>
+                <p className="text-sm">04:11 PM</p>
+              </div>
             </div>
           </div>
 
