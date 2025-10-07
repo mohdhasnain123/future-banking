@@ -2,6 +2,9 @@ import { Header } from "@/components/Header";
 import { TaskList } from "@/components/TaskList";
 import { GeometricOverlay } from "@/components/GeometricOverlay";
 import { Task } from "@/components/TaskCard";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 
 const mockTasks: Task[] = [
@@ -22,6 +25,8 @@ const mockTasks: Task[] = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image */}
@@ -45,6 +50,16 @@ const Index = () => {
             {/* Left side - Header */}
             <div className="pt-8">
               <Header userName="Vick" />
+              <div className="mt-8">
+                <Button 
+                  onClick={() => navigate("/portfolio")}
+                  className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 transition-all"
+                  size="lg"
+                >
+                  View Portfolio
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
             </div>
             
             {/* Right side - Tasks */}
