@@ -2,140 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Health Provider Dashboard Design System - Futuristic Medical Theme */
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
 
 @layer base {
   :root {
-    /* Cyberpunk Core - Dark futuristic backgrounds */
-    --background: 240 10% 8%;
-    --foreground: 180 100% 85%;
+    --background: 210 100% 97%;
+    --foreground: 220 40% 10%;
 
-    /* Card system - Dark with neon glow */
-    --card: 240 15% 12%;
-    --card-foreground: 180 95% 90%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 10%;
 
-    /* Popover system */
-    --popover: 240 20% 10%;
-    --popover-foreground: 180 95% 90%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 40% 10%;
 
-    /* Neon primary - Electric blue */
-    --primary: 200 100% 60%;
-    --primary-foreground: 240 10% 8%;
-    --primary-glow: 200 100% 70%;
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Cyberpunk secondary - Neon green */
-    --secondary: 140 100% 50%;
-    --secondary-foreground: 240 10% 8%;
+    --secondary: 30 60% 70%;
+    --secondary-foreground: 30 30% 20%;
 
-    /* Tech accent - Hot pink neon */
-    --accent: 320 100% 65%;
-    --accent-foreground: 240 10% 8%;
+    --muted: 220 20% 90%;
+    --muted-foreground: 220 20% 40%;
 
-    /* Muted elements - Dark grays with hint of blue */
-    --muted: 240 15% 18%;
-    --muted-foreground: 240 20% 65%;
+    --accent: 220 70% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Status colors - Vibrant cyberpunk */
-    --success: 140 100% 50%;
-    --warning: 45 100% 60%;
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 240 10% 8%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs - Subtle neon */
-    --border: 240 25% 25%;
-    --input: 240 20% 15%;
-    --ring: 200 100% 60%;
+    --border: 220 30% 85%;
+    --input: 220 30% 85%;
+    --ring: 220 70% 50%;
 
-    /* Cyberpunk gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(200 100% 60%), hsl(280 100% 70%));
-    --gradient-secondary: linear-gradient(135deg, hsl(140 100% 50%), hsl(200 100% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(320 100% 65%), hsl(280 100% 70%));
-    --gradient-card: linear-gradient(145deg, hsl(240 15% 12%), hsl(240 20% 8%));
-    --gradient-bg: linear-gradient(180deg, hsl(240 10% 8%), hsl(240 15% 5%));
+    --radius: 1rem;
 
-    /* Neon shadows */
-    --shadow-sm: 0 2px 8px hsl(200 100% 50% / 0.2);
-    --shadow-md: 0 4px 16px hsl(200 100% 50% / 0.3);
-    --shadow-lg: 0 8px 32px hsl(200 100% 50% / 0.4);
-    --shadow-glow: 0 0 24px hsl(200 100% 60% / 0.5);
-
-    /* Chart colors - Vibrant cyberpunk palette */
-    --chart-1: 200 100% 60%;  /* Electric blue */
-    --chart-2: 140 100% 50%;  /* Neon green */
-    --chart-3: 320 100% 65%;  /* Hot pink */
-    --chart-4: 45 100% 60%;   /* Cyber orange */
-    --chart-5: 280 100% 70%;  /* Purple neon */
-    --chart-6: 0 100% 65%;    /* Neon red */
-    --chart-7: 60 100% 50%;   /* Lime green */
-    --chart-8: 190 100% 65%;  /* Cyan neon */
-
-    --radius: 0.75rem;
+    /* Glassmorphism tokens */
+    --glass-bg: 0 0% 10%;
+    --glass-border: 0 0% 100%;
+    --glass-shadow: 0 0% 0%;
+    
+    /* Priority colors */
+    --priority-low: 200 70% 60%;
+    --priority-medium: 45 90% 65%;
+    --priority-high: 350 85% 65%;
+    
+    /* Geometric overlay colors */
+    --geo-blue: 220 70% 50%;
+    --geo-peach: 30 60% 70%;
+    
+    /* Timeline */
+    --timeline-dot: 150 70% 55%;
+    --timeline-line: 150 70% 55%;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    /* Enhanced cyberpunk dark mode */
-    --background: 240 15% 3%;
-    --foreground: 180 100% 90%;
+    --background: 220 40% 10%;
+    --foreground: 0 0% 100%;
 
-    --card: 240 20% 8%;
-    --card-foreground: 180 100% 95%;
+    --card: 220 30% 15%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 240 25% 6%;
-    --popover-foreground: 180 100% 95%;
+    --popover: 220 30% 15%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 200 100% 70%;
-    --primary-foreground: 240 15% 3%;
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 140 100% 60%;
-    --secondary-foreground: 240 15% 3%;
+    --secondary: 30 60% 70%;
+    --secondary-foreground: 30 30% 20%;
 
-    --muted: 240 20% 15%;
-    --muted-foreground: 240 30% 70%;
+    --muted: 220 30% 20%;
+    --muted-foreground: 220 20% 60%;
 
-    --accent: 320 100% 75%;
-    --accent-foreground: 240 15% 3%;
+    --accent: 220 70% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 70%;
-    --destructive-foreground: 240 15% 3%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 30% 20%;
-    --input: 240 25% 12%;
-    --ring: 200 100% 70%;
+    --border: 220 30% 25%;
+    --input: 220 30% 25%;
+    --ring: 220 70% 50%;
     
-    --sidebar-background: 240 20% 5%;
-    --sidebar-foreground: 180 95% 85%;
-    --sidebar-primary: 200 100% 60%;
-    --sidebar-primary-foreground: 240 10% 8%;
-    --sidebar-accent: 240 25% 12%;
-    --sidebar-accent-foreground: 180 95% 85%;
-    --sidebar-border: 240 30% 18%;
-    --sidebar-ring: 200 100% 60%;
-
-    /* Enhanced chart colors for dark mode */
-    --chart-1: 200 100% 70%;  /* Brighter electric blue */
-    --chart-2: 140 100% 60%;  /* Brighter neon green */
-    --chart-3: 320 100% 75%;  /* Brighter hot pink */
-    --chart-4: 45 100% 70%;   /* Brighter cyber orange */
-    --chart-5: 280 100% 80%;  /* Brighter purple neon */
-    --chart-6: 0 100% 75%;    /* Brighter neon red */
-    --chart-7: 60 100% 60%;   /* Brighter lime green */
-    --chart-8: 190 100% 75%;  /* Brighter cyan neon */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -145,48 +112,28 @@
   }
 
   body {
-    @apply bg-gradient-bg text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    @apply bg-background text-foreground font-sans;
   }
+}
 
-  /* Cyberpunk glow effects */
-  .neon-glow {
-    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+@layer utilities {
+  .glass-panel {
+    @apply backdrop-blur-xl bg-[hsl(var(--glass-bg)/0.4)] border border-[hsl(var(--glass-border)/0.1)] rounded-3xl shadow-2xl;
   }
-
-  .cyber-grid {
-    background-image: 
-      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
+  
+  .glass-card {
+    @apply backdrop-blur-md bg-[hsl(var(--glass-bg)/0.3)] border border-[hsl(var(--glass-border)/0.1)] rounded-2xl;
   }
-
-  /* Interactive chart elements */
-  .chart-interactive {
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   }
-
-  .chart-interactive:hover {
-    filter: brightness(1.2) saturate(1.3);
-    transform: scale(1.02);
+  
+  .perspective-1000 {
+    perspective: 1000px;
   }
-
-  /* Scrollbar styling for cyberpunk theme */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary));
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary-glow));
+  
+  .rotate-y-6 {
+    transform: rotateY(6deg);
   }
 }
