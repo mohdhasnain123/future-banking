@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Home, Plane, Sprout, Cat, ArrowLeft, Plus, Minus } from "lucide-react";
+import { Home, Plane, Sprout, Cat, ArrowLeft, Plus, Minus, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
@@ -175,8 +175,20 @@ const Goals = () => {
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Portfolio</span>
             </button>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">My Goals</h1>
-            <p className="text-white/70 text-lg">Track your financial objectives and celebrate your progress</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">My Goals</h1>
+                <p className="text-white/70 text-lg">Track your financial objectives and celebrate your progress</p>
+              </div>
+              <Button
+                onClick={() => navigate("/updated-calendar")}
+                className="glass-card border-2 border-white/30 text-white hover:bg-white/20 transition-all"
+                size="lg"
+              >
+                <Calendar className="mr-2 w-5 h-5" />
+                Updated Calendar
+              </Button>
+            </div>
           </div>
 
           {/* Goals Grid */}

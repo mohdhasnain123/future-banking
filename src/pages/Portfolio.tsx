@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Bitcoin, Globe, Building2, ShoppingCart, CreditCard, Plane, Send, Heart, Coffee, ArrowLeft } from "lucide-react";
+import { TrendingUp, Bitcoin, Globe, Building2, ShoppingCart, CreditCard, Plane, Send, Heart, Coffee, ArrowLeft, Shield, Leaf, Home, Car, Briefcase, Heart as HeartIcon, TreePine, Droplet, Wind, Recycle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 
@@ -57,6 +57,74 @@ const Portfolio = () => {
     { year: 2038, value: 280 },
     { year: 2039, value: 320 },
     { year: 2040, value: 360 },
+  ];
+
+  const insurances = [
+    { 
+      name: "Life Insurance", 
+      coverage: "$500,000", 
+      premium: "$89/month", 
+      icon: HeartIcon, 
+      status: "Active",
+      details: "Comprehensive coverage for your family's future security"
+    },
+    { 
+      name: "Health Insurance", 
+      coverage: "$2M", 
+      premium: "$320/month", 
+      icon: Shield, 
+      status: "Active",
+      details: "Premium health coverage with global network access"
+    },
+    { 
+      name: "Home Insurance", 
+      coverage: "$750,000", 
+      premium: "$125/month", 
+      icon: Home, 
+      status: "Active",
+      details: "Full property protection including natural disasters"
+    },
+    { 
+      name: "Auto Insurance", 
+      coverage: "$150,000", 
+      premium: "$95/month", 
+      icon: Car, 
+      status: "Active",
+      details: "Comprehensive auto coverage with roadside assistance"
+    },
+  ];
+
+  const esgMetrics = [
+    {
+      category: "Environmental",
+      icon: TreePine,
+      score: 92,
+      metrics: [
+        { label: "Carbon Footprint", value: "15 tons CO₂/year", target: "12 tons CO₂/year" },
+        { label: "Renewable Energy", value: "78%", target: "100%" },
+        { label: "Waste Reduction", value: "65%", target: "80%" }
+      ]
+    },
+    {
+      category: "Social",
+      icon: Heart,
+      score: 88,
+      metrics: [
+        { label: "Community Investment", value: "$8.5K", target: "$10K" },
+        { label: "Fair Trade Products", value: "82%", target: "90%" },
+        { label: "Diversity Index", value: "85/100", target: "95/100" }
+      ]
+    },
+    {
+      category: "Governance",
+      icon: Briefcase,
+      score: 95,
+      metrics: [
+        { label: "Ethical Investments", value: "96%", target: "100%" },
+        { label: "Transparency Score", value: "94/100", target: "100/100" },
+        { label: "Compliance Rate", value: "100%", target: "100%" }
+      ]
+    }
   ];
 
   return (
@@ -378,6 +446,184 @@ const Portfolio = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* Insurance Coverage Section */}
+          <div className="mt-8">
+            <div className="mb-6 perspective-1000">
+              <h2 className="text-4xl font-bold text-white relative" style={{
+                transform: 'translateZ(20px)',
+                textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)',
+                letterSpacing: '0.05em'
+              }}>
+                Insurance Coverage
+              </h2>
+              <div className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2" 
+                style={{ transform: 'translateZ(10px)' }} />
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {insurances.map((insurance) => (
+                <Dialog key={insurance.name}>
+                  <DialogTrigger asChild>
+                    <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000 group">
+                      <CardContent className="p-6" style={{ transform: 'translateZ(10px)' }}>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                            style={{ transform: 'translateZ(8px)' }}>
+                            <insurance.icon className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                            {insurance.status}
+                          </Badge>
+                        </div>
+                        <h3 className="text-white font-semibold text-lg mb-2">{insurance.name}</h3>
+                        <div className="space-y-1 text-white/70 text-sm">
+                          <p>Coverage: <span className="text-white font-semibold">{insurance.coverage}</span></p>
+                          <p>Premium: <span className="text-white font-semibold">{insurance.premium}</span></p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </DialogTrigger>
+                  <DialogContent className="bg-background/95 backdrop-blur-sm">
+                    <DialogHeader>
+                      <DialogTitle>{insurance.name}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <p className="text-sm text-muted-foreground">{insurance.details}</p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span>Coverage Amount:</span>
+                          <span className="font-semibold">{insurance.coverage}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Monthly Premium:</span>
+                          <span className="font-semibold">{insurance.premium}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Status:</span>
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                            {insurance.status}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Annual Cost:</span>
+                          <span className="font-semibold">
+                            ${(parseFloat(insurance.premium.replace(/[^0-9.]/g, '')) * 12).toFixed(0)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
+          </div>
+
+          {/* ESG Sustainability Section */}
+          <div className="mt-8 mb-8">
+            <div className="mb-6 perspective-1000">
+              <h2 className="text-4xl font-bold text-white relative" style={{
+                transform: 'translateZ(20px)',
+                textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)',
+                letterSpacing: '0.05em'
+              }}>
+                ESG Sustainability
+              </h2>
+              <div className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2" 
+                style={{ transform: 'translateZ(10px)' }} />
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {esgMetrics.map((category) => (
+                <Dialog key={category.category}>
+                  <DialogTrigger asChild>
+                    <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                              style={{ transform: 'translateZ(8px)' }}>
+                              <category.icon className="w-6 h-6 text-white" />
+                            </div>
+                            <CardTitle className="text-white">{category.category}</CardTitle>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="mb-4">
+                          <div className="flex justify-between mb-2">
+                            <span className="text-white/70 text-sm">ESG Score</span>
+                            <span className="text-white font-bold text-lg">{category.score}/100</span>
+                          </div>
+                          <div className="w-full bg-white/10 rounded-full h-3">
+                            <div
+                              className="bg-gradient-to-r from-primary to-green-400 h-3 rounded-full transition-all"
+                              style={{ width: `${category.score}%` }}
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          {category.metrics.slice(0, 2).map((metric) => (
+                            <div key={metric.label} className="text-white/70 text-sm">
+                              <span className="text-white/90">{metric.label}:</span> {metric.value}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </DialogTrigger>
+                  <DialogContent className="bg-background/95 backdrop-blur-sm">
+                    <DialogHeader>
+                      <DialogTitle>{category.category} Details</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                        <span className="font-semibold">Overall Score</span>
+                        <span className="text-2xl font-bold text-green-600">{category.score}/100</span>
+                      </div>
+                      <div className="space-y-3">
+                        {category.metrics.map((metric) => (
+                          <div key={metric.label} className="space-y-1">
+                            <div className="flex justify-between text-sm">
+                              <span className="font-medium">{metric.label}</span>
+                              <span className="text-muted-foreground">Target: {metric.target}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-green-600">{metric.value}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      ))}
+    </div>
+          </div>
+
+          {/* Data Source Information */}
+          <Card className="mt-8 bg-glass-bg/60 backdrop-blur-md border-2 border-white/10">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="bg-blue-500/20 p-3 rounded-lg">
+                  <Shield className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold mb-2">Data Source & Security</h3>
+                  <p className="text-white/70 text-sm mb-3">
+                    All portfolio data is aggregated from verified sources and secured using blockchain technology. 
+                    Information includes real-time market data, institutional holdings, and verified transactions.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Real-time Market Data</span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Blockchain Verified</span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Bank-Level Encryption</span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Multi-Source Aggregation</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

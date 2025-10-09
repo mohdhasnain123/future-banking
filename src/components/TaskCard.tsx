@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ChevronDown, MapPin, Clock, Briefcase, Coffee, Dumbbell, ShoppingCart, Users, Calendar as CalendarIcon } from "lucide-react";
+import { ChevronDown, MapPin, Clock, Briefcase, Coffee, Dumbbell, ShoppingCart, Users, Calendar as CalendarIcon, Video } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export interface Task {
   id: string;
@@ -10,6 +11,7 @@ export interface Task {
   location: string;
   priority: "low" | "medium" | "high";
   icon?: string;
+  onClick?: string;
 }
 
 const taskIcons = {
@@ -19,6 +21,7 @@ const taskIcons = {
   shopping: ShoppingCart,
   meeting: Users,
   calendar: CalendarIcon,
+  video: Video,
 };
 
 interface TaskCardProps {
@@ -27,6 +30,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -51,6 +55,14 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
 
   const TaskIcon = getTaskIcon();
 
+  const handleClick = () => {
+    if (task.onClick) {
+      navigate(task.onClick);
+    } else {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
     <div className="relative pl-8 pb-8 last:pb-0">
       {/* Timeline dot - now 3D */}
@@ -69,7 +81,7 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
 
       {/* 3D Task card */}
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={handleClick}
         onMouseDown={() => setIsPressed(true)}
         onMouseUp={() => setIsPressed(false)}
         onMouseLeave={() => setIsPressed(false)}
