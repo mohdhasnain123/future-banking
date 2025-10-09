@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   ArrowLeft, 
   TrendingUp, 
@@ -14,7 +15,10 @@ import {
   Calendar,
   PiggyBank,
   Shield,
-  Clock
+  Clock,
+  Car,
+  MapPin,
+  Cloud
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
@@ -23,6 +27,8 @@ import dreamHouse from "@/assets/dream-house.jpg";
 const WealthAdvisor = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [cabBookingOpen, setCabBookingOpen] = useState(false);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
 
   const currentAssets = {
     crypto: 25000,
@@ -138,6 +144,12 @@ const WealthAdvisor = () => {
     }
   ];
 
+  const todaysTasks = [
+    { id: 1, task: "Review investment portfolio", time: "10:00 AM", completed: true },
+    { id: 2, task: "Wealth advisor consultation", time: "2:00 PM", completed: false },
+    { id: 3, task: "Submit loan application", time: "4:00 PM", completed: false },
+  ];
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image */}
@@ -150,23 +162,34 @@ const WealthAdvisor = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
       
       {/* Content */}
-      <div className="relative z-10 min-h-screen p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <button
-              onClick={() => navigate("/updated-calendar")}
-              className="flex items-center gap-2 text-white/90 hover:text-white transition-colors mb-6"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Calendar</span>
-            </button>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Wealth Advisor Consultation</h1>
-            <p className="text-white/70 text-lg">Strategic planning for your dream home purchase</p>
-          </div>
+      <div className="relative z-10 min-h-screen">
+        {/* Fixed Header Section - Non-scrollable */}
+        <div className="sticky top-0 z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm p-8 pb-4">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  onClick={() => navigate("/updated-calendar")}
+                  className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span>Back to Calendar</span>
+                </button>
+                <Button
+                  onClick={() => setCabBookingOpen(true)}
+                  className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+                >
+                  <Car className="w-4 h-4" />
+                  Cab Booking
+                </Button>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Wealth Advisor Consultation</h1>
+              <p className="text-white/70 text-lg">Strategic planning for your dream home purchase</p>
+            </div>
 
-          {/* Wealth Advisor Video & Blockchain Info */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {/* Wealth Advisor Video & Blockchain Info - Non-scrollable */}
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Video Call */}
             <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20">
               <CardContent className="p-0">
@@ -225,8 +248,13 @@ const WealthAdvisor = () => {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </div>
+        </div>
 
+        {/* Scrollable Content */}
+        <div className="p-8 pt-0">
+          <div className="max-w-7xl mx-auto">
           {/* Dream House Image */}
           <div className="mb-8 rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl">
             <img 
@@ -447,8 +475,172 @@ const WealthAdvisor = () => {
               </Button>
             </div>
           )}
+          </div>
         </div>
       </div>
+
+      {/* Cab Booking Dialog */}
+      <Dialog open={cabBookingOpen} onOpenChange={setCabBookingOpen}>
+        <DialogContent className="max-w-3xl bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-white/20">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-white">Cab Booking Appointment</DialogTitle>
+            <p className="text-white/60">15 July 2035, Sun • 02:00 pm</p>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Appointment Details */}
+            <Card className="bg-black/40 border-white/20">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Left Side - Details */}
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-white font-semibold text-lg mb-2">
+                        Wealth Advisor Consultation{" "}
+                        <span className="text-green-400 text-sm">(Crypto Insurance Verified)</span>
+                      </h3>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Time</span>
+                        <span className="text-white font-semibold">3:00 PM - 4:00 PM</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Address</span>
+                        <span className="text-white font-semibold text-right">
+                          13th Street 47 W 13th St, New York, NY 10011, USA
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Time to reach</span>
+                        <span className="text-white font-semibold">30 min</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/60">Weather</span>
+                        <span className="text-white font-semibold flex items-center gap-1">
+                          <Cloud className="w-4 h-4" />
+                          90°F (Partly Cloudy)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Side - Map Placeholder */}
+                  <div className="bg-gray-700/50 rounded-lg flex items-center justify-center min-h-[200px]">
+                    <div className="text-center text-white/40">
+                      <MapPin className="w-12 h-12 mx-auto mb-2" />
+                      <p className="text-sm">Map View</p>
+                      <p className="text-xs">13th Street, NY</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Today's Tasks */}
+            <div>
+              <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                Today's Tasks
+              </h3>
+              <div className="space-y-2">
+                {todaysTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="bg-black/40 border border-white/10 rounded-lg p-3 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      {task.completed ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-400" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-white/40" />
+                      )}
+                      <span className={task.completed ? "text-white/50 line-through" : "text-white"}>
+                        {task.task}
+                      </span>
+                    </div>
+                    <span className="text-white/60 text-sm">{task.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Confirm Button */}
+            <Button
+              onClick={() => {
+                setCabBookingOpen(false);
+                setConfirmationOpen(true);
+              }}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg"
+            >
+              Confirm to book a cab
+              <span className="text-sm ml-2">(Approx. $10)</span>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={confirmationOpen} onOpenChange={setConfirmationOpen}>
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-green-500/30">
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Cab booking is confirmed! Your cab is 10 min away
+              </h2>
+            </div>
+
+            {/* Cab Details */}
+            <Card className="bg-black/40 border-white/20">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-white/60">Cab Number</span>
+                  <span className="text-white font-bold text-xl">A BC 1224</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-white/60">Cab Model</span>
+                  <span className="text-white font-bold text-xl">Tesla</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Updated Today's Tasks */}
+            <div>
+              <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                Today's Tasks
+              </h3>
+              <div className="space-y-2">
+                {todaysTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="bg-black/40 border border-white/10 rounded-lg p-3 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      {task.completed ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-400" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-white/40" />
+                      )}
+                      <span className={task.completed ? "text-white/50 line-through" : "text-white"}>
+                        {task.task}
+                      </span>
+                    </div>
+                    <span className="text-white/60 text-sm">{task.time}</span>
+                  </div>
+                ))}
+                {/* New Task - Cab Arriving */}
+                <div className="bg-green-500/20 border border-green-500/40 rounded-lg p-3 flex items-center gap-3">
+                  <Car className="w-5 h-5 text-green-400 animate-pulse" />
+                  <span className="text-white font-semibold">Cab arriving in 10 mins</span>
+                  <Clock className="w-4 h-4 text-green-400 ml-auto" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
