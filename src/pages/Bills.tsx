@@ -33,6 +33,9 @@ const Bills = () => {
 
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(null);
+  const [showPaymentDetailsDialog, setShowPaymentDetailsDialog] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const paymentMethods = [
     { id: "crypto", name: "Cryptocurrency", icon: Bitcoin, description: "Pay with BTC, ETH, or USDT" },
@@ -41,25 +44,62 @@ const Bills = () => {
     { id: "card", name: "Credit/Debit Card", icon: CreditCard, description: "Visa, Mastercard, Amex" },
   ];
 
+  const savedPaymentDetails: Record<string, Array<{id: string, name: string, details: string}>> = {
+    crypto: [
+      { id: "btc1", name: "Bitcoin Wallet", details: "bc1q...x7z9" },
+      { id: "eth1", name: "Ethereum Wallet", details: "0x742...d8f4" },
+      { id: "usdt1", name: "USDT (TRC20)", details: "TRX...k3m9" },
+    ],
+    wallet: [
+      { id: "apple1", name: "Apple Pay", details: "iPhone 15 Pro" },
+      { id: "google1", name: "Google Pay", details: "****1234" },
+      { id: "paypal1", name: "PayPal", details: "john@example.com" },
+    ],
+    p2p: [
+      { id: "venmo1", name: "Venmo", details: "@johnsmith" },
+      { id: "zelle1", name: "Zelle", details: "john@email.com" },
+      { id: "cash1", name: "Cash App", details: "$johnsmith" },
+    ],
+    card: [
+      { id: "visa1", name: "Visa", details: "**** **** **** 4532" },
+      { id: "master1", name: "Mastercard", details: "**** **** **** 8721" },
+      { id: "amex1", name: "Amex", details: "**** ****** *9876" },
+    ],
+  };
+
   const handlePayBill = (bill: Bill) => {
     setSelectedBill(bill);
     setShowPaymentDialog(true);
   };
 
   const handlePaymentMethod = (method: string) => {
-    if (selectedBill) {
-      setBills(bills.map(b => 
-        b.id === selectedBill.id ? { ...b, status: "paid" as const } : b
-      ));
-      
-      toast({
-        title: "Payment Successful",
-        description: `${selectedBill.name} paid via ${paymentMethods.find(m => m.id === method)?.name}`,
-      });
-      
-      setShowPaymentDialog(false);
-      setSelectedBill(null);
-    }
+    setSelectedPaymentType(method);
+    setShowPaymentDialog(false);
+    setShowPaymentDetailsDialog(true);
+  };
+
+  const handlePaymentDetailSelection = () => {
+    setShowPaymentDetailsDialog(false);
+    setIsProcessing(true);
+
+    // Simulate payment processing
+    setTimeout(() => {
+      if (selectedBill) {
+        setBills(bills.map(b => 
+          b.id === selectedBill.id ? { ...b, status: "paid" as const } : b
+        ));
+        
+        setIsProcessing(false);
+        
+        toast({
+          title: "Payment Successful",
+          description: `${selectedBill.name} paid successfully`,
+        });
+        
+        setSelectedBill(null);
+        setSelectedPaymentType(null);
+      }
+    }, 3000); // 3 seconds processing time
   };
 
   const totalPending = bills.filter(b => b.status === "pending").reduce((sum, b) => sum + b.amount, 0);
@@ -178,6 +218,55 @@ const Bills = () => {
                 <p className="text-sm text-muted-foreground">{method.description}</p>
               </button>
             ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Payment Details Selection Dialog */}
+      <Dialog open={showPaymentDetailsDialog} onOpenChange={setShowPaymentDetailsDialog}>
+        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Select {paymentMethods.find(m => m.id === selectedPaymentType)?.name}</DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Choose from your saved payment methods
+            </p>
+          </DialogHeader>
+          <div className="space-y-3 mt-4">
+            {selectedPaymentType && savedPaymentDetails[selectedPaymentType]?.map((detail) => (
+              <button
+                key={detail.id}
+                onClick={handlePaymentDetailSelection}
+                className="w-full p-4 rounded-lg border-2 border-border hover:border-[hsl(142,76%,36%)] hover:bg-accent transition-all text-left group"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">{detail.name}</h3>
+                    <p className="text-sm text-muted-foreground">{detail.details}</p>
+                  </div>
+                  <CreditCard className="w-6 h-6 text-muted-foreground group-hover:text-[hsl(142,76%,36%)] transition-colors" />
+                </div>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Processing Dialog */}
+      <Dialog open={isProcessing} onOpenChange={() => {}}>
+        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-md">
+          <DialogHeader>
+            <DialogTitle>Processing Payment</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="relative w-24 h-24 mb-6">
+              <div className="absolute inset-0 border-4 border-[hsl(142,76%,36%)]/20 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-[hsl(142,76%,36%)] rounded-full border-t-transparent animate-spin"></div>
+            </div>
+            <p className="text-lg font-semibold mb-2">Processing your payment...</p>
+            <p className="text-sm text-muted-foreground text-center">
+              Please wait while we securely process your transaction.
+              <br />This may take a few moments.
+            </p>
           </div>
         </DialogContent>
       </Dialog>
