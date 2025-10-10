@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Bitcoin, Globe, Building2, ShoppingCart, CreditCard, Plane, Send, Heart, Coffee, ArrowLeft, Shield, Leaf, Home, Car, Briefcase, Heart as HeartIcon, TreePine, Droplet, Wind, Recycle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface Activity {
   id: string;
@@ -29,8 +31,8 @@ const Portfolio = () => {
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
   const assets = [
-    { name: "Global Equities", amount: 85000, icon: Globe, color: "hsl(142, 76%, 36%)" },
-    { name: "Crypto Assets", amount: 45000, icon: Bitcoin, color: "hsl(142, 76%, 36%)" },
+    { name: "Global Equities", amount: 85000, icon: Globe, color: "hsl(220, 70%, 50%)" },
+    { name: "Crypto Assets", amount: 45000, icon: Bitcoin, color: "hsl(30, 60%, 70%)" },
     { name: "Digital Real Estate", amount: 54567, icon: Building2, color: "hsl(142, 76%, 36%)" },
   ];
 
@@ -59,6 +61,13 @@ const Portfolio = () => {
     { year: 2040, value: 360 },
   ];
 
+  const quarterlyExpenditure = [
+    { quarter: "Q1 2025", amount: 45000 },
+    { quarter: "Q2 2025", amount: 52000 },
+    { quarter: "Q3 2025", amount: 48000 },
+    { quarter: "Q4 2025", amount: 55000 },
+  ];
+
   const insurances = [
     { 
       name: "Life Insurance", 
@@ -66,7 +75,10 @@ const Portfolio = () => {
       premium: "$89/month", 
       icon: HeartIcon, 
       status: "Active",
-      details: "Comprehensive coverage for your family's future security"
+      details: "Comprehensive coverage for your family's future security",
+      startDate: "January 15, 2023",
+      endDate: "January 15, 2043",
+      nextDue: "November 15, 2025"
     },
     { 
       name: "Health Insurance", 
@@ -74,7 +86,10 @@ const Portfolio = () => {
       premium: "$320/month", 
       icon: Shield, 
       status: "Active",
-      details: "Premium health coverage with global network access"
+      details: "Premium health coverage with global network access",
+      startDate: "March 1, 2024",
+      endDate: "March 1, 2029",
+      nextDue: "November 1, 2025"
     },
     { 
       name: "Home Insurance", 
@@ -82,7 +97,10 @@ const Portfolio = () => {
       premium: "$125/month", 
       icon: Home, 
       status: "Active",
-      details: "Full property protection including natural disasters"
+      details: "Full property protection including natural disasters",
+      startDate: "June 10, 2022",
+      endDate: "June 10, 2032",
+      nextDue: "November 10, 2025"
     },
     { 
       name: "Auto Insurance", 
@@ -90,7 +108,10 @@ const Portfolio = () => {
       premium: "$95/month", 
       icon: Car, 
       status: "Active",
-      details: "Comprehensive auto coverage with roadside assistance"
+      details: "Comprehensive auto coverage with roadside assistance",
+      startDate: "February 20, 2023",
+      endDate: "February 20, 2026",
+      nextDue: "November 20, 2025"
     },
   ];
 
@@ -251,82 +272,54 @@ const Portfolio = () => {
               <CardContent>
                 <div className="flex items-center justify-center py-8">
                   <svg width="200" height="200" viewBox="0 0 200 200" className="cursor-pointer">
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(142, 76%, 36%)" strokeWidth="30" strokeDasharray="231 500" transform="rotate(-90 100 100)" />
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(142, 60%, 45%)" strokeWidth="30" strokeDasharray="120 500" strokeDashoffset="-231" transform="rotate(-90 100 100)" />
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(142, 50%, 55%)" strokeWidth="30" strokeDasharray="150 500" strokeDashoffset="-351" transform="rotate(-90 100 100)" />
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(220, 70%, 50%)" strokeWidth="30" strokeDasharray="231 500" transform="rotate(-90 100 100)" />
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(30, 60%, 70%)" strokeWidth="30" strokeDasharray="120 500" strokeDashoffset="-231" transform="rotate(-90 100 100)" />
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(142, 76%, 36%)" strokeWidth="30" strokeDasharray="150 500" strokeDashoffset="-351" transform="rotate(-90 100 100)" />
                   </svg>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
+                    <div className="w-3 h-3 rounded-full bg-[hsl(220,70%,50%)]" />
                     <span>Equities 46%</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,60%,45%)]" />
+                    <div className="w-3 h-3 rounded-full bg-[hsl(30,60%,70%)]" />
                     <span>Crypto 24%</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,50%,55%)]" />
+                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
                     <span>Digital RE 30%</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Financial Goals */}
+            {/* Quarterly Expenditure */}
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
               <CardHeader>
-                <CardTitle className="text-white">Financial Goals</CardTitle>
-                <p className="text-white/60 text-sm">Stay on track</p>
+                <CardTitle className="text-white">Quarterly Expenditure</CardTitle>
+                <p className="text-white/60 text-sm">Track your spending patterns</p>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {goals.map((goal) => (
-                  <Dialog key={goal.name}>
-                    <DialogTrigger asChild>
-                      <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                        <div className="flex justify-between mb-2">
-                          <span className="text-white text-sm">{goal.name}</span>
-                          <span className="text-white/70 text-sm">{goal.progress}%</span>
-                        </div>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-white/50 text-xs">${goal.current.toLocaleString()}</span>
-                          <span className="text-white/50 text-xs">${goal.target.toLocaleString()}</span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
-                          <div
-                            className="bg-[hsl(142,76%,36%)] h-2 rounded-full transition-all"
-                            style={{ width: `${goal.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent className="bg-background/95 backdrop-blur-sm">
-                      <DialogHeader>
-                        <DialogTitle>{goal.name}</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span>Current Amount:</span>
-                            <span className="font-semibold">${goal.current.toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Target Amount:</span>
-                            <span className="font-semibold">${goal.target.toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Remaining:</span>
-                            <span className="font-semibold">${(goal.target - goal.current).toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Progress:</span>
-                            <span className="font-semibold">{goal.progress}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                ))}
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    amount: {
+                      label: "Expenditure",
+                      color: "hsl(142, 76%, 36%)",
+                    },
+                  }}
+                  className="h-[200px]"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={quarterlyExpenditure}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis dataKey="quarter" stroke="rgba(255,255,255,0.6)" />
+                      <YAxis stroke="rgba(255,255,255,0.6)" />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line type="monotone" dataKey="amount" stroke="hsl(142, 76%, 36%)" strokeWidth={2} dot={{ fill: "hsl(142, 76%, 36%)", r: 4 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
               </CardContent>
             </Card>
           </div>
@@ -490,7 +483,7 @@ const Portfolio = () => {
                     </DialogHeader>
                     <div className="space-y-4">
                       <p className="text-sm text-muted-foreground">{insurance.details}</p>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <div className="flex justify-between">
                           <span>Coverage Amount:</span>
                           <span className="font-semibold">{insurance.coverage}</span>
@@ -510,6 +503,20 @@ const Portfolio = () => {
                           <span className="font-semibold">
                             ${(parseFloat(insurance.premium.replace(/[^0-9.]/g, '')) * 12).toFixed(0)}
                           </span>
+                        </div>
+                        <div className="border-t border-border pt-3 mt-3">
+                          <div className="flex justify-between mb-2">
+                            <span>Start Date:</span>
+                            <span className="font-semibold">{insurance.startDate}</span>
+                          </div>
+                          <div className="flex justify-between mb-2">
+                            <span>End Date:</span>
+                            <span className="font-semibold">{insurance.endDate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Next Due Date:</span>
+                            <span className="font-semibold text-primary">{insurance.nextDue}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
