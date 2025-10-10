@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Bitcoin, Globe, Building2, ShoppingCart, CreditCard, Plane, Send, Heart, Coffee, ArrowLeft, Shield, Leaf, Home, Car, Briefcase, Heart as HeartIcon, TreePine, Droplet, Wind, Recycle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface Activity {
@@ -61,12 +61,17 @@ const Portfolio = () => {
     { year: 2040, value: 360 },
   ];
 
-  const quarterlyExpenditure = [
-    { quarter: "Q1 2025", amount: 45000 },
-    { quarter: "Q2 2025", amount: 52000 },
-    { quarter: "Q3 2025", amount: 48000 },
-    { quarter: "Q4 2025", amount: 55000 },
+  const expenseData = [
+    { category: "Grocery", amount: 12000, details: "Monthly grocery shopping at organic markets and supermarkets", color: "hsl(142, 76%, 36%)" },
+    { category: "Apparel", amount: 8500, details: "Clothing, shoes, and accessories from premium brands", color: "hsl(220, 70%, 50%)" },
+    { category: "Electronics", amount: 15000, details: "Latest tech gadgets, smartphones, and home electronics", color: "hsl(30, 60%, 70%)" },
+    { category: "Entertainment", amount: 6500, details: "Movies, concerts, subscriptions, and leisure activities", color: "hsl(280, 65%, 60%)" },
+    { category: "Healthcare", amount: 9000, details: "Medical expenses, prescriptions, and wellness programs", color: "hsl(10, 80%, 60%)" },
+    { category: "Transportation", amount: 7500, details: "Fuel, maintenance, public transport, and ride-sharing", color: "hsl(180, 55%, 45%)" },
+    { category: "Education", amount: 11000, details: "Online courses, books, workshops, and certifications", color: "hsl(45, 85%, 55%)" },
   ];
+
+  const [selectedExpense, setSelectedExpense] = useState<typeof expenseData[0] | null>(null);
 
   const insurances = [
     { 
@@ -177,6 +182,12 @@ const Portfolio = () => {
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm border border-white/20"
               >
                 My Goals
+              </button>
+              <button
+                onClick={() => navigate("/bills")}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm border border-white/20"
+              >
+                My Bills
               </button>
               <div className="text-white/90">
                 <h2 className="text-xl font-semibold">Tue, October 07, 2025</h2>
@@ -294,11 +305,11 @@ const Portfolio = () => {
               </CardContent>
             </Card>
 
-            {/* Quarterly Expenditure */}
+            {/* Expense Categories */}
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
               <CardHeader>
-                <CardTitle className="text-white">Quarterly Expenditure</CardTitle>
-                <p className="text-white/60 text-sm">Track your spending patterns</p>
+                <CardTitle className="text-white">Expense Categories</CardTitle>
+                <p className="text-white/60 text-sm">Click on any bar for details</p>
               </CardHeader>
               <CardContent>
                 <ChartContainer
@@ -308,20 +319,54 @@ const Portfolio = () => {
                       color: "hsl(142, 76%, 36%)",
                     },
                   }}
-                  className="h-[300px] w-[550px] mt-5"
+                  className="h-[300px] w-full mt-5"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={quarterlyExpenditure}>
+                    <BarChart data={expenseData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                      <XAxis dataKey="quarter" stroke="rgba(255,255,255,0.6)" />
+                      <XAxis dataKey="category" stroke="rgba(255,255,255,0.6)" />
                       <YAxis stroke="rgba(255,255,255,0.6)" />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="amount" stroke="hsl(142, 76%, 36%)" strokeWidth={2} dot={{ fill: "hsl(142, 76%, 36%)", r: 4 }} />
-                    </LineChart>
+                      <Bar dataKey="amount" onClick={(data) => setSelectedExpense(data)}>
+                        {expenseData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} cursor="pointer" />
+                        ))}
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
             </Card>
+
+            {/* Expense Detail Dialog */}
+            <Dialog open={!!selectedExpense} onOpenChange={(open) => !open && setSelectedExpense(null)}>
+              <DialogContent className="bg-background/95 backdrop-blur-sm">
+                <DialogHeader>
+                  <DialogTitle>{selectedExpense?.category} Expenses</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>Category:</span>
+                      <span className="font-semibold">{selectedExpense?.category}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Total Amount:</span>
+                      <span className="font-semibold">${selectedExpense?.amount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>% of Total Expenses:</span>
+                      <span className="font-semibold">
+                        {selectedExpense ? ((selectedExpense.amount / expenseData.reduce((sum, e) => sum + e.amount, 0)) * 100).toFixed(1) : 0}%
+                      </span>
+                    </div>
+                    <div className="pt-2 border-t">
+                      <p className="text-sm text-muted-foreground">{selectedExpense?.details}</p>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">
