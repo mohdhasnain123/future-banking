@@ -308,7 +308,7 @@ const Portfolio = () => {
                       color: "hsl(142, 76%, 36%)",
                     },
                   }}
-                  className="h-[200px]"
+                  className="h-[300px] w-[550px] mt-5"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={quarterlyExpenditure}>
@@ -389,7 +389,7 @@ const Portfolio = () => {
               <CardHeader>
                 <CardTitle className="text-white">5-Year Wealth Projection</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="h-[350px] w-[620px] mt-14">
                 <div className="relative h-64">
                   <svg width="100%" height="100%" viewBox="0 0 600 250" className="overflow-visible">
                     <defs>
