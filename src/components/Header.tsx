@@ -41,7 +41,7 @@ export const Header = ({ userName = "Vick" }: HeaderProps) => {
           </h2>
           <p className="text-lg text-white/70">{formatTime(currentTime)}</p>
         </div>
-        <CalendarPicker />
+        {/* <CalendarPicker /> */}
       </div>
       <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white text-glow leading-tight">
         Good Morning {userName}

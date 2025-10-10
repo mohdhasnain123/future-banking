@@ -139,6 +139,9 @@ const WealthAdvisor = () => {
     }
   ];
 
+  // Adjust this value to match the actual pixel height of your fixed header section
+  const HEADER_HEIGHT = 580;
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image */}
@@ -149,36 +152,37 @@ const WealthAdvisor = () => {
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-      
-      {/* Content */}
-      <div className="relative z-10 min-h-screen">
-        {/* Fixed Header Section - Non-scrollable */}
-        <div className="sticky top-0 z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm p-8 pb-4">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={() => navigate("/updated-calendar")}
-                  className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                  <span>Back to Calendar</span>
-                </button>
-                <Button
-                  onClick={() => navigate("/cab-booking", { state: { wealthAdvisorCompleted: true } })}
-                  className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
-                >
-                  <Car className="w-4 h-4" />
-                  Cab Booking
-                </Button>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Wealth Advisor Consultation</h1>
-              <p className="text-white/70 text-lg">Strategic planning for your dream home purchase</p>
-            </div>
 
-            {/* Wealth Advisor Video & Blockchain Info - Non-scrollable */}
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+      {/* Fixed Header Section */}
+      <div
+        className="fixed top-0 left-0 w-full z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm"
+        style={{ height: HEADER_HEIGHT, pointerEvents: "auto" }}
+      >
+        <div className="max-w-7xl mx-auto p-8 pb-4">
+          {/* Header */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={() => navigate("/updated-calendar")}
+                className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back to Calendar</span>
+              </button>
+              <Button
+                onClick={() => navigate("/cab-booking", { state: { wealthAdvisorCompleted: true } })}
+                className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+              >
+                <Car className="w-4 h-4" />
+                Cab Booking
+              </Button>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Wealth Advisor Consultation</h1>
+            <p className="text-white/70 text-lg">Strategic planning for your dream home purchase</p>
+          </div>
+
+          {/* Video Call & Secure Data Access */}
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Video Call */}
             <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20">
               <CardContent className="p-0">
@@ -237,13 +241,20 @@ const WealthAdvisor = () => {
                 </div>
               </CardContent>
             </Card>
-            </div>
           </div>
         </div>
+      </div>
 
-        {/* Scrollable Content */}
-        <div className="p-8 pt-0">
-          <div className="max-w-7xl mx-auto">
+      {/* Scrollable Content Section */}
+      <div
+        className="relative z-10"
+        style={{
+          marginTop: HEADER_HEIGHT,
+          minHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          overflowY: "auto"
+        }}
+      >
+        <div className="p-8 pt-0 max-w-7xl mx-auto">
           {/* Dream House Image */}
           <div className="mb-8 rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl">
             <img 
@@ -464,7 +475,6 @@ const WealthAdvisor = () => {
               </Button>
             </div>
           )}
-          </div>
         </div>
       </div>
     </div>

@@ -100,7 +100,7 @@ const UpdatedCalendar = () => {
                     </h2>
                     <p className="text-lg text-white/70">{formatTime(currentTime)}</p>
                   </div>
-                  <CalendarPicker />
+                  {/* <CalendarPicker /> */}
                 </div>
               </header>
             </div>
