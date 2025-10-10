@@ -1,12 +1,55 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Bitcoin, Globe, Building2, ShoppingCart, CreditCard, Plane, Send, Heart, Coffee, ArrowLeft, Shield, Leaf, Home, Car, Briefcase, Heart as HeartIcon, TreePine, Droplet, Wind, Recycle } from "lucide-react";
+import {
+  TrendingUp,
+  Bitcoin,
+  Globe,
+  Building2,
+  ShoppingCart,
+  CreditCard,
+  Plane,
+  Send,
+  Heart,
+  Coffee,
+  ArrowLeft,
+  Shield,
+  Leaf,
+  Home,
+  Car,
+  Briefcase,
+  Heart as HeartIcon,
+  TreePine,
+  Droplet,
+  Wind,
+  Recycle,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 interface Activity {
   id: string;
@@ -27,28 +70,85 @@ interface Goal {
 const Portfolio = () => {
   const navigate = useNavigate();
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
+    null
+  );
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
   const assets = [
-    { name: "Global Equities", amount: 85000, icon: Globe, color: "hsl(220, 70%, 50%)" },
-    { name: "Crypto Assets", amount: 45000, icon: Bitcoin, color: "hsl(30, 60%, 70%)" },
-    { name: "Digital Real Estate", amount: 54567, icon: Building2, color: "hsl(142, 76%, 36%)" },
+    {
+      name: "Global Equities",
+      amount: 85000,
+      icon: Globe,
+      color: "hsl(220, 70%, 50%)",
+    },
+    {
+      name: "Crypto Assets",
+      amount: 45000,
+      icon: Bitcoin,
+      color: "hsl(30, 60%, 70%)",
+    },
+    {
+      name: "Digital Real Estate",
+      amount: 54567,
+      icon: Building2,
+      color: "hsl(142, 76%, 36%)",
+    },
   ];
 
   const activities: Activity[] = [
-    { id: "1", name: "Cyberdyne Systems", category: "Tech Subscription", amount: -49.99, time: "2m ago", icon: CreditCard },
-    { id: "2", name: "Orbital Foods", category: "Groceries", amount: -150.23, time: "1h ago", icon: ShoppingCart },
-    { id: "3", name: "Incoming Transfer", category: "Project payment", amount: 2500.00, time: "3h ago", icon: Send },
-    { id: "4", name: "Mars Transit", category: "Transport", amount: -25.50, time: "yesterday", icon: Plane },
-    { id: "5", name: "Solana NFT Mint", category: "Digital Assets", amount: -350.00, time: "yesterday", icon: Bitcoin },
+    {
+      id: "1",
+      name: "Cyberdyne Systems",
+      category: "Tech Subscription",
+      amount: -49.99,
+      time: "2m ago",
+      icon: CreditCard,
+    },
+    {
+      id: "2",
+      name: "Orbital Foods",
+      category: "Groceries",
+      amount: -150.23,
+      time: "1h ago",
+      icon: ShoppingCart,
+    },
+    {
+      id: "3",
+      name: "Incoming Transfer",
+      category: "Project payment",
+      amount: 2500.0,
+      time: "3h ago",
+      icon: Send,
+    },
+    {
+      id: "4",
+      name: "Mars Transit",
+      category: "Transport",
+      amount: -25.5,
+      time: "yesterday",
+      icon: Plane,
+    },
+    {
+      id: "5",
+      name: "Solana NFT Mint",
+      category: "Digital Assets",
+      amount: -350.0,
+      time: "yesterday",
+      icon: Bitcoin,
+    },
   ];
 
   const goals: Goal[] = [
     { name: "Buy a House", current: 35000, target: 50000, progress: 70 },
     { name: "Retire by 40", current: 30000, target: 100000, progress: 30 },
     { name: "Vacation", current: 1700, target: 2000, progress: 85 },
-    { name: "Donate to Greenpeace", current: 8500, target: 10000, progress: 85 },
+    {
+      name: "Donate to Greenpeace",
+      current: 8500,
+      target: 10000,
+      progress: 85,
+    },
     { name: "Pet Cafe", current: 3000, target: 20000, progress: 15 },
   ];
 
@@ -62,61 +162,98 @@ const Portfolio = () => {
   ];
 
   const expenseData = [
-    { category: "Grocery", amount: 12000, details: "Monthly grocery shopping at organic markets and supermarkets", color: "hsl(142, 76%, 36%)" },
-    { category: "Apparel", amount: 8500, details: "Clothing, shoes, and accessories from premium brands", color: "hsl(220, 70%, 50%)" },
-    { category: "Electronics", amount: 15000, details: "Latest tech gadgets, smartphones, and home electronics", color: "hsl(30, 60%, 70%)" },
-    { category: "Entertainment", amount: 6500, details: "Movies, concerts, subscriptions, and leisure activities", color: "hsl(280, 65%, 60%)" },
-    { category: "Healthcare", amount: 9000, details: "Medical expenses, prescriptions, and wellness programs", color: "hsl(10, 80%, 60%)" },
-    { category: "Transportation", amount: 7500, details: "Fuel, maintenance, public transport, and ride-sharing", color: "hsl(180, 55%, 45%)" },
-    { category: "Education", amount: 11000, details: "Online courses, books, workshops, and certifications", color: "hsl(45, 85%, 55%)" },
+    {
+      category: "Grocery",
+      amount: 12000,
+      details: "Monthly grocery shopping at organic markets and supermarkets",
+      color: "hsl(142, 76%, 36%)",
+    },
+    {
+      category: "Apparel",
+      amount: 8500,
+      details: "Clothing, shoes, and accessories from premium brands",
+      color: "hsl(220, 70%, 50%)",
+    },
+    {
+      category: "Electronics",
+      amount: 15000,
+      details: "Latest tech gadgets, smartphones, and home electronics",
+      color: "hsl(30, 60%, 70%)",
+    },
+    {
+      category: "Entertainment",
+      amount: 6500,
+      details: "Movies, concerts, subscriptions, and leisure activities",
+      color: "hsl(280, 65%, 60%)",
+    },
+    {
+      category: "Healthcare",
+      amount: 9000,
+      details: "Medical expenses, prescriptions, and wellness programs",
+      color: "hsl(10, 80%, 60%)",
+    },
+    {
+      category: "Transportation",
+      amount: 7500,
+      details: "Fuel, maintenance, public transport, and ride-sharing",
+      color: "hsl(180, 55%, 45%)",
+    },
+    {
+      category: "Education",
+      amount: 11000,
+      details: "Online courses, books, workshops, and certifications",
+      color: "hsl(45, 85%, 55%)",
+    },
   ];
 
-  const [selectedExpense, setSelectedExpense] = useState<typeof expenseData[0] | null>(null);
+  const [selectedExpense, setSelectedExpense] = useState<
+    (typeof expenseData)[0] | null
+  >(null);
 
   const insurances = [
-    { 
-      name: "Life Insurance", 
-      coverage: "$500,000", 
-      premium: "$89/month", 
-      icon: HeartIcon, 
+    {
+      name: "Life Insurance",
+      coverage: "$500,000",
+      premium: "$89/month",
+      icon: HeartIcon,
       status: "Active",
       details: "Comprehensive coverage for your family's future security",
       startDate: "January 15, 2023",
       endDate: "January 15, 2043",
-      nextDue: "November 15, 2025"
+      nextDue: "November 15, 2025",
     },
-    { 
-      name: "Health Insurance", 
-      coverage: "$2M", 
-      premium: "$320/month", 
-      icon: Shield, 
+    {
+      name: "Health Insurance",
+      coverage: "$2M",
+      premium: "$320/month",
+      icon: Shield,
       status: "Active",
       details: "Premium health coverage with global network access",
       startDate: "March 1, 2024",
       endDate: "March 1, 2029",
-      nextDue: "November 1, 2025"
+      nextDue: "November 1, 2025",
     },
-    { 
-      name: "Home Insurance", 
-      coverage: "$750,000", 
-      premium: "$125/month", 
-      icon: Home, 
+    {
+      name: "Home Insurance",
+      coverage: "$750,000",
+      premium: "$125/month",
+      icon: Home,
       status: "Active",
       details: "Full property protection including natural disasters",
       startDate: "June 10, 2022",
       endDate: "June 10, 2032",
-      nextDue: "November 10, 2025"
+      nextDue: "November 10, 2025",
     },
-    { 
-      name: "Auto Insurance", 
-      coverage: "$150,000", 
-      premium: "$95/month", 
-      icon: Car, 
+    {
+      name: "Auto Insurance",
+      coverage: "$150,000",
+      premium: "$95/month",
+      icon: Car,
       status: "Active",
       details: "Comprehensive auto coverage with roadside assistance",
       startDate: "February 20, 2023",
       endDate: "February 20, 2026",
-      nextDue: "November 20, 2025"
+      nextDue: "November 20, 2025",
     },
   ];
 
@@ -126,10 +263,14 @@ const Portfolio = () => {
       icon: TreePine,
       score: 92,
       metrics: [
-        { label: "Carbon Footprint", value: "15 tons CO₂/year", target: "12 tons CO₂/year" },
+        {
+          label: "Carbon Footprint",
+          value: "15 tons CO₂/year",
+          target: "12 tons CO₂/year",
+        },
         { label: "Renewable Energy", value: "78%", target: "100%" },
-        { label: "Waste Reduction", value: "65%", target: "80%" }
-      ]
+        { label: "Waste Reduction", value: "65%", target: "80%" },
+      ],
     },
     {
       category: "Social",
@@ -138,8 +279,8 @@ const Portfolio = () => {
       metrics: [
         { label: "Community Investment", value: "$8.5K", target: "$10K" },
         { label: "Fair Trade Products", value: "82%", target: "90%" },
-        { label: "Diversity Index", value: "85/100", target: "95/100" }
-      ]
+        { label: "Diversity Index", value: "85/100", target: "95/100" },
+      ],
     },
     {
       category: "Governance",
@@ -148,9 +289,9 @@ const Portfolio = () => {
       metrics: [
         { label: "Ethical Investments", value: "96%", target: "100%" },
         { label: "Transparency Score", value: "94/100", target: "100/100" },
-        { label: "Compliance Rate", value: "100%", target: "100%" }
-      ]
-    }
+        { label: "Compliance Rate", value: "100%", target: "100%" },
+      ],
+    },
   ];
 
   return (
@@ -160,10 +301,10 @@ const Portfolio = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${mountainBg})` }}
       />
-      
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
-      
+
       {/* Content */}
       <div className="relative z-10 min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
@@ -203,7 +344,9 @@ const Portfolio = () => {
                 <CardContent className="p-6">
                   <p className="text-white/80 text-sm mb-2">Total Net Worth</p>
                   <div className="flex items-center justify-between">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white">$184,567.89</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white">
+                      $184,567.89
+                    </h1>
                     <Badge className="bg-white/20 text-white border-none">
                       <TrendingUp className="w-4 h-4 mr-1" />
                       $1234.56 (+2.1%) in last 24 h
@@ -217,7 +360,9 @@ const Portfolio = () => {
                 <DialogTitle>Total Net Worth Details</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">Your total net worth has grown by 2.1% in the last 24 hours.</p>
+                <p className="text-sm text-muted-foreground">
+                  Your total net worth has grown by 2.1% in the last 24 hours.
+                </p>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Previous Value:</span>
@@ -244,10 +389,15 @@ const Portfolio = () => {
                   <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:bg-glass-bg/80 transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-2">
-                        <asset.icon className="w-5 h-5" style={{ color: asset.color }} />
+                        <asset.icon
+                          className="w-5 h-5"
+                          style={{ color: asset.color }}
+                        />
                         <p className="text-white/70 text-sm">{asset.name}</p>
                       </div>
-                      <p className="text-2xl font-bold text-white">${asset.amount.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-white">
+                        ${asset.amount.toLocaleString()}
+                      </p>
                     </CardContent>
                   </Card>
                 </DialogTrigger>
@@ -256,15 +406,21 @@ const Portfolio = () => {
                     <DialogTitle>{asset.name}</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">Current holdings in {asset.name.toLowerCase()}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Current holdings in {asset.name.toLowerCase()}
+                    </p>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Total Value:</span>
-                        <span className="font-semibold">${asset.amount.toLocaleString()}</span>
+                        <span className="font-semibold">
+                          ${asset.amount.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>% of Portfolio:</span>
-                        <span className="font-semibold">{((asset.amount / 184567) * 100).toFixed(1)}%</span>
+                        <span className="font-semibold">
+                          {((asset.amount / 184567) * 100).toFixed(1)}%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -278,14 +434,50 @@ const Portfolio = () => {
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
               <CardHeader>
                 <CardTitle className="text-white">Asset Allocation</CardTitle>
-                <p className="text-white/60 text-sm">See How Your Money Moves</p>
+                <p className="text-white/60 text-sm">
+                  See How Your Money Moves
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center py-8">
-                  <svg width="200" height="200" viewBox="0 0 200 200" className="cursor-pointer">
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(220, 70%, 50%)" strokeWidth="30" strokeDasharray="231 500" transform="rotate(-90 100 100)" />
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(30, 60%, 70%)" strokeWidth="30" strokeDasharray="120 500" strokeDashoffset="-231" transform="rotate(-90 100 100)" />
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(142, 76%, 36%)" strokeWidth="30" strokeDasharray="150 500" strokeDashoffset="-351" transform="rotate(-90 100 100)" />
+                  <svg
+                    width="200"
+                    height="200"
+                    viewBox="0 0 200 200"
+                    className="cursor-pointer"
+                  >
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(220, 70%, 50%)"
+                      strokeWidth="30"
+                      strokeDasharray="231 500"
+                      transform="rotate(-90 100 100)"
+                    />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(30, 60%, 70%)"
+                      strokeWidth="30"
+                      strokeDasharray="120 500"
+                      strokeDashoffset="-231"
+                      transform="rotate(-90 100 100)"
+                    />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(142, 76%, 36%)"
+                      strokeWidth="30"
+                      strokeDasharray="150 500"
+                      strokeDashoffset="-351"
+                      transform="rotate(-90 100 100)"
+                    />
                   </svg>
                 </div>
                 <div className="space-y-2">
@@ -309,7 +501,9 @@ const Portfolio = () => {
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
               <CardHeader>
                 <CardTitle className="text-white">Expense Categories</CardTitle>
-                <p className="text-white/60 text-sm">Click on any bar for details</p>
+                <p className="text-white/60 text-sm">
+                  Click on any bar for details
+                </p>
               </CardHeader>
               <CardContent>
                 <ChartContainer
@@ -323,13 +517,26 @@ const Portfolio = () => {
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={expenseData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                      <XAxis dataKey="category" stroke="rgba(255,255,255,0.6)" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="rgba(255,255,255,0.1)"
+                      />
+                      <XAxis
+                        dataKey="category"
+                        stroke="rgba(255,255,255,0.6)"
+                      />
                       <YAxis stroke="rgba(255,255,255,0.6)" />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="amount" onClick={(data) => setSelectedExpense(data)}>
+                      <Bar
+                        dataKey="amount"
+                        onClick={(data) => setSelectedExpense(data)}
+                      >
                         {expenseData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} cursor="pointer" />
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={entry.color}
+                            cursor="pointer"
+                          />
                         ))}
                       </Bar>
                     </BarChart>
@@ -339,29 +546,50 @@ const Portfolio = () => {
             </Card>
 
             {/* Expense Detail Dialog */}
-            <Dialog open={!!selectedExpense} onOpenChange={(open) => !open && setSelectedExpense(null)}>
+            <Dialog
+              open={!!selectedExpense}
+              onOpenChange={(open) => !open && setSelectedExpense(null)}
+            >
               <DialogContent className="bg-background/95 backdrop-blur-sm">
                 <DialogHeader>
-                  <DialogTitle>{selectedExpense?.category} Expenses</DialogTitle>
+                  <DialogTitle>
+                    {selectedExpense?.category} Expenses
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Category:</span>
-                      <span className="font-semibold">{selectedExpense?.category}</span>
+                      <span className="font-semibold">
+                        {selectedExpense?.category}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Total Amount:</span>
-                      <span className="font-semibold">${selectedExpense?.amount.toLocaleString()}</span>
+                      <span className="font-semibold">
+                        ${selectedExpense?.amount.toLocaleString()}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>% of Total Expenses:</span>
                       <span className="font-semibold">
-                        {selectedExpense ? ((selectedExpense.amount / expenseData.reduce((sum, e) => sum + e.amount, 0)) * 100).toFixed(1) : 0}%
+                        {selectedExpense
+                          ? (
+                              (selectedExpense.amount /
+                                expenseData.reduce(
+                                  (sum, e) => sum + e.amount,
+                                  0
+                                )) *
+                              100
+                            ).toFixed(1)
+                          : 0}
+                        %
                       </span>
                     </div>
                     <div className="pt-2 border-t">
-                      <p className="text-sm text-muted-foreground">{selectedExpense?.details}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedExpense?.details}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -385,15 +613,28 @@ const Portfolio = () => {
                             <activity.icon className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <p className="text-white font-medium">{activity.name}</p>
-                            <p className="text-white/60 text-sm">{activity.category}</p>
+                            <p className="text-white font-medium">
+                              {activity.name}
+                            </p>
+                            <p className="text-white/60 text-sm">
+                              {activity.category}
+                            </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className={`font-semibold ${activity.amount > 0 ? 'text-green-400' : 'text-white'}`}>
-                            {activity.amount > 0 ? '+' : ''}{activity.amount.toFixed(2)}
+                          <p
+                            className={`font-semibold ${
+                              activity.amount > 0
+                                ? "text-green-400"
+                                : "text-white"
+                            }`}
+                          >
+                            {activity.amount > 0 ? "+" : ""}
+                            {activity.amount.toFixed(2)}
                           </p>
-                          <p className="text-white/60 text-sm">{activity.time}</p>
+                          <p className="text-white/60 text-sm">
+                            {activity.time}
+                          </p>
                         </div>
                       </div>
                     </DialogTrigger>
@@ -405,21 +646,31 @@ const Portfolio = () => {
                         <div className="space-y-2">
                           <div className="flex justify-between">
                             <span>Category:</span>
-                            <span className="font-semibold">{activity.category}</span>
+                            <span className="font-semibold">
+                              {activity.category}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Amount:</span>
-                            <span className={`font-semibold ${activity.amount > 0 ? 'text-green-600' : ''}`}>
+                            <span
+                              className={`font-semibold ${
+                                activity.amount > 0 ? "text-green-600" : ""
+                              }`}
+                            >
                               ${Math.abs(activity.amount).toFixed(2)}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Time:</span>
-                            <span className="font-semibold">{activity.time}</span>
+                            <span className="font-semibold">
+                              {activity.time}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Type:</span>
-                            <span className="font-semibold">{activity.amount > 0 ? 'Credit' : 'Debit'}</span>
+                            <span className="font-semibold">
+                              {activity.amount > 0 ? "Credit" : "Debit"}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -432,36 +683,78 @@ const Portfolio = () => {
             {/* 5-Year Wealth Projection */}
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
               <CardHeader>
-                <CardTitle className="text-white">5-Year Wealth Projection</CardTitle>
+                <CardTitle className="text-white">
+                  5-Year Wealth Projection
+                </CardTitle>
               </CardHeader>
               <CardContent className="h-[350px] w-[620px] mt-14">
                 <div className="relative h-64">
-                  <svg width="100%" height="100%" viewBox="0 0 600 250" className="overflow-visible">
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 600 250"
+                    className="overflow-visible"
+                  >
                     <defs>
-                      <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <linearGradient
+                        id="lineGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
                         <stop offset="0%" stopColor="hsl(142, 76%, 36%)" />
                         <stop offset="100%" stopColor="hsl(142, 60%, 45%)" />
                       </linearGradient>
                     </defs>
                     {/* Grid lines */}
                     {[0, 90, 180, 270].map((y) => (
-                      <line key={y} x1="50" y1={250 - y} x2="550" y2={250 - y} stroke="white" strokeOpacity="0.1" strokeWidth="1" />
+                      <line
+                        key={y}
+                        x1="50"
+                        y1={250 - y}
+                        x2="550"
+                        y2={250 - y}
+                        stroke="white"
+                        strokeOpacity="0.1"
+                        strokeWidth="1"
+                      />
                     ))}
                     {/* Y-axis labels */}
-                    {['0k', '90k', '180k', '270k', '360k'].map((label, i) => (
-                      <text key={label} x="20" y={250 - (i * 62)} fill="white" opacity="0.5" fontSize="12">
+                    {["0k", "90k", "180k", "270k", "360k"].map((label, i) => (
+                      <text
+                        key={label}
+                        x="20"
+                        y={250 - i * 62}
+                        fill="white"
+                        opacity="0.5"
+                        fontSize="12"
+                      >
                         {label}
                       </text>
                     ))}
                     {/* X-axis labels */}
                     {projectionData.map((data, i) => (
-                      <text key={data.year} x={50 + (i * 500 / 5)} y="270" fill="white" opacity="0.5" fontSize="12" textAnchor="middle">
+                      <text
+                        key={data.year}
+                        x={50 + (i * 500) / 5}
+                        y="270"
+                        fill="white"
+                        opacity="0.5"
+                        fontSize="12"
+                        textAnchor="middle"
+                      >
                         {data.year}
                       </text>
                     ))}
                     {/* Line chart */}
                     <polyline
-                      points={projectionData.map((data, i) => `${50 + (i * 500 / 5)},${250 - (data.value * 0.7)}`).join(' ')}
+                      points={projectionData
+                        .map(
+                          (data, i) =>
+                            `${50 + (i * 500) / 5},${250 - data.value * 0.7}`
+                        )
+                        .join(" ")}
                       fill="none"
                       stroke="url(#lineGradient)"
                       strokeWidth="3"
@@ -472,8 +765,8 @@ const Portfolio = () => {
                     {projectionData.map((data, i) => (
                       <circle
                         key={data.year}
-                        cx={50 + (i * 500 / 5)}
-                        cy={250 - (data.value * 0.7)}
+                        cx={50 + (i * 500) / 5}
+                        cy={250 - data.value * 0.7}
                         r="5"
                         fill="hsl(142, 76%, 36%)"
                         className="cursor-pointer hover:r-7 transition-all"
@@ -488,36 +781,59 @@ const Portfolio = () => {
           {/* Insurance Coverage Section */}
           <div className="mt-8">
             <div className="mb-6 perspective-1000">
-              <h2 className="text-4xl font-bold text-white relative" style={{
-                transform: 'translateZ(20px)',
-                textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)',
-                letterSpacing: '0.05em'
-              }}>
+              <h2
+                className="text-4xl font-bold text-white relative"
+                style={{
+                  transform: "translateZ(20px)",
+                  textShadow:
+                    "0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 Insurance Coverage
               </h2>
-              <div className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2" 
-                style={{ transform: 'translateZ(10px)' }} />
+              <div
+                className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2"
+                style={{ transform: "translateZ(10px)" }}
+              />
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {insurances.map((insurance) => (
                 <Dialog key={insurance.name}>
                   <DialogTrigger asChild>
                     <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000 group">
-                      <CardContent className="p-6" style={{ transform: 'translateZ(10px)' }}>
+                      <CardContent
+                        className="p-6"
+                        style={{ transform: "translateZ(10px)" }}
+                      >
                         <div className="flex items-center justify-between mb-4">
-                          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
-                            style={{ transform: 'translateZ(8px)' }}>
+                          <div
+                            className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                            style={{ transform: "translateZ(8px)" }}
+                          >
                             <insurance.icon className="w-6 h-6 text-white" />
                           </div>
                           <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                             {insurance.status}
                           </Badge>
                         </div>
-                        <h3 className="text-white font-semibold text-lg mb-2">{insurance.name}</h3>
+                        <h3 className="text-white font-semibold text-lg mb-2">
+                          {insurance.name}
+                        </h3>
                         <div className="space-y-1 text-white/70 text-sm">
-                          <p>Coverage: <span className="text-white font-semibold">{insurance.coverage}</span></p>
-                          <p>Premium: <span className="text-white font-semibold">{insurance.premium}</span></p>
+                          <p>
+                            Coverage:{" "}
+                            <span className="text-white font-semibold">
+                              {insurance.coverage}
+                            </span>
+                          </p>
+                          <p>
+                            Premium:{" "}
+                            <span className="text-white font-semibold">
+                              {insurance.premium}
+                            </span>
+                          </p>
                         </div>
                       </CardContent>
                     </Card>
@@ -527,15 +843,21 @@ const Portfolio = () => {
                       <DialogTitle>{insurance.name}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <p className="text-sm text-muted-foreground">{insurance.details}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {insurance.details}
+                      </p>
                       <div className="space-y-3">
                         <div className="flex justify-between">
                           <span>Coverage Amount:</span>
-                          <span className="font-semibold">{insurance.coverage}</span>
+                          <span className="font-semibold">
+                            {insurance.coverage}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Monthly Premium:</span>
-                          <span className="font-semibold">{insurance.premium}</span>
+                          <span className="font-semibold">
+                            {insurance.premium}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Status:</span>
@@ -546,21 +868,32 @@ const Portfolio = () => {
                         <div className="flex justify-between">
                           <span>Annual Cost:</span>
                           <span className="font-semibold">
-                            ${(parseFloat(insurance.premium.replace(/[^0-9.]/g, '')) * 12).toFixed(0)}
+                            $
+                            {(
+                              parseFloat(
+                                insurance.premium.replace(/[^0-9.]/g, "")
+                              ) * 12
+                            ).toFixed(0)}
                           </span>
                         </div>
                         <div className="border-t border-border pt-3 mt-3">
                           <div className="flex justify-between mb-2">
                             <span>Start Date:</span>
-                            <span className="font-semibold">{insurance.startDate}</span>
+                            <span className="font-semibold">
+                              {insurance.startDate}
+                            </span>
                           </div>
                           <div className="flex justify-between mb-2">
                             <span>End Date:</span>
-                            <span className="font-semibold">{insurance.endDate}</span>
+                            <span className="font-semibold">
+                              {insurance.endDate}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Next Due Date:</span>
-                            <span className="font-semibold text-primary">{insurance.nextDue}</span>
+                            <span className="font-semibold text-primary">
+                              {insurance.nextDue}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -572,17 +905,23 @@ const Portfolio = () => {
           </div>
 
           {/* ESG Sustainability Section */}
-          <div className="mt-8 mb-8">
+          {/* <div className="mt-8 mb-8">
             <div className="mb-6 perspective-1000">
-              <h2 className="text-4xl font-bold text-white relative" style={{
-                transform: 'translateZ(20px)',
-                textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)',
-                letterSpacing: '0.05em'
-              }}>
+              <h2
+                className="text-4xl font-bold text-white relative"
+                style={{
+                  transform: "translateZ(20px)",
+                  textShadow:
+                    "0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 ESG Sustainability
               </h2>
-              <div className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2" 
-                style={{ transform: 'translateZ(10px)' }} />
+              <div
+                className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2"
+                style={{ transform: "translateZ(10px)" }}
+              />
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -593,19 +932,27 @@ const Portfolio = () => {
                       <CardHeader>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
-                              style={{ transform: 'translateZ(8px)' }}>
+                            <div
+                              className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                              style={{ transform: "translateZ(8px)" }}
+                            >
                               <category.icon className="w-6 h-6 text-white" />
                             </div>
-                            <CardTitle className="text-white">{category.category}</CardTitle>
+                            <CardTitle className="text-white">
+                              {category.category}
+                            </CardTitle>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent>
                         <div className="mb-4">
                           <div className="flex justify-between mb-2">
-                            <span className="text-white/70 text-sm">ESG Score</span>
-                            <span className="text-white font-bold text-lg">{category.score}/100</span>
+                            <span className="text-white/70 text-sm">
+                              ESG Score
+                            </span>
+                            <span className="text-white font-bold text-lg">
+                              {category.score}/100
+                            </span>
                           </div>
                           <div className="w-full bg-white/10 rounded-full h-3">
                             <div
@@ -616,8 +963,14 @@ const Portfolio = () => {
                         </div>
                         <div className="space-y-2">
                           {category.metrics.slice(0, 2).map((metric) => (
-                            <div key={metric.label} className="text-white/70 text-sm">
-                              <span className="text-white/90">{metric.label}:</span> {metric.value}
+                            <div
+                              key={metric.label}
+                              className="text-white/70 text-sm"
+                            >
+                              <span className="text-white/90">
+                                {metric.label}:
+                              </span>{" "}
+                              {metric.value}
                             </div>
                           ))}
                         </div>
@@ -631,27 +984,35 @@ const Portfolio = () => {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                         <span className="font-semibold">Overall Score</span>
-                        <span className="text-2xl font-bold text-green-600">{category.score}/100</span>
+                        <span className="text-2xl font-bold text-green-600">
+                          {category.score}/100
+                        </span>
                       </div>
                       <div className="space-y-3">
                         {category.metrics.map((metric) => (
                           <div key={metric.label} className="space-y-1">
                             <div className="flex justify-between text-sm">
-                              <span className="font-medium">{metric.label}</span>
-                              <span className="text-muted-foreground">Target: {metric.target}</span>
+                              <span className="font-medium">
+                                {metric.label}
+                              </span>
+                              <span className="text-muted-foreground">
+                                Target: {metric.target}
+                              </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-green-600">{metric.value}</span>
+                              <span className="font-semibold text-green-600">
+                                {metric.value}
+                              </span>
                             </div>
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ))}
             </div>
-          </DialogContent>
-        </Dialog>
-      ))}
-    </div>
-          </div>
+          </div> /*}
 
           {/* Data Source Information */}
           <Card className="mt-8 bg-glass-bg/60 backdrop-blur-md border-2 border-white/10">
@@ -661,16 +1022,28 @@ const Portfolio = () => {
                   <Shield className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-2">Data Source & Security</h3>
+                  <h3 className="text-white font-semibold mb-2">
+                    Data Source & Security
+                  </h3>
                   <p className="text-white/70 text-sm mb-3">
-                    All portfolio data is aggregated from verified sources and secured using blockchain technology. 
-                    Information includes real-time market data, institutional holdings, and verified transactions.
+                    All portfolio data is aggregated from verified sources and
+                    secured using blockchain technology. Information includes
+                    real-time market data, institutional holdings, and verified
+                    transactions.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Real-time Market Data</span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Blockchain Verified</span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Bank-Level Encryption</span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">Multi-Source Aggregation</span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                      Real-time Market Data
+                    </span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                      Blockchain Verified
+                    </span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                      Bank-Level Encryption
+                    </span>
+                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                      Multi-Source Aggregation
+                    </span>
                   </div>
                 </div>
               </div>
