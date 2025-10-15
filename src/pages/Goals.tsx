@@ -14,10 +14,8 @@ import {
   Plane,
   Sprout,
   Cat,
-  ArrowLeft,
   Plus,
   Minus,
-  Calendar,
   Mic,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +23,7 @@ import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import UpdatedCalendar from "./UpdatedCalendar";
+import { useVoiceNavigation } from "@/components/utils";
 
 interface Goal {
   id: string;
@@ -38,18 +37,14 @@ interface Goal {
   color: string;
 }
 
-const Goals = ({
-  listening,
-  browserSupportsSpeechRecognition,
-}: {
-  listening?: boolean;
-  browserSupportsSpeechRecognition?: boolean;
-}) => {
+const Goals = () => {
   const navigate = useNavigate();
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [amount, setAmount] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const { listening, browserSupportsSpeechRecognition } = useVoiceNavigation();
 
   const commands = useMemo(
     () => [
@@ -67,15 +62,7 @@ const Goals = ({
     []
   );
 
-  const { transcript } = useSpeechRecognition({ commands });
-
-  useEffect(() => {
-    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-      return;
-    }
-    SpeechRecognition.startListening({ continuous: true });
-    return () => SpeechRecognition.stopListening();
-  }, []);
+  useSpeechRecognition({ commands });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -475,9 +462,9 @@ const Goals = ({
 
       {/* Updated Calendar Modal */}
       <Dialog open={showCalendarModal} onOpenChange={setShowCalendarModal}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden">
-          <div className="h-[95vh] overflow-auto">
-            <UpdatedCalendar />
+        <DialogContent className="max-w-4xl max-h-[85vh] p-0 overflow-hidden bg-transparent border-none shadow-none">
+          <div className="h-[85vh] overflow-auto rounded-lg">
+            <UpdatedCalendar isModal={true} onClose={() => setShowCalendarModal(false)} />
           </div>
         </DialogContent>
       </Dialog>

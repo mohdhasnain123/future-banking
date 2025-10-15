@@ -1,8 +1,6 @@
 import { TaskList } from "@/components/TaskList";
 import { GeometricOverlay } from "@/components/GeometricOverlay";
 import { Task } from "@/components/TaskCard";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import { useState, useEffect } from "react";
 
@@ -32,8 +30,12 @@ const mockTasks: Task[] = [
   },
 ];
 
-const UpdatedCalendar = () => {
-  const navigate = useNavigate();
+interface UpdatedCalendarProps {
+  isModal?: boolean;
+  onClose?: () => void;
+}
+
+const UpdatedCalendar = ({ isModal = false, onClose }: UpdatedCalendarProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -79,15 +81,6 @@ const UpdatedCalendar = () => {
       {/* Content */}
       <div className="relative z-10 min-h-screen p-8 md:p-12 lg:p-16">
         <div className="max-w-7xl mx-auto">
-          {/* Back Button */}
-          <button
-            onClick={() => navigate("/goals")}
-            className="flex items-center gap-2 text-white/90 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Goals</span>
-          </button>
-
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left side - Date and Time */}
             <div className="pt-8">

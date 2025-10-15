@@ -187,14 +187,7 @@ function AppContent() {
         />
         <Route
           path="/goals"
-          element={
-            <Goals
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
+          element={<Goals />}
         />
         <Route path="/updated-calendar" element={<UpdatedCalendar />} />
         <Route path="/wealth-advisor" element={<WealthAdvisor />} />
