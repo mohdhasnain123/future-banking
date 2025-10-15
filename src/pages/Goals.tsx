@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
@@ -23,6 +23,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import UpdatedCalendar from "./UpdatedCalendar";
 
 interface Goal {
   id: string;
@@ -47,6 +49,33 @@ const Goals = ({
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [amount, setAmount] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const commands = useMemo(
+    () => [
+      {
+        command: /updated calendar/i,
+        callback: () => {
+          setShowCalendarModal(true);
+          toast({
+            title: "Opening Calendar",
+            description: "Voice command recognized: Updated Calendar",
+          });
+        },
+      },
+    ],
+    []
+  );
+
+  const { transcript } = useSpeechRecognition({ commands });
+
+  useEffect(() => {
+    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+      return;
+    }
+    SpeechRecognition.startListening({ continuous: true });
+    return () => SpeechRecognition.stopListening();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -441,6 +470,15 @@ const Goals = ({
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Updated Calendar Modal */}
+      <Dialog open={showCalendarModal} onOpenChange={setShowCalendarModal}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden">
+          <div className="h-[95vh] overflow-auto">
+            <UpdatedCalendar />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
