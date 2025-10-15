@@ -303,18 +303,18 @@ const Portfolio = ({
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative z-10 h-screen overflow-hidden p-3">
+        <div className="max-w-7xl mx-auto h-full flex flex-col">
           {/* Header */}
 
-          <div className="mb-8 flex justify-between items-start text-white/90">
+          <div className="mb-2 flex justify-between items-start text-white/90">
             {/* Date & Time on the left */}
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+              <h1 className="text-2xl font-bold text-white mb-1">
                 Portfolio
               </h1>
 
-              <p className="text-lg font-medium">
+              <p className="text-sm font-medium">
                 {formatTime(currentTime)} | {formatDate(currentTime)}
               </p>
             </div>
@@ -332,21 +332,17 @@ const Portfolio = ({
             )}
           </div>
 
-          <div className="mb-8">
-            <div className="flex items-center justify-between"></div>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <div className="grid md:grid-cols-4 gap-2 mb-2">
             {/* --- Net Worth small box --- */}
 
             <Dialog>
               <DialogTrigger asChild>
                 <Card className="bg-[hsl(142,76%,36%)]/90 hover:bg-[hsl(142,76%,36%)] transition-all backdrop-blur-sm border-none cursor-pointer">
-                  <CardContent className="p-5">
-                    <p className="text-white/80 text-xs mb-1">Net Worth</p>
+                  <CardContent className="p-3">
+                    <p className="text-white/80 text-[10px] mb-0.5">Net Worth</p>
 
                     <div className="flex items-start justify-between">
-                      <h2 className="text-2xl font-bold text-white mr-3">
+                      <h2 className="text-lg font-bold text-white mr-2">
                         $
                         {totalNetWorth.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
@@ -354,18 +350,13 @@ const Portfolio = ({
                         })}
                       </h2>
 
-                      <Badge className="bg-white/20 text-white border-none">
-                        <TrendingUp className="w-4 h-4 mr-1" />
-                        +$
-                        {gain.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        ({changePct}%)
+                      <Badge className="bg-white/20 text-white border-none text-[10px] px-1.5 py-0.5">
+                        <TrendingUp className="w-3 h-3 mr-0.5" />
+                        +{changePct}%
                       </Badge>
                     </div>
 
-                    <p className="mt-2 text-xs text-white/80">In last 24 h</p>
+                    <p className="mt-1 text-[10px] text-white/80">In last 24 h</p>
                   </CardContent>
                 </Card>
               </DialogTrigger>
@@ -424,28 +415,28 @@ const Portfolio = ({
                 <Dialog key={asset.name}>
                   <DialogTrigger asChild>
                     <Card className="bg-glass-bg/60 hover:bg-glass-bg/80 transition-all backdrop-blur-md border-glass-border cursor-pointer">
-                      <CardContent className="p-5">
-                        <div className="flex items-center gap-2 mb-2">
+                      <CardContent className="p-3">
+                        <div className="flex items-center gap-1 mb-1">
                           <asset.icon
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                             style={{ color: asset.color }}
                           />
-                          <p className="text-white/70 text-xs">{asset.name}</p>
+                          <p className="text-white/70 text-[10px]">{asset.name}</p>
                         </div>
 
                         <div className="flex items-baseline justify-between">
-                          <p className="text-xl font-bold text-white">
+                          <p className="text-base font-bold text-white">
                             ${asset.amount.toLocaleString()}
                           </p>
-                          <span className="text-xs text-white/80">
+                          <span className="text-[10px] text-white/80">
                             {pct.toFixed(1)}%
                           </span>
                         </div>
 
                         {/* Tiny allocation bar */}
-                        <div className="mt-3 h-2 rounded-full bg-white/15">
+                        <div className="mt-2 h-1.5 rounded-full bg-white/15">
                           <div
-                            className="h-2 rounded-full"
+                            className="h-1.5 rounded-full"
                             style={{
                               width: `${Math.min(100, pct)}%`,
                               backgroundColor:
@@ -490,32 +481,32 @@ const Portfolio = ({
           </div>
 
           {/* Insurance Coverage Section */}
-          <div className="mt-8 mb-8">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mb-2">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-2">
               {insurances.map((insurance) => (
                 <Dialog key={insurance.name}>
                   <DialogTrigger asChild>
                     <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000 group">
                       <CardContent
-                        className="p-4"
+                        className="p-2"
                         style={{ transform: "translateZ(8px)" }}
                       >
-                        <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center justify-between mb-0.5">
                           <div
-                            className="p-2 rounded-lg bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                            className="p-1.5 rounded-lg bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
                             style={{ transform: "translateZ(6px)" }}
                           >
-                            <insurance.icon className="w-5 h-5 text-white" />
+                            <insurance.icon className="w-3.5 h-3.5 text-white" />
                           </div>
-                          <h3 className="text-white font-semibold text-base">
+                          <h3 className="text-white font-semibold text-xs">
                             {insurance.name}
                           </h3>
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs mr-2">
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[9px] px-1 py-0">
                             {insurance.status}
                           </Badge>
                         </div>
 
-                        <div className="space-y-1 text-white/70 text-xs">
+                        <div className="space-y-0.5 text-white/70 text-[10px]">
                           <p>
                             Coverage:{" "}
                             <span className="text-white font-semibold">
@@ -600,23 +591,23 @@ const Portfolio = ({
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid lg:grid-cols-2 gap-2 mb-2 flex-1 min-h-0">
             {/* Asset Allocation */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white text-base">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border flex flex-col h-full">
+              <CardHeader className="pb-1 px-3 pt-2">
+                <CardTitle className="text-white text-sm">
                   Asset Allocation
                 </CardTitle>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/60 text-[10px]">
                   See How Your Money Moves
                 </p>
               </CardHeader>
 
-              <CardContent className="flex-1 flex flex-col justify-center px-4 py-2">
-                <div className="flex items-center justify-center py-4">
+              <CardContent className="flex-1 flex flex-col justify-center px-3 py-1">
+                <div className="flex items-center justify-center py-2">
                   <svg
-                    width="180"
-                    height="180"
+                    width="120"
+                    height="120"
                     viewBox="0 0 200 200"
                     className="cursor-pointer"
                   >
@@ -655,17 +646,17 @@ const Portfolio = ({
                   </svg>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(220,70%,50%)]" />
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-1.5 text-white/80 text-[10px]">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(220,70%,50%)]" />
                     <span>Equities 46%</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(30,60%,70%)]" />
+                  <div className="flex items-center gap-1.5 text-white/80 text-[10px]">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(30,60%,70%)]" />
                     <span>Crypto & NFTs 24%</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
+                  <div className="flex items-center gap-1.5 text-white/80 text-[10px]">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(142,76%,36%)]" />
                     <span>Digital RE 30%</span>
                   </div>
                 </div>
@@ -673,15 +664,15 @@ const Portfolio = ({
             </Card>
 
             {/* Expense Categories */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
-              <CardHeader>
-                <CardTitle className="text-white">Expense Categories</CardTitle>
-                <p className="text-white/60 text-sm">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border flex flex-col h-full">
+              <CardHeader className="pb-1 px-3 pt-2">
+                <CardTitle className="text-white text-sm">Expense Categories</CardTitle>
+                <p className="text-white/60 text-[10px]">
                   Detailed breakdown with carbon footprint
                 </p>
 
                 {/* ✅ Time Period moved here */}
-                <p className="text-xs text-blue-300 mt-1">
+                <p className="text-[9px] text-blue-300 mt-0.5">
                   Time Period:{" Jan 2025 - Oct 2025"}
                   <span className="font-semibold text-white">
                     {/* dynamic value */}
@@ -689,8 +680,8 @@ const Portfolio = ({
                 </p>
               </CardHeader>
 
-              <CardContent className="flex-1 overflow-y-auto pr-2">
-                <div className="space-y-4 perspective-1000">
+              <CardContent className="flex-1 overflow-y-auto pr-1 px-3 py-1">
+                <div className="space-y-1.5 perspective-1000">
                   {expenseData.map((expense, index) => (
                     <div
                       key={expense.category}
@@ -702,28 +693,28 @@ const Portfolio = ({
                     >
                       {/* 3D Card Container */}
                       <div
-                        className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-[1.02]"
+                        className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 hover:border-white/30 transition-all duration-300"
                         style={{
                           transform: "translateZ(10px)",
-                          boxShadow: `0 8px 32px ${expense.color}40`,
+                          boxShadow: `0 4px 16px ${expense.color}40`,
                         }}
                       >
-                        <div className="flex items-start gap-4">
+                        <div className="flex items-start gap-2">
                           {/* Category Info */}
                           <div className="flex-1">
-                            <div className="flex items-center justify-between mb-3">
-                              <h3 className="text-white font-semibold text-lg">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <h3 className="text-white font-semibold text-xs">
                                 {expense.category}
                               </h3>
-                              <span className="text-1xl font-bold text-white">
+                              <span className="text-xs font-bold text-white">
                                 ${expense.amount.toLocaleString()}
                               </span>
                             </div>
 
                             {/* ✅ Progress Bar + Carbon Footprint side by side */}
-                            <div className="grid grid-cols-2 gap-3 mb-3">
+                            <div className="grid grid-cols-2 gap-2 mb-1.5">
                               {/* Progress Bar */}
-                              <div className="h-full relative h-8 bg-white/10 rounded-lg overflow-hidden">
+                              <div className="h-full relative h-5 bg-white/10 rounded overflow-hidden">
                                 <div
                                   className="absolute inset-0 rounded-lg transition-all duration-500"
                                   style={{
@@ -746,7 +737,7 @@ const Portfolio = ({
                                   />
                                 </div>
                                 <div className="relative z-10 flex items-center justify-center h-full">
-                                  <span className="text-white text-xs font-medium">
+                                  <span className="text-white text-[9px] font-medium">
                                     {(
                                       (expense.amount /
                                         expenseData.reduce(
@@ -755,26 +746,23 @@ const Portfolio = ({
                                         )) *
                                       100
                                     ).toFixed(1)}
-                                    % of total
+                                    %
                                   </span>
                                 </div>
                               </div>
 
                               {/* Carbon Footprint */}
                               <div
-                                className="h-full bg-green-500/20 backdrop-blur-sm rounded-lg p-3 border border-green-400/30 flex flex-col justify-center"
+                                className="h-full bg-green-500/20 backdrop-blur-sm rounded p-1.5 border border-green-400/30 flex items-center justify-center"
                                 style={{
                                   transform: "translateZ(5px)",
                                   boxShadow:
-                                    "0 4px 12px rgba(34, 197, 94, 0.2)",
+                                    "0 2px 8px rgba(34, 197, 94, 0.2)",
                                 }}
                               >
-                                <div className="flex items-center gap-1 mb-1">
-                                  <Leaf className="w-3 h-3 text-green-400" />
-                                  <span className="text-xs text-green-300">
-                                    Carbon Footprint
-                                  </span>
-                                  <p className="text-sm font-semibold text-white">
+                                <div className="flex items-center gap-0.5">
+                                  <Leaf className="w-2.5 h-2.5 text-green-400" />
+                                  <p className="text-[9px] font-semibold text-white">
                                     {expense.carbonFootprint}
                                   </p>
                                 </div>
@@ -782,7 +770,7 @@ const Portfolio = ({
                             </div>
 
                             {/* Description */}
-                            <p className="text-white/60 text-xs mt-3 leading-relaxed">
+                            <p className="text-white/60 text-[9px] leading-relaxed">
                               {expense.details}
                             </p>
                           </div>
@@ -791,7 +779,7 @@ const Portfolio = ({
 
                       {/* 3D Shadow layer */}
                       <div
-                        className="absolute inset-0 rounded-xl -z-10 blur-xl opacity-50"
+                        className="absolute inset-0 rounded-lg -z-10 blur-lg opacity-30"
                         style={{
                           background: expense.color,
                           transform: "translateZ(-10px) scale(0.95)",
@@ -804,35 +792,35 @@ const Portfolio = ({
             </Card>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-2 mb-2">
             {/* Recent Activity */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white text-base">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
+              <CardHeader className="pb-1 px-3 pt-2">
+                <CardTitle className="text-white text-sm">
                   Recent Activity
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 px-4 py-2">
+              <CardContent className="space-y-1 px-3 py-1">
                 {activities.map((activity) => (
                   <Dialog key={activity.id}>
                     <DialogTrigger asChild>
-                      <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
-                        <div className="flex items-center gap-2">
-                          <div className="p-1 rounded-lg bg-white/10">
-                            <activity.icon className="w-4 h-4 text-white" />
+                      <div className="flex items-center justify-between p-1.5 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
+                        <div className="flex items-center gap-1.5">
+                          <div className="p-1 rounded bg-white/10">
+                            <activity.icon className="w-3 h-3 text-white" />
                           </div>
                           <div>
-                            <p className="text-white text-sm font-medium">
+                            <p className="text-white text-[10px] font-medium">
                               {activity.name}
                             </p>
-                            <p className="text-white/60 text-xs">
+                            <p className="text-white/60 text-[9px]">
                               {activity.category}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <p
-                            className={`text-sm font-semibold ${
+                            className={`text-[10px] font-semibold ${
                               activity.amount > 0
                                 ? "text-green-400"
                                 : "text-white"
@@ -841,7 +829,7 @@ const Portfolio = ({
                             {activity.amount > 0 ? "+" : ""}
                             {activity.amount.toFixed(2)}
                           </p>
-                          <p className="text-white/60 text-xs">
+                          <p className="text-white/60 text-[9px]">
                             {activity.time}
                           </p>
                         </div>
@@ -886,18 +874,18 @@ const Portfolio = ({
             </Card>
 
             {/* 5-Year Wealth Projection */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white text-base">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
+              <CardHeader className="pb-1 px-3 pt-2">
+                <CardTitle className="text-white text-sm">
                   5-Year Wealth Projection
                 </CardTitle>
               </CardHeader>
-              <CardContent className="mt-6 px-4 py-2">
-                <div className="relative h-[250px] w-full">
+              <CardContent className="px-3 py-1">
+                <div className="relative h-[120px] w-full">
                   <svg
                     width="100%"
                     height="100%"
-                    viewBox="0 0 600 250"
+                    viewBox="0 0 600 150"
                     className="overflow-visible"
                   >
                     <defs>
@@ -914,13 +902,13 @@ const Portfolio = ({
                     </defs>
 
                     {/* Grid lines */}
-                    {[0, 90, 180, 270].map((y) => (
+                    {[0, 50, 100].map((y) => (
                       <line
                         key={y}
-                        x1="50"
-                        y1={250 - y}
-                        x2="550"
-                        y2={250 - y}
+                        x1="40"
+                        y1={130 - y}
+                        x2="560"
+                        y2={130 - y}
                         stroke="white"
                         strokeOpacity="0.1"
                         strokeWidth="1"
@@ -928,14 +916,14 @@ const Portfolio = ({
                     ))}
 
                     {/* Y-axis labels */}
-                    {["0k", "90k", "180k", "270k", "360k"].map((label, i) => (
+                    {["0k", "180k", "360k"].map((label, i) => (
                       <text
                         key={label}
-                        x="20"
-                        y={250 - i * 62}
+                        x="10"
+                        y={135 - i * 50}
                         fill="white"
                         opacity="0.5"
-                        fontSize="10"
+                        fontSize="8"
                       >
                         {label}
                       </text>
@@ -945,11 +933,11 @@ const Portfolio = ({
                     {projectionData.map((data, i) => (
                       <text
                         key={data.year}
-                        x={50 + (i * 500) / 5}
-                        y="270"
+                        x={40 + (i * 520) / 5}
+                        y="145"
                         fill="white"
                         opacity="0.5"
-                        fontSize="10"
+                        fontSize="8"
                         textAnchor="middle"
                       >
                         {data.year}
@@ -961,12 +949,12 @@ const Portfolio = ({
                       points={projectionData
                         .map(
                           (data, i) =>
-                            `${50 + (i * 500) / 5},${250 - data.value * 0.7}`
+                            `${40 + (i * 520) / 5},${130 - data.value * 0.35}`
                         )
                         .join(" ")}
                       fill="none"
                       stroke="url(#lineGradient)"
-                      strokeWidth="3"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
@@ -975,11 +963,11 @@ const Portfolio = ({
                     {projectionData.map((data, i) => (
                       <circle
                         key={data.year}
-                        cx={50 + (i * 500) / 5}
-                        cy={250 - data.value * 0.7}
-                        r="4"
+                        cx={40 + (i * 520) / 5}
+                        cy={130 - data.value * 0.35}
+                        r="2.5"
                         fill="hsl(142, 76%, 36%)"
-                        className="cursor-pointer hover:r-6 transition-all"
+                        className="cursor-pointer transition-all"
                       />
                     ))}
                   </svg>
@@ -989,38 +977,33 @@ const Portfolio = ({
           </div>
 
           {/* Data Source Information */}
-          <Card className="mt-8 bg-glass-bg/60 backdrop-blur-md border-2 border-white/10">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-500/20 p-3 rounded-lg">
-                  <Shield className="w-6 h-6 text-blue-400" />
+          <Card className="bg-glass-bg/60 backdrop-blur-md border border-white/10">
+            <CardContent className="p-2">
+              <div className="flex items-start gap-2">
+                <div className="bg-blue-500/20 p-1.5 rounded">
+                  <Shield className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white font-semibold mb-2">
+                  <h3 className="text-white font-semibold text-xs mb-1">
                     Data Source & Security
                   </h3>
-                  <p className="text-white/70 text-sm mb-3">
+                  <p className="text-white/70 text-[9px] mb-1.5">
                     All portfolio data is aggregated from verified sources and
-                    secured using blockchain technology. Information includes
-                    real-time market data, institutional holdings, and verified
-                    transactions.
+                    secured using blockchain technology.
                   </p>
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                  <div className="flex flex-wrap gap-1 items-center">
+                    <span className="px-2 py-0.5 bg-white/10 text-white/80 text-[8px] rounded-full">
                       Real-time Market Data
                     </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                    <span className="px-2 py-0.5 bg-white/10 text-white/80 text-[8px] rounded-full">
                       Blockchain Verified
                     </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
+                    <span className="px-2 py-0.5 bg-white/10 text-white/80 text-[8px] rounded-full">
                       Bank-Level Encryption
-                    </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
-                      Multi-Source Aggregation
                     </span>
                     <button
                       onClick={() => navigate("/agentmesh")}
-                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg"
+                      className="px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded text-[9px] hover:from-blue-600 hover:to-purple-700 transition-all"
                     >
                       Agentic Mesh
                     </button>
