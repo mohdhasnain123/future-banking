@@ -19,7 +19,11 @@ export const useVoiceNavigation = () => {
         callback: () => navigate("/wealth-advisor"),
       },
 
-      { command: /cab booking/, callback: () => navigate("/cab-booking") },
+      { command: /book/, callback: () => navigate("/cab-booking") },
+      {
+        command: /schedule/,
+        callback: () => navigate("/goals?showCalendar=true"),
+      },
     ],
     [navigate]
   );

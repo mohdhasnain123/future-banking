@@ -12,15 +12,14 @@ import {
 import { useState, useEffect } from "react";
 
 // --- Page imports (as in your first code)
-import Index from "./pages/Index";
-import Portfolio from "./pages/Portfolio";
-import Goals from "./pages/Goals";
-import UpdatedCalendar from "./pages/UpdatedCalendar";
-import WealthAdvisor from "./pages/WealthAdvisor";
-import CabBooking from "./pages/CabBooking";
-import Bills from "./pages/Bills";
+import Index from "./pages/Index.tsx";
+import Portfolio from "./pages/Portfolio.tsx";
+import Goals from "./pages/Goals.tsx";
+import WealthAdvisor from "./pages/WealthAdvisor.tsx";
+import CabBooking from "./pages/CabBooking.tsx";
+import Bills from "./pages/Bills.tsx";
 import AgentsDashboard from "./pages/agents.tsx";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound.tsx";
 import BrowseArts from "./scene-2/src/pages/BrowseArts.tsx";
 import NFTDetail from "./scene-2/src/pages/NFTDetail.tsx";
 import PaymentMethod from "./scene-2/src/pages/PaymentMethod.tsx";
@@ -35,17 +34,17 @@ import TaskDashboardScene from "./scene-2/src/components/scenes/TaskDashboardSce
 
 // --- Scene-3 imports (from your second code, adjust paths as needed)
 import EntryPromptScreen from "./scene-3/EntryPromptScreen.tsx";
-import AuthenticationSuccessScreen from "./scene-3/AuthenticationSuccessScreen";
-import UserPositionDetected from "./scene-3/UserPositionDetected";
-import MappingInterfaceScreen from "./scene-3/MappingInterfaceScreen";
-import HolographicBankManagerScreen from "./scene-3/HolographicBankManagerScreen";
-import KYCUpdateScreen from "./scene-3/KYCUpdateScreen";
-import ExitScreen from "./scene-3/ExitScreen";
-import useElapsedTimer, { formatTime } from "./scene-3/elapsedTimer";
-import QuantumAuthScreen from "./scene-3/QuantumAuthScreen";
-import BankSelectionScreen from "./scene-3/BankSelectionScreen";
-import ConsentScreen from "./scene-3/consent";
-import AuthenticationChoiceScreen from "./scene-3/AutheticationChoiceScreen";
+import AuthenticationSuccessScreen from "./scene-3/AuthenticationSuccessScreen.tsx";
+import UserPositionDetected from "./scene-3/UserPositionDetected.tsx";
+import MappingInterfaceScreen from "./scene-3/MappingInterfaceScreen.tsx";
+import HolographicBankManagerScreen from "./scene-3/HolographicBankManagerScreen.tsx";
+import KYCUpdateScreen from "./scene-3/KYCUpdateScreen.tsx";
+import ExitScreen from "./scene-3/ExitScreen.tsx";
+import useElapsedTimer, { formatTime } from "./scene-3/elapsedTimer.tsx";
+import QuantumAuthScreen from "./scene-3/QuantumAuthScreen.tsx";
+import BankSelectionScreen from "./scene-3/BankSelectionScreen.tsx";
+import ConsentScreen from "./scene-3/consent.tsx";
+import AuthenticationChoiceScreen from "./scene-3/AutheticationChoiceScreen.tsx";
 import { useVoiceNavigation } from "@/components/utils";
 
 // --- Controlled step path logic
@@ -162,7 +161,7 @@ function AppContent() {
     <div>
       {isControlledPath && step >= 4 && timerBar}
       <Routes>
-        {/* Main pages */}
+        {/* Scene-1 pages */}
         <Route
           path="/"
           element={
@@ -187,11 +186,37 @@ function AppContent() {
         />
         <Route
           path="/goals"
-          element={<Goals />}
+          element={
+            <Goals
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
         />
-        <Route path="/updated-calendar" element={<UpdatedCalendar />} />
-        <Route path="/wealth-advisor" element={<WealthAdvisor />} />
-        <Route path="/cab-booking" element={<CabBooking />} />
+        <Route
+          path="/wealth-advisor"
+          element={
+            <WealthAdvisor
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
+        <Route
+          path="/cab-booking"
+          element={
+            <CabBooking
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
         <Route
           path="/bills"
           element={
@@ -205,6 +230,7 @@ function AppContent() {
         />
         <Route path="/agentmesh" element={<AgentsDashboard />} />
 
+          {/* Scene-2 pages */}
         <Route path="/welcomeScreen" element={<Welcome />} />
         <Route path="/index" element={<Index />} />
         <Route

@@ -2,15 +2,16 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ArrowLeft, MapPin, Cloud, CheckCircle2, Car } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { MapPin, Cloud, CheckCircle2, Car, Mic } from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
-// Optional: If you have a searching GIF, uncomment the next line and add the file
-// import searchingGif from "@/assets/searching.gif";
 
-const CabBooking = () => {
-  const navigate = useNavigate();
-
+const CabBooking = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   // NEW: searching state
   const [isSearching, setIsSearching] = useState(false);
   const [vehicleSelectionOpen, setVehicleSelectionOpen] = useState(false);
@@ -23,9 +24,30 @@ const CabBooking = () => {
   const SEARCH_DELAY_MS = 2000; // Adjust as you like (2s = nice UX)
 
   const availableVehicles = [
-    { id: 1, model: "Tesla Model 3", number: "ABC 1224", eta: "5 mins", price: "$10", rating: 4.9 },
-    { id: 2, model: "Toyota Prius", number: "XYZ 5678", eta: "8 mins", price: "$8", rating: 4.7 },
-    { id: 3, model: "Honda Civic", number: "LMN 9012", eta: "12 mins", price: "$7", rating: 4.8 },
+    {
+      id: 1,
+      model: "Tesla Model 3",
+      number: "ABC 1224",
+      eta: "5 mins",
+      price: "$10",
+      rating: 4.9,
+    },
+    {
+      id: 2,
+      model: "Toyota Prius",
+      number: "XYZ 5678",
+      eta: "8 mins",
+      price: "$8",
+      rating: 4.7,
+    },
+    {
+      id: 3,
+      model: "Honda Civic",
+      number: "LMN 9012",
+      eta: "12 mins",
+      price: "$7",
+      rating: 4.8,
+    },
   ];
 
   const todaysTasks = [
@@ -83,8 +105,8 @@ const CabBooking = () => {
 
     // Simulate a "searching/assigning cab" delay
     timerRef.current = window.setTimeout(() => {
-      setIsSearching(false);           // close searching modal
-      setVehicleSelectionOpen(true);   // open vehicle selection
+      setIsSearching(false); // close searching modal
+      setVehicleSelectionOpen(true); // open vehicle selection
     }, SEARCH_DELAY_MS);
   };
 
@@ -118,23 +140,22 @@ const CabBooking = () => {
       <div className="relative z-10 min-h-screen p-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <button
-              onClick={() => navigate("/wealth-advisor")}
-              className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back</span>
-            </button>
-            <div className="text-white/70">
-              <p className="text-sm">15 July 2035, Sun</p>
-              <p className="text-xs">02:00 pm</p>
-            </div>
-          </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 text-center">
-            Pet Therapy Appointment
-          </h1>
+          <div className="flex justify-between items-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-white text-center">
+              Pet Therapy Appointment
+            </h1>
+            {browserSupportsSpeechRecognition && (
+              <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+                <Mic
+                  className={`w-5 h-5 ${
+                    listening ? "text-green-400 animate-pulse" : ""
+                  }`}
+                />
+                <span>{listening ? "Listening..." : "Mic off"}</span>
+              </div>
+            )}
+          </div>
 
           {/* Side by Side Cards */}
           <div className="flex flex-col md:flex-row gap-6 mb-8">
@@ -254,7 +275,6 @@ const CabBooking = () => {
               </Card>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -270,7 +290,9 @@ const CabBooking = () => {
             /> */}
             {/* Fallback spinner */}
             <div className="w-16 h-16 rounded-full border-4 border-white/20 border-t-white animate-spin mb-4" />
-            <h2 className="text-xl font-semibold">Connecting to vehicle booking app…</h2>
+            <h2 className="text-xl font-semibold">
+              Connecting to vehicle booking app…
+            </h2>
             <p className="text-white/60 mt-2 text-sm">
               This will just take a moment.
             </p>
@@ -279,11 +301,18 @@ const CabBooking = () => {
       </Dialog>
 
       {/* Vehicle Selection Dialog */}
-      <Dialog open={vehicleSelectionOpen} onOpenChange={setVehicleSelectionOpen}>
+      <Dialog
+        open={vehicleSelectionOpen}
+        onOpenChange={setVehicleSelectionOpen}
+      >
         <DialogContent className="bg-gray-900/95 backdrop-blur-md border-2 border-white/20 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
           <div className="py-4">
-            <h2 className="text-2xl font-bold mb-2 text-center">Available Vehicles</h2>
-            <p className="text-white/60 text-center mb-6">Select a vehicle for 11:00 AM pickup</p>
+            <h2 className="text-2xl font-bold mb-2 text-center">
+              Available Vehicles
+            </h2>
+            <p className="text-white/60 text-center mb-6">
+              Select a vehicle for 11:00 AM pickup
+            </p>
             <div className="space-y-4">
               {availableVehicles.map((vehicle) => (
                 <div
@@ -297,17 +326,27 @@ const CabBooking = () => {
                         <Car className="w-8 h-8 text-primary" />
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-lg">{vehicle.model}</h3>
-                        <p className="text-white/60 text-sm">{vehicle.number}</p>
+                        <h3 className="text-white font-bold text-lg">
+                          {vehicle.model}
+                        </h3>
+                        <p className="text-white/60 text-sm">
+                          {vehicle.number}
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-primary">{vehicle.price}</p>
-                      <p className="text-white/60 text-sm">⭐ {vehicle.rating}</p>
+                      <p className="text-2xl font-bold text-primary">
+                        {vehicle.price}
+                      </p>
+                      <p className="text-white/60 text-sm">
+                        ⭐ {vehicle.rating}
+                      </p>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/60 text-sm">ETA: {vehicle.eta}</span>
+                    <span className="text-white/60 text-sm">
+                      ETA: {vehicle.eta}
+                    </span>
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -336,19 +375,27 @@ const CabBooking = () => {
             <h2 className="text-2xl font-bold mb-6">
               Cab Booked Successfully!
             </h2>
-            <p className="text-white/70 mb-6">Your vehicle will arrive at 11:00 AM</p>
+            <p className="text-white/70 mb-6">
+              Your vehicle will arrive at 11:00 AM
+            </p>
             {selectedVehicle && (
               <div className="space-y-4 bg-white/5 rounded-lg p-6">
                 <div className="flex justify-between items-center">
                   <span className="text-white/60">Cab Number</span>
                   <span className="text-white font-bold text-lg">
-                    {availableVehicles.find(v => v.id === selectedVehicle)?.number}
+                    {
+                      availableVehicles.find((v) => v.id === selectedVehicle)
+                        ?.number
+                    }
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-white/60">Cab Model</span>
                   <span className="text-white font-bold text-lg">
-                    {availableVehicles.find(v => v.id === selectedVehicle)?.model}
+                    {
+                      availableVehicles.find((v) => v.id === selectedVehicle)
+                        ?.model
+                    }
                   </span>
                 </div>
                 <div className="flex justify-between items-center">

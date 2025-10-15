@@ -21,14 +21,20 @@ import {
   PiggyBank,
   Shield,
   Clock,
-  Car,
   Database,
+  Mic,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import dreamHouse from "@/assets/dream-house.jpg";
 
-const WealthAdvisor = () => {
+const WealthAdvisor = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [conservativeOpen, setConservativeOpen] = useState(false);
@@ -170,33 +176,29 @@ const WealthAdvisor = () => {
       >
         <div className="max-w-7xl mx-auto p-8 pb-4">
           {/* Header */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-6">
-              <button
-                onClick={() => navigate("/updated-calendar")}
-                className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span>Back to Calendar</span>
-              </button>
-              <Button
-                onClick={() =>
-                  navigate("/cab-booking", {
-                    state: { wealthAdvisorCompleted: true },
-                  })
-                }
-                className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
-              >
-                <Car className="w-4 h-4" />
-                Cab Booking
-              </Button>
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  Wealth Advisor Consultation
+                </h1>
+                <p className="text-white/70 text-lg">
+                  Strategic planning for your dream home purchase
+                </p>
+              </div>
+              <div className="flex flex-col items-end gap-4">
+                {browserSupportsSpeechRecognition && (
+                  <div className="flex items-center gap-2 text-sm text-white/70">
+                    <Mic
+                      className={`w-5 h-5 ${
+                        listening ? "text-green-400 animate-pulse" : ""
+                      }`}
+                    />
+                    <span>{listening ? "Listening..." : "Mic off"}</span>
+                  </div>
+                )}
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-              Wealth Advisor Consultation
-            </h1>
-            <p className="text-white/70 text-lg">
-              Strategic planning for your dream home purchase
-            </p>
           </div>
 
           {/* Video Call & Secure Data Access */}
@@ -367,112 +369,111 @@ const WealthAdvisor = () => {
             </CardContent>
           </Card>
 
-            {/* Account Aggregator Architecture Diagram */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20 p-3 mb-3">
-              <h3 className="text-1xl font-bold text-white mb-2 flex items-center gap-1">
-                <Database className="h-4 w-4 text-primary" />
-                Account Aggregator Architecture
-              </h3>
-              <div className="bg-black/30 rounded-lg p-4 border border-primary/30">
-                {/* Top Layer - Data Sources */}
-                <div className="flex justify-around items-center mb-2">
-                  {[
-                    {
-                      icon: "🏦",
-                      label: "Bank Accounts",
-                      sub: "Real-time Balance",
-                    },
-                    {
-                      icon: "💳",
-                      label: "Credit Cards",
-                      sub: "Transaction History",
-                    },
-                    { icon: "📈", label: "Investment", sub: "Market Data" },
-                    { icon: "🎯", label: "Retirement", sub: "Growth Tracking" },
-                    { icon: "💎", label: "Alt Assets", sub: "Crypto & NFTs" },
-                  ].map((source, i) => (
-                    <div key={i} className="flex flex-col items-center">
-                      <div className="bg-blue-600/30 border-2 border-blue-400 rounded-lg p-1 mb-1">
-                        <div className="text-2xl mb-1">{source.icon}</div>
-                        <div className="text-white text-xs font-semibold text-center">
-                          {source.label}
-                        </div>
-                        <div className="text-white/70 text-xs text-center">
-                          {source.sub}
-                        </div>
+          {/* Account Aggregator Architecture Diagram */}
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 p-3 mb-3">
+            <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-1">
+              <Database className="h-4 w-4 text-primary" />
+              Account Aggregator Architecture
+            </h3>
+            <div className="bg-black/30 rounded-lg p-4 border border-primary/30">
+              {/* Top Layer - Data Sources */}
+              <div className="flex justify-around items-center mb-2">
+                {[
+                  {
+                    icon: "🏦",
+                    label: "Bank Accounts",
+                    sub: "Real-time Balance",
+                  },
+                  {
+                    icon: "💳",
+                    label: "Credit Cards",
+                    sub: "Transaction History",
+                  },
+                  { icon: "📈", label: "Investment", sub: "Market Data" },
+                  { icon: "🎯", label: "Retirement", sub: "Growth Tracking" },
+                  { icon: "💎", label: "Alt Assets", sub: "Crypto & NFTs" },
+                ].map((source, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="bg-blue-600/30 border-2 border-blue-400 rounded-lg p-1 mb-1">
+                      <div className="text-2xl mb-1">{source.icon}</div>
+                      <div className="text-white text-xs font-semibold text-center">
+                        {source.label}
                       </div>
-                      <div className="w-0.5 h-6 bg-gradient-to-b from-blue-400 to-purple-500"></div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Middle Layer - Account Aggregator */}
-                <div className="flex justify-center mb-1">
-                  <div className="bg-primary/40 border-4 border-primary rounded-xl p-6 shadow-lg shadow-primary/50">
-                    <div className="text-white text-sm font-bold text-center mb-1">
-                      Account Aggregator
-                    </div>
-                    <div className="text-white/80 text-sm text-center">
-                      Open API Gateway
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-center mb-1">
-                  <div className="w-0.5 h-6 bg-gradient-to-b from-purple-500 to-purple-600"></div>
-                </div>
-
-                {/* Blockchain Layer */}
-                <div className="flex justify-center mb-1">
-                  <div className="bg-purple-600/40 border-4 border-purple-400 rounded-xl p-6 shadow-lg shadow-purple-500/50">
-                    <div className="text-white text-sm font-bold text-center mb-1">
-                      🔗 Blockchain Layer
-                    </div>
-                    <div className="text-white/80 text-sm text-center">
-                      Immutable Records
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-center mb-1">
-                  <div className="w-0.5 h-6 bg-gradient-to-b from-purple-600 to-pink-600"></div>
-                </div>
-
-                {/* AI Wealth Manager */}
-                <div className="flex justify-center mb-1">
-                  <div className="bg-pink-600/40 border-4 border-pink-400 rounded-xl p-6 shadow-lg shadow-pink-500/50">
-                    <div className="text-white text-sm font-bold text-center mb-1">
-                      🤖 AI Wealth Manager
-                    </div>
-                    <div className="text-white/80 text-sm text-center">
-                      Intelligence Engine
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Layer - Analytics Outputs */}
-                <div className="flex justify-around items-center mt-6">
-                  {[
-                    { icon: "📊", label: "Cash Flow", sub: "Analysis" },
-                    { icon: "🛡️", label: "Risk", sub: "Profiling" },
-                    { icon: "📈", label: "Portfolio", sub: "Performance" },
-                    { icon: "⚡", label: "Real-time", sub: "Insights" },
-                  ].map((output, i) => (
-                    <div key={i} className="flex flex-col items-center">
-                      <div className="w-0.5 h-6 bg-gradient-to-b from-pink-600 to-green-500 mb-2"></div>
-                      <div className="bg-green-600/30 border-2 border-green-400 rounded-lg p-4">
-                        <div className="text-3xl mb-1">{output.icon}</div>
-                        <div className="text-white text-xs font-semibold text-center">
-                          {output.label}
-                        </div>
-                        <div className="text-white/70 text-xs text-center">
-                          {output.sub}
-                        </div>
+                      <div className="text-white/70 text-xs text-center">
+                        {source.sub}
                       </div>
                     </div>
-                  ))}
+                    <div className="w-0.5 h-6 bg-gradient-to-b from-blue-400 to-purple-500"></div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Middle Layer - Account Aggregator */}
+              <div className="flex justify-center mb-1">
+                <div className="bg-primary/40 border-4 border-primary rounded-xl p-6 shadow-lg shadow-primary/50">
+                  <div className="text-white text-sm font-bold text-center mb-1">
+                    Account Aggregator
+                  </div>
+                  <div className="text-white/80 text-sm text-center">
+                    Open API Gateway
+                  </div>
                 </div>
               </div>
-            </Card>
+              <div className="flex justify-center mb-1">
+                <div className="w-0.5 h-6 bg-gradient-to-b from-purple-500 to-purple-600"></div>
+              </div>
 
+              {/* Blockchain Layer */}
+              <div className="flex justify-center mb-1">
+                <div className="bg-purple-600/40 border-4 border-purple-400 rounded-xl p-6 shadow-lg shadow-purple-500/50">
+                  <div className="text-white text-sm font-bold text-center mb-1">
+                    🔗 Blockchain Layer
+                  </div>
+                  <div className="text-white/80 text-sm text-center">
+                    Immutable Records
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-center mb-1">
+                <div className="w-0.5 h-6 bg-gradient-to-b from-purple-600 to-pink-600"></div>
+              </div>
+
+              {/* AI Wealth Manager */}
+              <div className="flex justify-center mb-1">
+                <div className="bg-pink-600/40 border-4 border-pink-400 rounded-xl p-6 shadow-lg shadow-pink-500/50">
+                  <div className="text-white text-sm font-bold text-center mb-1">
+                    🤖 AI Wealth Manager
+                  </div>
+                  <div className="text-white/80 text-sm text-center">
+                    Intelligence Engine
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Layer - Analytics Outputs */}
+              <div className="flex justify-around items-center mt-6">
+                {[
+                  { icon: "📊", label: "Cash Flow", sub: "Analysis" },
+                  { icon: "🛡️", label: "Risk", sub: "Profiling" },
+                  { icon: "📈", label: "Portfolio", sub: "Performance" },
+                  { icon: "⚡", label: "Real-time", sub: "Insights" },
+                ].map((output, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="w-0.5 h-6 bg-gradient-to-b from-pink-600 to-green-500 mb-2"></div>
+                    <div className="bg-green-600/30 border-2 border-green-400 rounded-lg p-4">
+                      <div className="text-3xl mb-1">{output.icon}</div>
+                      <div className="text-white text-xs font-semibold text-center">
+                        {output.label}
+                      </div>
+                      <div className="text-white/70 text-xs text-center">
+                        {output.sub}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
 
           {/* Action Buttons */}
           <div className="flex flex-wrap justify-center gap-4 mt-8 mb-8">

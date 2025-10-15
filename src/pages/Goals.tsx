@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
@@ -18,12 +18,10 @@ import {
   Minus,
   Mic,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import UpdatedCalendar from "./UpdatedCalendar";
-import { useVoiceNavigation } from "@/components/utils";
 
 interface Goal {
   id: string;
@@ -37,32 +35,28 @@ interface Goal {
   color: string;
 }
 
-const Goals = () => {
+const Goals = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [amount, setAmount] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showCalendarModal, setShowCalendarModal] = useState(false);
 
-  const { listening, browserSupportsSpeechRecognition } = useVoiceNavigation();
-
-  const commands = useMemo(
-    () => [
-      {
-        command: /updated calendar/i,
-        callback: () => {
-          setShowCalendarModal(true);
-          toast({
-            title: "Opening Calendar",
-            description: "Voice command recognized: Updated Calendar",
-          });
-        },
-      },
-    ],
-    []
-  );
-
-  useSpeechRecognition({ commands });
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("showCalendar") === "true") {
+      setShowCalendarModal(true);
+      // Optional: remove the query param from URL after opening the modal
+      navigate("/goals", { replace: true });
+    }
+  }, [location.search, navigate]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -462,7 +456,7 @@ const Goals = () => {
 
       {/* Updated Calendar Modal */}
       <Dialog open={showCalendarModal} onOpenChange={setShowCalendarModal}>
-        <DialogContent className="max-w-4xl max-h-[85vh] p-0 overflow-hidden bg-transparent border-none shadow-none">
+        <DialogContent className="max-w-4xl max-h-[85vh] max-w-[135vh] p-0 overflow-hidden bg-transparent border-none shadow-none">
           <div className="h-[85vh] overflow-auto rounded-lg">
             <UpdatedCalendar isModal={true} onClose={() => setShowCalendarModal(false)} />
           </div>
