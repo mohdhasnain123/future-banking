@@ -1,10 +1,9 @@
 import { TaskList } from "@/components/TaskList";
 import { GeometricOverlay } from "@/components/GeometricOverlay";
 import { Task } from "@/components/TaskCard";
-import { ArrowLeft, Video } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import { CalendarPicker } from "@/components/CalendarPicker";
 import { useState, useEffect } from "react";
 
 const mockTasks: Task[] = [

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ArrowLeft, MapPin, Cloud, CheckCircle2, Volume2 } from "lucide-react";
+import { ArrowLeft, MapPin, Cloud, CheckCircle2, Car } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 // Optional: If you have a searching GIF, uncomment the next line and add the file
@@ -13,12 +13,20 @@ const CabBooking = () => {
 
   // NEW: searching state
   const [isSearching, setIsSearching] = useState(false);
+  const [vehicleSelectionOpen, setVehicleSelectionOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [cabBooked, setCabBooked] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
 
   // Keep a reference to the timeout so we can clean it up on unmount
   const timerRef = useRef<number | null>(null);
   const SEARCH_DELAY_MS = 2000; // Adjust as you like (2s = nice UX)
+
+  const availableVehicles = [
+    { id: 1, model: "Tesla Model 3", number: "ABC 1224", eta: "5 mins", price: "$10", rating: 4.9 },
+    { id: 2, model: "Toyota Prius", number: "XYZ 5678", eta: "8 mins", price: "$8", rating: 4.7 },
+    { id: 3, model: "Honda Civic", number: "LMN 9012", eta: "12 mins", price: "$7", rating: 4.8 },
+  ];
 
   const todaysTasks = [
     {
@@ -76,10 +84,16 @@ const CabBooking = () => {
     // Simulate a "searching/assigning cab" delay
     timerRef.current = window.setTimeout(() => {
       setIsSearching(false);           // close searching modal
-      addCabTaskIfMissing();           // update tasks
-      setConfirmationOpen(true);       // open confirmation dialog
-      setCabBooked(true);              // enable Audible button
+      setVehicleSelectionOpen(true);   // open vehicle selection
     }, SEARCH_DELAY_MS);
+  };
+
+  const handleVehicleSelect = (vehicleId: number) => {
+    setSelectedVehicle(vehicleId);
+    setVehicleSelectionOpen(false);
+    addCabTaskIfMissing();
+    setConfirmationOpen(true);
+    setCabBooked(true);
   };
 
   // Cleanup timer on unmount to avoid memory leaks
@@ -241,19 +255,6 @@ const CabBooking = () => {
             </div>
           </div>
 
-          {/* Audible Button - only show after cab is booked */}
-          {cabBooked && (
-            <div className="flex justify-center">
-              <Button
-                onClick={() => navigate("/audiobook")}
-                className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg flex items-center gap-2"
-                size="lg"
-              >
-                <Volume2 className="w-5 h-5" />
-                Audible
-              </Button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -269,7 +270,7 @@ const CabBooking = () => {
             /> */}
             {/* Fallback spinner */}
             <div className="w-16 h-16 rounded-full border-4 border-white/20 border-t-white animate-spin mb-4" />
-            <h2 className="text-xl font-semibold">Finding nearby cabs…</h2>
+            <h2 className="text-xl font-semibold">Connecting to vehicle booking app…</h2>
             <p className="text-white/60 mt-2 text-sm">
               This will just take a moment.
             </p>
@@ -277,23 +278,85 @@ const CabBooking = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Confirmation Dialog (shows after searching) */}
+      {/* Vehicle Selection Dialog */}
+      <Dialog open={vehicleSelectionOpen} onOpenChange={setVehicleSelectionOpen}>
+        <DialogContent className="bg-gray-900/95 backdrop-blur-md border-2 border-white/20 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
+          <div className="py-4">
+            <h2 className="text-2xl font-bold mb-2 text-center">Available Vehicles</h2>
+            <p className="text-white/60 text-center mb-6">Select a vehicle for 11:00 AM pickup</p>
+            <div className="space-y-4">
+              {availableVehicles.map((vehicle) => (
+                <div
+                  key={vehicle.id}
+                  className="bg-white/5 hover:bg-white/10 rounded-lg p-6 border border-white/10 transition-all cursor-pointer"
+                  onClick={() => handleVehicleSelect(vehicle.id)}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary/20 p-3 rounded-lg">
+                        <Car className="w-8 h-8 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg">{vehicle.model}</h3>
+                        <p className="text-white/60 text-sm">{vehicle.number}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-primary">{vehicle.price}</p>
+                      <p className="text-white/60 text-sm">⭐ {vehicle.rating}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/60 text-sm">ETA: {vehicle.eta}</span>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleVehicleSelect(vehicle.id);
+                      }}
+                      className="bg-green-600 hover:bg-green-700"
+                      size="sm"
+                    >
+                      Select for 11:00 AM
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirmation Dialog (shows after vehicle selection) */}
       <Dialog open={confirmationOpen} onOpenChange={setConfirmationOpen}>
         <DialogContent className="bg-gray-900/95 backdrop-blur-md border-2 border-white/20 text-white max-w-md">
           <div className="text-center py-8">
-            <h2 className="text-2xl font-bold mb-6">
-              Cab booking is confirmed! Your cab is 10 min away
-            </h2>
-            <div className="space-y-4 bg-white/5 rounded-lg p-6">
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">Cab Number</span>
-                <span className="text-white font-bold text-lg">A BC 1224</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">Cab Model</span>
-                <span className="text-white font-bold text-lg">Tesla</span>
-              </div>
+            <div className="bg-green-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-400" />
             </div>
+            <h2 className="text-2xl font-bold mb-6">
+              Cab Booked Successfully!
+            </h2>
+            <p className="text-white/70 mb-6">Your vehicle will arrive at 11:00 AM</p>
+            {selectedVehicle && (
+              <div className="space-y-4 bg-white/5 rounded-lg p-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-white/60">Cab Number</span>
+                  <span className="text-white font-bold text-lg">
+                    {availableVehicles.find(v => v.id === selectedVehicle)?.number}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-white/60">Cab Model</span>
+                  <span className="text-white font-bold text-lg">
+                    {availableVehicles.find(v => v.id === selectedVehicle)?.model}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-white/60">Pickup Time</span>
+                  <span className="text-white font-bold text-lg">11:00 AM</span>
+                </div>
+              </div>
+            )}
             <Button
               onClick={() => setConfirmationOpen(false)}
               className="mt-6 bg-primary hover:bg-primary/90 w-full"

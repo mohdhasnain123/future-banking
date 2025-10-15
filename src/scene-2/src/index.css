@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Background and Foreground */
+    --background: 220 20% 6%; /* From first file */
+    /* --background: 0 0% 4%;   From second file */
+    --foreground: 0 0% 98%;
+
+    /* Card */
+    --card: 220 18% 10%; /* From first file */
+    /* --card: 0 0% 8%;   From second file */
+    --card-foreground: 0 0% 98%;
+
+    /* Popover */
+    --popover: 220 18% 10%; /* From first file */
+    /* --popover: 0 0% 6%;   From second file */
+    --popover-foreground: 0 0% 98%;
+
+    /* Primary */
+    --primary: 180 85% 55%; /* From first file */
+    /* --primary: 158 100% 50%; From second file */
+    --primary-foreground: 220 20% 6%; /* From first file */
+    /* --primary-foreground: 0 0% 4%; From second file */
+
+    /* Secondary */
+    --secondary: 220 18% 14%; /* From first file */
+    /* --secondary: 0 0% 12%; From second file */
+    --secondary-foreground: 0 0% 98%;
+
+    /* Muted */
+    --muted: 220 18% 14%; /* From first file */
+    /* --muted: 0 0% 15%; From second file */
+    --muted-foreground: 0 0% 65%; /* From first file */
+    /* --muted-foreground: 0 0% 60%; From second file */
+
+    /* Accent */
+    --accent: 142 76% 50%; /* From first file */
+    /* --accent: 158 100% 50%; From second file */
+    --accent-foreground: 220 20% 6%; /* From first file */
+    /* --accent-foreground: 0 0% 4%; From second file */
+
+    /* Success (only in first file) */
+    --success: 142 76% 50%;
+    --success-foreground: 220 20% 6%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Border, Input, Ring */
+    --border: 220 18% 18%; /* From first file */
+    /* --border: 0 0% 18%; From second file */
+    --input: 220 18% 18%; /* From first file */
+    /* --input: 0 0% 18%; From second file */
+    --ring: 180 85% 55%; /* From first file */
+    /* --ring: 158 100% 50%; From second file */
+
+    /* Radius */
+    --radius: 0.75rem; /* From first file */
+    /* --radius: 1rem; From second file */
+
+    /* Chat (only in first file) */
+    --chat-bg: 220 18% 12%;
+    --chat-message: 142 76% 40%;
+    --chat-border: 142 76% 50%;
+
+    /* Neon/Glass/Gradient/Shadow (only in second file) */
+    --neon-green: 158 100% 50%;
+    --neon-green-glow: 158 100% 50%;
+    --deep-dark: 0 0% 4%;
+    --glass-bg: 0 0% 8%;
+    --gradient-cyber: linear-gradient(135deg, hsl(158 100% 50% / 0.1), hsl(0 0% 8%));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 4%), hsl(0 0% 8%));
+    --shadow-neon: 0 0 20px hsl(158 100% 50% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

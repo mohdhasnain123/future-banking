@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { ArrowLeft, CreditCard, Wifi, Smartphone, Droplets, Zap, Shield, CheckCi
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
+import { Mic } from "lucide-react";
 
 interface Bill {
   id: string;
@@ -19,7 +20,13 @@ interface Bill {
   category: string;
 }
 
-const Bills = () => {
+const Bills = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [bills, setBills] = useState<Bill[]>([
@@ -36,6 +43,33 @@ const Bills = () => {
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(null);
   const [showPaymentDetailsDialog, setShowPaymentDetailsDialog] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+  };
 
   const paymentMethods = [
     { id: "crypto", name: "Cryptocurrency", icon: Bitcoin, description: "Pay with BTC, ETH, or USDT" },
@@ -116,21 +150,30 @@ const Bills = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
       
-      {/* Content */}
+            {/* Content */}
       <div className="relative z-10 min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
-            <button
-              onClick={() => navigate("/portfolio")}
-              className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Portfolio</span>
-            </button>
-            <div className="text-white/90">
-              <h2 className="text-xl font-semibold">My Bills</h2>
-              <p className="text-sm">Manage your payments</p>
+          <div className="mb-8">
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">My Bills</h1>
+                <p className="text-white/70 text-lg">Manage your payments</p>
+                <div className="mt-4 text-white/90">
+                  <p className="text-lg font-medium">
+                    {formatTime(currentTime)} | {formatDate(currentTime)}
+                  </p>
+                </div>
+              </div>
+              {browserSupportsSpeechRecognition && (
+                <div className="flex items-center gap-2 text-sm text-white/70 mt-2">
+                  <Mic
+                    className={`w-5 h-5 ${
+                      listening ? "text-green-400 animate-pulse" : ""
+                    }`}
+                  />
+                  <span>{listening ? "Listening..." : "Mic off"}</span>
+                </div>
+              )}
             </div>
           </div>
 

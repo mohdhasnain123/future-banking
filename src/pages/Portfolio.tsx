@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
@@ -16,6 +16,7 @@ import {
   ShoppingCart,
   CreditCard,
   Plane,
+  Mic,
   Send,
   Heart,
   Coffee,
@@ -27,29 +28,9 @@ import {
   Briefcase,
   Heart as HeartIcon,
   TreePine,
-  Droplet,
-  Wind,
-  Recycle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
 interface Activity {
   id: string;
@@ -67,13 +48,46 @@ interface Goal {
   progress: number;
 }
 
-const Portfolio = () => {
+const Portfolio = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+  };
 
   const assets = [
     {
@@ -83,7 +97,7 @@ const Portfolio = () => {
       color: "hsl(220, 70%, 50%)",
     },
     {
-      name: "Crypto Assets",
+      name: "Crypto & NFTs",
       amount: 45000,
       icon: Bitcoin,
       color: "hsl(30, 60%, 70%)",
@@ -167,48 +181,58 @@ const Portfolio = () => {
       amount: 12000,
       details: "Monthly grocery shopping at organic markets and supermarkets",
       color: "hsl(142, 76%, 36%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "2.3 tons CO₂",
     },
     {
       category: "Apparel",
       amount: 8500,
       details: "Clothing, shoes, and accessories from premium brands",
       color: "hsl(220, 70%, 50%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "1.8 tons CO₂",
     },
     {
       category: "Electronics",
       amount: 15000,
       details: "Latest tech gadgets, smartphones, and home electronics",
       color: "hsl(30, 60%, 70%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "3.5 tons CO₂",
     },
     {
       category: "Entertainment",
       amount: 6500,
       details: "Movies, concerts, subscriptions, and leisure activities",
       color: "hsl(280, 65%, 60%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "0.9 tons CO₂",
     },
     {
       category: "Healthcare",
       amount: 9000,
       details: "Medical expenses, prescriptions, and wellness programs",
       color: "hsl(10, 80%, 60%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "1.2 tons CO₂",
     },
     {
       category: "Transportation",
       amount: 7500,
       details: "Fuel, maintenance, public transport, and ride-sharing",
       color: "hsl(180, 55%, 45%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "4.1 tons CO₂",
     },
     {
       category: "Education",
       amount: 11000,
       details: "Online courses, books, workshops, and certifications",
       color: "hsl(45, 85%, 55%)",
+      timeline: "Jan 2025 - Oct 2025",
+      carbonFootprint: "0.7 tons CO₂",
     },
   ];
-
-  const [selectedExpense, setSelectedExpense] = useState<
-    (typeof expenseData)[0] | null
-  >(null);
 
   const insurances = [
     {
@@ -257,42 +281,15 @@ const Portfolio = () => {
     },
   ];
 
-  const esgMetrics = [
-    {
-      category: "Environmental",
-      icon: TreePine,
-      score: 92,
-      metrics: [
-        {
-          label: "Carbon Footprint",
-          value: "15 tons CO₂/year",
-          target: "12 tons CO₂/year",
-        },
-        { label: "Renewable Energy", value: "78%", target: "100%" },
-        { label: "Waste Reduction", value: "65%", target: "80%" },
-      ],
-    },
-    {
-      category: "Social",
-      icon: Heart,
-      score: 88,
-      metrics: [
-        { label: "Community Investment", value: "$8.5K", target: "$10K" },
-        { label: "Fair Trade Products", value: "82%", target: "90%" },
-        { label: "Diversity Index", value: "85/100", target: "95/100" },
-      ],
-    },
-    {
-      category: "Governance",
-      icon: Briefcase,
-      score: 95,
-      metrics: [
-        { label: "Ethical Investments", value: "96%", target: "100%" },
-        { label: "Transparency Score", value: "94/100", target: "100/100" },
-        { label: "Compliance Rate", value: "100%", target: "100%" },
-      ],
-    },
-  ];
+  const totalNetWorth = 184567.89;
+  const gain = 1234.56;
+  const previousValue = totalNetWorth - gain;
+  const changePct = ((gain / previousValue) * 100).toFixed(1);
+
+  // Helper: pick top 3 assets by amount (or replace with the specific 3 you want)
+  const top3Assets = [...assets]
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -309,519 +306,216 @@ const Portfolio = () => {
       <div className="relative z-10 min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
-            <button
-              onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
-            </button>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/goals")}
-                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm border border-white/20"
-              >
-                My Goals
-              </button>
-              <button
-                onClick={() => navigate("/bills")}
-                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm border border-white/20"
-              >
-                My Bills
-              </button>
-              <div className="text-white/90">
-                <h2 className="text-xl font-semibold">Tue, October 07, 2025</h2>
-                <p className="text-sm">04:11 PM</p>
-              </div>
+
+          <div className="mb-8 flex justify-between items-start text-white/90">
+            {/* Date & Time on the left */}
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+                Portfolio
+              </h1>
+
+              <p className="text-lg font-medium">
+                {formatTime(currentTime)} | {formatDate(currentTime)}
+              </p>
             </div>
-          </div>
 
-          {/* Total Net Worth - Clickable */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Card className="mb-8 bg-[hsl(142,76%,36%)]/90 backdrop-blur-sm border-none cursor-pointer hover:bg-[hsl(142,76%,36%)] transition-all">
-                <CardContent className="p-6">
-                  <p className="text-white/80 text-sm mb-2">Total Net Worth</p>
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white">
-                      $184,567.89
-                    </h1>
-                    <Badge className="bg-white/20 text-white border-none">
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      $1234.56 (+2.1%) in last 24 h
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="bg-background/95 backdrop-blur-sm">
-              <DialogHeader>
-                <DialogTitle>Total Net Worth Details</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Your total net worth has grown by 2.1% in the last 24 hours.
-                </p>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Previous Value:</span>
-                    <span className="font-semibold">$183,333.33</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Current Value:</span>
-                    <span className="font-semibold">$184,567.89</span>
-                  </div>
-                  <div className="flex justify-between text-green-600">
-                    <span>Gain:</span>
-                    <span className="font-semibold">+$1,234.56</span>
-                  </div>
-                </div>
+            {/* Mic status on the right */}
+            {browserSupportsSpeechRecognition && (
+              <div className="flex items-center gap-2 text-sm text-white/70 mt-2">
+                <Mic
+                  className={`w-5 h-5 ${
+                    listening ? "text-green-400 animate-pulse" : ""
+                  }`}
+                />
+                <span>{listening ? "Listening..." : "Mic off"}</span>
               </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* Asset Breakdown */}
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {assets.map((asset) => (
-              <Dialog key={asset.name}>
-                <DialogTrigger asChild>
-                  <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:bg-glass-bg/80 transition-all">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-2">
-                        <asset.icon
-                          className="w-5 h-5"
-                          style={{ color: asset.color }}
-                        />
-                        <p className="text-white/70 text-sm">{asset.name}</p>
-                      </div>
-                      <p className="text-2xl font-bold text-white">
-                        ${asset.amount.toLocaleString()}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="bg-background/95 backdrop-blur-sm">
-                  <DialogHeader>
-                    <DialogTitle>{asset.name}</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                      Current holdings in {asset.name.toLowerCase()}
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Total Value:</span>
-                        <span className="font-semibold">
-                          ${asset.amount.toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>% of Portfolio:</span>
-                        <span className="font-semibold">
-                          {((asset.amount / 184567) * 100).toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ))}
+            )}
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            {/* Asset Allocation */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
-              <CardHeader>
-                <CardTitle className="text-white">Asset Allocation</CardTitle>
-                <p className="text-white/60 text-sm">
-                  See How Your Money Moves
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-center py-8">
-                  <svg
-                    width="200"
-                    height="200"
-                    viewBox="0 0 200 200"
-                    className="cursor-pointer"
-                  >
-                    <circle
-                      cx="100"
-                      cy="100"
-                      r="80"
-                      fill="none"
-                      stroke="hsl(220, 70%, 50%)"
-                      strokeWidth="30"
-                      strokeDasharray="231 500"
-                      transform="rotate(-90 100 100)"
-                    />
-                    <circle
-                      cx="100"
-                      cy="100"
-                      r="80"
-                      fill="none"
-                      stroke="hsl(30, 60%, 70%)"
-                      strokeWidth="30"
-                      strokeDasharray="120 500"
-                      strokeDashoffset="-231"
-                      transform="rotate(-90 100 100)"
-                    />
-                    <circle
-                      cx="100"
-                      cy="100"
-                      r="80"
-                      fill="none"
-                      stroke="hsl(142, 76%, 36%)"
-                      strokeWidth="30"
-                      strokeDasharray="150 500"
-                      strokeDashoffset="-351"
-                      transform="rotate(-90 100 100)"
-                    />
-                  </svg>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(220,70%,50%)]" />
-                    <span>Equities 46%</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(30,60%,70%)]" />
-                    <span>Crypto 24%</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
-                    <span>Digital RE 30%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="mb-8">
+            <div className="flex items-center justify-between"></div>
+          </div>
 
-            {/* Expense Categories */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
-              <CardHeader>
-                <CardTitle className="text-white">Expense Categories</CardTitle>
-                <p className="text-white/60 text-sm">
-                  Click on any bar for details
-                </p>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer
-                  config={{
-                    amount: {
-                      label: "Expenditure",
-                      color: "hsl(142, 76%, 36%)",
-                    },
-                  }}
-                  className="h-[300px] w-full mt-5"
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={expenseData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="rgba(255,255,255,0.1)"
-                      />
-                      <XAxis
-                        dataKey="category"
-                        stroke="rgba(255,255,255,0.6)"
-                      />
-                      <YAxis stroke="rgba(255,255,255,0.6)" />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar
-                        dataKey="amount"
-                        onClick={(data) => setSelectedExpense(data)}
-                      >
-                        {expenseData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={entry.color}
-                            cursor="pointer"
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-4 gap-6 mb-8">
+            {/* --- Net Worth small box --- */}
 
-            {/* Expense Detail Dialog */}
-            <Dialog
-              open={!!selectedExpense}
-              onOpenChange={(open) => !open && setSelectedExpense(null)}
-            >
+            <Dialog>
+              <DialogTrigger asChild>
+                <Card className="bg-[hsl(142,76%,36%)]/90 hover:bg-[hsl(142,76%,36%)] transition-all backdrop-blur-sm border-none cursor-pointer">
+                  <CardContent className="p-5">
+                    <p className="text-white/80 text-xs mb-1">Net Worth</p>
+
+                    <div className="flex items-start justify-between">
+                      <h2 className="text-2xl font-bold text-white mr-3">
+                        $
+                        {totalNetWorth.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </h2>
+
+                      <Badge className="bg-white/20 text-white border-none">
+                        <TrendingUp className="w-4 h-4 mr-1" />
+                        +$
+                        {gain.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        ({changePct}%)
+                      </Badge>
+                    </div>
+
+                    <p className="mt-2 text-xs text-white/80">In last 24 h</p>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+
+              {/* Net Worth dialog content */}
               <DialogContent className="bg-background/95 backdrop-blur-sm">
                 <DialogHeader>
-                  <DialogTitle>
-                    {selectedExpense?.category} Expenses
-                  </DialogTitle>
+                  <DialogTitle>Total Net Worth Details</DialogTitle>
                 </DialogHeader>
+
                 <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Your total net worth has grown by {changePct}% in the last
+                    24 hours.
+                  </p>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span>Category:</span>
+                      <span>Previous Value:</span>
                       <span className="font-semibold">
-                        {selectedExpense?.category}
+                        $
+                        {previousValue.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Total Amount:</span>
+                      <span>Current Value:</span>
                       <span className="font-semibold">
-                        ${selectedExpense?.amount.toLocaleString()}
+                        $
+                        {totalNetWorth.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>% of Total Expenses:</span>
+                    <div className="flex justify-between text-green-600">
+                      <span>Gain:</span>
                       <span className="font-semibold">
-                        {selectedExpense
-                          ? (
-                              (selectedExpense.amount /
-                                expenseData.reduce(
-                                  (sum, e) => sum + e.amount,
-                                  0
-                                )) *
-                              100
-                            ).toFixed(1)
-                          : 0}
-                        %
+                        +$
+                        {gain.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
-                    </div>
-                    <div className="pt-2 border-t">
-                      <p className="text-sm text-muted-foreground">
-                        {selectedExpense?.details}
-                      </p>
                     </div>
                   </div>
                 </div>
               </DialogContent>
             </Dialog>
-          </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Recent Activity */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
-              <CardHeader>
-                <CardTitle className="text-white">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {activities.map((activity) => (
-                  <Dialog key={activity.id}>
-                    <DialogTrigger asChild>
-                      <div className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-white/10">
-                            <activity.icon className="w-5 h-5 text-white" />
-                          </div>
-                          <div>
-                            <p className="text-white font-medium">
-                              {activity.name}
-                            </p>
-                            <p className="text-white/60 text-sm">
-                              {activity.category}
-                            </p>
-                          </div>
+            {/* --- 3 Asset Allocation boxes --- */}
+            {top3Assets.map((asset) => {
+              const pct = (asset.amount / totalNetWorth) * 100;
+              return (
+                <Dialog key={asset.name}>
+                  <DialogTrigger asChild>
+                    <Card className="bg-glass-bg/60 hover:bg-glass-bg/80 transition-all backdrop-blur-md border-glass-border cursor-pointer">
+                      <CardContent className="p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <asset.icon
+                            className="w-5 h-5"
+                            style={{ color: asset.color }}
+                          />
+                          <p className="text-white/70 text-xs">{asset.name}</p>
                         </div>
-                        <div className="text-right">
-                          <p
-                            className={`font-semibold ${
-                              activity.amount > 0
-                                ? "text-green-400"
-                                : "text-white"
-                            }`}
-                          >
-                            {activity.amount > 0 ? "+" : ""}
-                            {activity.amount.toFixed(2)}
+
+                        <div className="flex items-baseline justify-between">
+                          <p className="text-xl font-bold text-white">
+                            ${asset.amount.toLocaleString()}
                           </p>
-                          <p className="text-white/60 text-sm">
-                            {activity.time}
-                          </p>
+                          <span className="text-xs text-white/80">
+                            {pct.toFixed(1)}%
+                          </span>
+                        </div>
+
+                        {/* Tiny allocation bar */}
+                        <div className="mt-3 h-2 rounded-full bg-white/15">
+                          <div
+                            className="h-2 rounded-full"
+                            style={{
+                              width: `${Math.min(100, pct)}%`,
+                              backgroundColor:
+                                asset.color || "rgba(255,255,255,0.9)",
+                            }}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </DialogTrigger>
+
+                  {/* Asset dialog content */}
+                  <DialogContent className="bg-background/95 backdrop-blur-sm">
+                    <DialogHeader>
+                      <DialogTitle>{asset.name}</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        Current holdings in {asset.name.toLowerCase()}
+                      </p>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span>Total Value:</span>
+                          <span className="font-semibold">
+                            ${asset.amount.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>% of Portfolio:</span>
+                          <span className="font-semibold">
+                            {pct.toFixed(1)}%
+                          </span>
                         </div>
                       </div>
-                    </DialogTrigger>
-                    <DialogContent className="bg-background/95 backdrop-blur-sm">
-                      <DialogHeader>
-                        <DialogTitle>{activity.name}</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span>Category:</span>
-                            <span className="font-semibold">
-                              {activity.category}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Amount:</span>
-                            <span
-                              className={`font-semibold ${
-                                activity.amount > 0 ? "text-green-600" : ""
-                              }`}
-                            >
-                              ${Math.abs(activity.amount).toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Time:</span>
-                            <span className="font-semibold">
-                              {activity.time}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Type:</span>
-                            <span className="font-semibold">
-                              {activity.amount > 0 ? "Credit" : "Debit"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* 5-Year Wealth Projection */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border">
-              <CardHeader>
-                <CardTitle className="text-white">
-                  5-Year Wealth Projection
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="h-[350px] w-[620px] mt-14">
-                <div className="relative h-64">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 600 250"
-                    className="overflow-visible"
-                  >
-                    <defs>
-                      <linearGradient
-                        id="lineGradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="0%"
-                      >
-                        <stop offset="0%" stopColor="hsl(142, 76%, 36%)" />
-                        <stop offset="100%" stopColor="hsl(142, 60%, 45%)" />
-                      </linearGradient>
-                    </defs>
-                    {/* Grid lines */}
-                    {[0, 90, 180, 270].map((y) => (
-                      <line
-                        key={y}
-                        x1="50"
-                        y1={250 - y}
-                        x2="550"
-                        y2={250 - y}
-                        stroke="white"
-                        strokeOpacity="0.1"
-                        strokeWidth="1"
-                      />
-                    ))}
-                    {/* Y-axis labels */}
-                    {["0k", "90k", "180k", "270k", "360k"].map((label, i) => (
-                      <text
-                        key={label}
-                        x="20"
-                        y={250 - i * 62}
-                        fill="white"
-                        opacity="0.5"
-                        fontSize="12"
-                      >
-                        {label}
-                      </text>
-                    ))}
-                    {/* X-axis labels */}
-                    {projectionData.map((data, i) => (
-                      <text
-                        key={data.year}
-                        x={50 + (i * 500) / 5}
-                        y="270"
-                        fill="white"
-                        opacity="0.5"
-                        fontSize="12"
-                        textAnchor="middle"
-                      >
-                        {data.year}
-                      </text>
-                    ))}
-                    {/* Line chart */}
-                    <polyline
-                      points={projectionData
-                        .map(
-                          (data, i) =>
-                            `${50 + (i * 500) / 5},${250 - data.value * 0.7}`
-                        )
-                        .join(" ")}
-                      fill="none"
-                      stroke="url(#lineGradient)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    {/* Data points */}
-                    {projectionData.map((data, i) => (
-                      <circle
-                        key={data.year}
-                        cx={50 + (i * 500) / 5}
-                        cy={250 - data.value * 0.7}
-                        r="5"
-                        fill="hsl(142, 76%, 36%)"
-                        className="cursor-pointer hover:r-7 transition-all"
-                      />
-                    ))}
-                  </svg>
-                </div>
-              </CardContent>
-            </Card>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              );
+            })}
           </div>
 
           {/* Insurance Coverage Section */}
-          <div className="mt-8">
-            <div className="mb-6 perspective-1000">
-              <h2
-                className="text-4xl font-bold text-white relative"
-                style={{
-                  transform: "translateZ(20px)",
-                  textShadow:
-                    "0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Insurance Coverage
-              </h2>
-              <div
-                className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2"
-                style={{ transform: "translateZ(10px)" }}
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-8 mb-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {insurances.map((insurance) => (
                 <Dialog key={insurance.name}>
                   <DialogTrigger asChild>
                     <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000 group">
                       <CardContent
-                        className="p-6"
-                        style={{ transform: "translateZ(10px)" }}
+                        className="p-4"
+                        style={{ transform: "translateZ(8px)" }}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center justify-between mb-1">
                           <div
-                            className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
-                            style={{ transform: "translateZ(8px)" }}
+                            className="p-2 rounded-lg bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
+                            style={{ transform: "translateZ(6px)" }}
                           >
-                            <insurance.icon className="w-6 h-6 text-white" />
+                            <insurance.icon className="w-5 h-5 text-white" />
                           </div>
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                          <h3 className="text-white font-semibold text-base">
+                            {insurance.name}
+                          </h3>
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs mr-2">
                             {insurance.status}
                           </Badge>
                         </div>
-                        <h3 className="text-white font-semibold text-lg mb-2">
-                          {insurance.name}
-                        </h3>
-                        <div className="space-y-1 text-white/70 text-sm">
+
+                        <div className="space-y-1 text-white/70 text-xs">
                           <p>
                             Coverage:{" "}
                             <span className="text-white font-semibold">
@@ -838,6 +532,8 @@ const Portfolio = () => {
                       </CardContent>
                     </Card>
                   </DialogTrigger>
+
+                  {/* Dialog Content remains same */}
                   <DialogContent className="bg-background/95 backdrop-blur-sm">
                     <DialogHeader>
                       <DialogTitle>{insurance.name}</DialogTitle>
@@ -904,115 +600,393 @@ const Portfolio = () => {
             </div>
           </div>
 
-          {/* ESG Sustainability Section */}
-          {/* <div className="mt-8 mb-8">
-            <div className="mb-6 perspective-1000">
-              <h2
-                className="text-4xl font-bold text-white relative"
-                style={{
-                  transform: "translateZ(20px)",
-                  textShadow:
-                    "0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                ESG Sustainability
-              </h2>
-              <div
-                className="h-1 w-32 bg-gradient-to-r from-primary via-purple-500 to-primary mt-2"
-                style={{ transform: "translateZ(10px)" }}
-              />
-            </div>
+          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+            {/* Asset Allocation */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-white text-base">
+                  Asset Allocation
+                </CardTitle>
+                <p className="text-white/60 text-sm">
+                  See How Your Money Moves
+                </p>
+              </CardHeader>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {esgMetrics.map((category) => (
-                <Dialog key={category.category}>
-                  <DialogTrigger asChild>
-                    <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:scale-105 transition-all perspective-1000">
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div
-                              className="p-3 rounded-xl bg-gradient-to-br from-primary/30 to-purple-500/30 backdrop-blur-sm"
-                              style={{ transform: "translateZ(8px)" }}
-                            >
-                              <category.icon className="w-6 h-6 text-white" />
+              <CardContent className="flex-1 flex flex-col justify-center px-4 py-2">
+                <div className="flex items-center justify-center py-4">
+                  <svg
+                    width="180"
+                    height="180"
+                    viewBox="0 0 200 200"
+                    className="cursor-pointer"
+                  >
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(220, 70%, 50%)"
+                      strokeWidth="30"
+                      strokeDasharray="231 500"
+                      transform="rotate(-90 100 100)"
+                    />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(30, 60%, 70%)"
+                      strokeWidth="30"
+                      strokeDasharray="120 500"
+                      strokeDashoffset="-231"
+                      transform="rotate(-90 100 100)"
+                    />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="80"
+                      fill="none"
+                      stroke="hsl(142, 76%, 36%)"
+                      strokeWidth="30"
+                      strokeDasharray="150 500"
+                      strokeDashoffset="-351"
+                      transform="rotate(-90 100 100)"
+                    />
+                  </svg>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-white/80 text-sm">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(220,70%,50%)]" />
+                    <span>Equities 46%</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/80 text-sm">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(30,60%,70%)]" />
+                    <span>Crypto & NFTs 24%</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/80 text-sm">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
+                    <span>Digital RE 30%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Expense Categories */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
+              <CardHeader>
+                <CardTitle className="text-white">Expense Categories</CardTitle>
+                <p className="text-white/60 text-sm">
+                  Detailed breakdown with carbon footprint
+                </p>
+
+                {/* ✅ Time Period moved here */}
+                <p className="text-xs text-blue-300 mt-1">
+                  Time Period:{" Jan 2025 - Oct 2025"}
+                  <span className="font-semibold text-white">
+                    {/* dynamic value */}
+                  </span>
+                </p>
+              </CardHeader>
+
+              <CardContent className="flex-1 overflow-y-auto pr-2">
+                <div className="space-y-4 perspective-1000">
+                  {expenseData.map((expense, index) => (
+                    <div
+                      key={expense.category}
+                      className="relative group"
+                      style={{
+                        transform: `translateZ(${index * 2}px)`,
+                        transformStyle: "preserve-3d",
+                      }}
+                    >
+                      {/* 3D Card Container */}
+                      <div
+                        className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-[1.02]"
+                        style={{
+                          transform: "translateZ(10px)",
+                          boxShadow: `0 8px 32px ${expense.color}40`,
+                        }}
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Category Info */}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className="text-white font-semibold text-lg">
+                                {expense.category}
+                              </h3>
+                              <span className="text-1xl font-bold text-white">
+                                ${expense.amount.toLocaleString()}
+                              </span>
                             </div>
-                            <CardTitle className="text-white">
-                              {category.category}
-                            </CardTitle>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="mb-4">
-                          <div className="flex justify-between mb-2">
-                            <span className="text-white/70 text-sm">
-                              ESG Score
-                            </span>
-                            <span className="text-white font-bold text-lg">
-                              {category.score}/100
-                            </span>
-                          </div>
-                          <div className="w-full bg-white/10 rounded-full h-3">
-                            <div
-                              className="bg-gradient-to-r from-primary to-green-400 h-3 rounded-full transition-all"
-                              style={{ width: `${category.score}%` }}
-                            />
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          {category.metrics.slice(0, 2).map((metric) => (
-                            <div
-                              key={metric.label}
-                              className="text-white/70 text-sm"
-                            >
-                              <span className="text-white/90">
-                                {metric.label}:
-                              </span>{" "}
-                              {metric.value}
+
+                            {/* ✅ Progress Bar + Carbon Footprint side by side */}
+                            <div className="grid grid-cols-2 gap-3 mb-3">
+                              {/* Progress Bar */}
+                              <div className="h-full relative h-8 bg-white/10 rounded-lg overflow-hidden">
+                                <div
+                                  className="absolute inset-0 rounded-lg transition-all duration-500"
+                                  style={{
+                                    width: `${
+                                      (expense.amount /
+                                        Math.max(
+                                          ...expenseData.map((e) => e.amount)
+                                        )) *
+                                      100
+                                    }%`,
+                                    background: `linear-gradient(135deg, ${expense.color}, ${expense.color}dd)`,
+                                    boxShadow: `inset 0 2px 8px rgba(255,255,255,0.2), 0 4px 16px ${expense.color}60`,
+                                  }}
+                                >
+                                  <div
+                                    className="absolute inset-0"
+                                    style={{
+                                      background: `linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 50%)`,
+                                    }}
+                                  />
+                                </div>
+                                <div className="relative z-10 flex items-center justify-center h-full">
+                                  <span className="text-white text-xs font-medium">
+                                    {(
+                                      (expense.amount /
+                                        expenseData.reduce(
+                                          (sum, e) => sum + e.amount,
+                                          0
+                                        )) *
+                                      100
+                                    ).toFixed(1)}
+                                    % of total
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Carbon Footprint */}
+                              <div
+                                className="h-full bg-green-500/20 backdrop-blur-sm rounded-lg p-3 border border-green-400/30 flex flex-col justify-center"
+                                style={{
+                                  transform: "translateZ(5px)",
+                                  boxShadow:
+                                    "0 4px 12px rgba(34, 197, 94, 0.2)",
+                                }}
+                              >
+                                <div className="flex items-center gap-1 mb-1">
+                                  <Leaf className="w-3 h-3 text-green-400" />
+                                  <span className="text-xs text-green-300">
+                                    Carbon Footprint
+                                  </span>
+                                  <p className="text-sm font-semibold text-white">
+                                    {expense.carbonFootprint}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                          ))}
+
+                            {/* Description */}
+                            <p className="text-white/60 text-xs mt-3 leading-relaxed">
+                              {expense.details}
+                            </p>
+                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </DialogTrigger>
-                  <DialogContent className="bg-background/95 backdrop-blur-sm">
-                    <DialogHeader>
-                      <DialogTitle>{category.category} Details</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                        <span className="font-semibold">Overall Score</span>
-                        <span className="text-2xl font-bold text-green-600">
-                          {category.score}/100
-                        </span>
                       </div>
-                      <div className="space-y-3">
-                        {category.metrics.map((metric) => (
-                          <div key={metric.label} className="space-y-1">
-                            <div className="flex justify-between text-sm">
-                              <span className="font-medium">
-                                {metric.label}
-                              </span>
-                              <span className="text-muted-foreground">
-                                Target: {metric.target}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold text-green-600">
-                                {metric.value}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+
+                      {/* 3D Shadow layer */}
+                      <div
+                        className="absolute inset-0 rounded-xl -z-10 blur-xl opacity-50"
+                        style={{
+                          background: expense.color,
+                          transform: "translateZ(-10px) scale(0.95)",
+                        }}
+                      />
                     </div>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </div>
-          </div> /*}
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Recent Activity */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-white text-base">
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 px-4 py-2">
+                {activities.map((activity) => (
+                  <Dialog key={activity.id}>
+                    <DialogTrigger asChild>
+                      <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
+                        <div className="flex items-center gap-2">
+                          <div className="p-1 rounded-lg bg-white/10">
+                            <activity.icon className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-white text-sm font-medium">
+                              {activity.name}
+                            </p>
+                            <p className="text-white/60 text-xs">
+                              {activity.category}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p
+                            className={`text-sm font-semibold ${
+                              activity.amount > 0
+                                ? "text-green-400"
+                                : "text-white"
+                            }`}
+                          >
+                            {activity.amount > 0 ? "+" : ""}
+                            {activity.amount.toFixed(2)}
+                          </p>
+                          <p className="text-white/60 text-xs">
+                            {activity.time}
+                          </p>
+                        </div>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="bg-background/95 backdrop-blur-sm">
+                      <DialogHeader>
+                        <DialogTitle>{activity.name}</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Category:</span>
+                          <span className="font-semibold">
+                            {activity.category}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Amount:</span>
+                          <span
+                            className={`font-semibold ${
+                              activity.amount > 0 ? "text-green-600" : ""
+                            }`}
+                          >
+                            ${Math.abs(activity.amount).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Time:</span>
+                          <span className="font-semibold">{activity.time}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Type:</span>
+                          <span className="font-semibold">
+                            {activity.amount > 0 ? "Credit" : "Debit"}
+                          </span>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* 5-Year Wealth Projection */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-white text-base">
+                  5-Year Wealth Projection
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mt-6 px-4 py-2">
+                <div className="relative h-[250px] w-full">
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 600 250"
+                    className="overflow-visible"
+                  >
+                    <defs>
+                      <linearGradient
+                        id="lineGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="hsl(142, 76%, 36%)" />
+                        <stop offset="100%" stopColor="hsl(142, 60%, 45%)" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Grid lines */}
+                    {[0, 90, 180, 270].map((y) => (
+                      <line
+                        key={y}
+                        x1="50"
+                        y1={250 - y}
+                        x2="550"
+                        y2={250 - y}
+                        stroke="white"
+                        strokeOpacity="0.1"
+                        strokeWidth="1"
+                      />
+                    ))}
+
+                    {/* Y-axis labels */}
+                    {["0k", "90k", "180k", "270k", "360k"].map((label, i) => (
+                      <text
+                        key={label}
+                        x="20"
+                        y={250 - i * 62}
+                        fill="white"
+                        opacity="0.5"
+                        fontSize="10"
+                      >
+                        {label}
+                      </text>
+                    ))}
+
+                    {/* X-axis labels */}
+                    {projectionData.map((data, i) => (
+                      <text
+                        key={data.year}
+                        x={50 + (i * 500) / 5}
+                        y="270"
+                        fill="white"
+                        opacity="0.5"
+                        fontSize="10"
+                        textAnchor="middle"
+                      >
+                        {data.year}
+                      </text>
+                    ))}
+
+                    {/* Line chart */}
+                    <polyline
+                      points={projectionData
+                        .map(
+                          (data, i) =>
+                            `${50 + (i * 500) / 5},${250 - data.value * 0.7}`
+                        )
+                        .join(" ")}
+                      fill="none"
+                      stroke="url(#lineGradient)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    {/* Data points */}
+                    {projectionData.map((data, i) => (
+                      <circle
+                        key={data.year}
+                        cx={50 + (i * 500) / 5}
+                        cy={250 - data.value * 0.7}
+                        r="4"
+                        fill="hsl(142, 76%, 36%)"
+                        className="cursor-pointer hover:r-6 transition-all"
+                      />
+                    ))}
+                  </svg>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Data Source Information */}
           <Card className="mt-8 bg-glass-bg/60 backdrop-blur-md border-2 border-white/10">
@@ -1021,7 +995,7 @@ const Portfolio = () => {
                 <div className="bg-blue-500/20 p-3 rounded-lg">
                   <Shield className="w-6 h-6 text-blue-400" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="text-white font-semibold mb-2">
                     Data Source & Security
                   </h3>
@@ -1031,7 +1005,7 @@ const Portfolio = () => {
                     real-time market data, institutional holdings, and verified
                     transactions.
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 items-center">
                     <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
                       Real-time Market Data
                     </span>
@@ -1044,6 +1018,12 @@ const Portfolio = () => {
                     <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
                       Multi-Source Aggregation
                     </span>
+                    <button
+                      onClick={() => navigate("/agentmesh")}
+                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg"
+                    >
+                      Agentic Mesh
+                    </button>
                   </div>
                 </div>
               </div>
