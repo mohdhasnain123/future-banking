@@ -24,6 +24,7 @@ import NFTDetail from "./scene-2/src/pages/NFTDetail.tsx";
 import PaymentMethod from "./scene-2/src/pages/PaymentMethod.tsx";
 import PaymentProcessing from "./scene-2/src/pages/PaymentProcessing.tsx";
 import Welcome from "./scene-2/src/pages/Welcome.tsx";
+import HouseGoal from "./scene-2/src/pages/HouseGoal.tsx";
 
 // --- Scene imports
 import DestinationScene from "./scene-2/src/components/scenes/DestinationScene.tsx";
@@ -305,6 +306,17 @@ function AppContent() {
           path="/taskdashboard"
           element={
             <TaskDashboardScene
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
+        <Route
+          path="/house-goal"
+          element={
+            <HouseGoal
               listening={listening}
               browserSupportsSpeechRecognition={
                 browserSupportsSpeechRecognition
