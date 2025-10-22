@@ -17,7 +17,6 @@ import Portfolio from "./pages/Portfolio.tsx";
 import Goals from "./pages/Goals.tsx";
 import WealthAdvisor from "./pages/WealthAdvisor.tsx";
 import CabBooking from "./pages/CabBooking.tsx";
-import Bills from "./pages/Bills.tsx";
 import AgentsDashboard from "./pages/agents.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import BrowseArts from "./scene-2/src/pages/BrowseArts.tsx";
@@ -72,7 +71,8 @@ function AppContent() {
   const location = useLocation();
 
   // Start voice navigation at the app level
-  const { listening, browserSupportsSpeechRecognition } = useVoiceNavigation();
+  const { listening, browserSupportsSpeechRecognition, transcript } =
+    useVoiceNavigation();
 
   // Controlled path logic
   const isControlledPath = controlledStepPaths.includes(location.pathname);
@@ -217,10 +217,13 @@ function AppContent() {
             />
           }
         />
+        <Route path="/agentmesh" element={<AgentsDashboard />} />
+
+        {/* Scene-2 pages */}
         <Route
-          path="/bills"
+          path="/welcomeScreen"
           element={
-            <Bills
+            <Welcome
               listening={listening}
               browserSupportsSpeechRecognition={
                 browserSupportsSpeechRecognition
@@ -228,11 +231,6 @@ function AppContent() {
             />
           }
         />
-        <Route path="/agentmesh" element={<AgentsDashboard />} />
-
-          {/* Scene-2 pages */}
-        <Route path="/welcomeScreen" element={<Welcome />} />
-        <Route path="/index" element={<Index />} />
         <Route
           path="/browse-arts"
           element={
@@ -244,13 +242,76 @@ function AppContent() {
             />
           }
         />
-        <Route path="/nft/:id" element={<NFTDetail />} />
-        <Route path="/payment-method" element={<PaymentMethod />} />
-        <Route path="/payment-processing" element={<PaymentProcessing />} />
-        <Route path="/destination" element={<DestinationScene />} />
-        <Route path="/petinfo" element={<PetInfoScene />} />
+
+        <Route
+          path="/nft/:id"
+          element={
+            <NFTDetail
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
+        <Route
+          path="/payment-method"
+          element={
+            <PaymentMethod
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
+        <Route
+          path="/payment-processing"
+          element={
+            <PaymentProcessing
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
+        <Route
+          path="/destination"
+          element={
+            <DestinationScene
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+              transcript={transcript}
+            />
+          }
+        />
+        <Route
+          path="/petinfo"
+          element={
+            <PetInfoScene
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+              transcript={transcript}
+            />
+          }
+        />
         <Route path="/paymentscene" element={<PaymentScene />} />
-        <Route path="/taskdashboard" element={<TaskDashboardScene />} />
+        <Route
+          path="/taskdashboard"
+          element={
+            <TaskDashboardScene
+              listening={listening}
+              browserSupportsSpeechRecognition={
+                browserSupportsSpeechRecognition
+              }
+            />
+          }
+        />
 
         {/* Scene-3 controlled screens */}
         <Route

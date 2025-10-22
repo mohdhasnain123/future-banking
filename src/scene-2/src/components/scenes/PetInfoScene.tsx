@@ -1,10 +1,20 @@
+import { useEffect, useRef } from "react";
 import dogVideo from "@/scene-2/src/assets/dogVideo.mp4";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import backgroundImage from "@/scene-2/src/assets/background.jpg"; // Ensure this path is correct
+import { ArrowLeft, ArrowRight, Mic } from "lucide-react";
+import backgroundImage from "@/scene-2/src/assets/background.jpg";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
-const PetInfoScene = () => {
-  const navigate = useNavigate();
+const PetInfoScene = ({
+  listening,
+  browserSupportsSpeechRecognition,
+  transcript
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+  transcript?: string;
+}) => {
+  
 
   return (
     <div
@@ -104,23 +114,34 @@ const PetInfoScene = () => {
         <div className="text-sm text-muted-foreground">02:45 pm</div>
       </div>
 
-      {/* Back Arrow at Bottom Left */}
-      <button
-        className="absolute bottom-8 left-8 z-30 bg-card/80 border border-border rounded-full p-2 shadow-lg hover:bg-card/90 transition"
-        onClick={() => navigate("/destination")}
-        aria-label="Go back to destination"
-      >
-        <ArrowLeft className="w-6 h-6 text-muted-foreground" />
-      </button>
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
 
-      {/* Next Arrow at Bottom Right */}
-      <button
-        className="absolute bottom-8 right-8 z-30 bg-card/80 border border-border rounded-full p-2 shadow-lg hover:bg-card/90 transition"
-        onClick={() => navigate("/paymentscene")}
-        aria-label="Go to payment"
-      >
-        <ArrowRight className="w-6 h-6 text-muted-foreground" />
-      </button>
+      {/* Voice status indicator and transcript for debugging */}
+      {browserSupportsSpeechRecognition && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 bg-background/80 px-4 py-2 rounded shadow">
+          <div className="flex items-center gap-2">
+            <span className={`w-3 h-3 rounded-full ${listening ? "bg-success" : "bg-destructive"}`}></span>
+            <span className="text-xs text-muted-foreground">
+              Voice Command: Say "paymentscene" to go to Payment Scene screen
+            </span>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Transcript: {transcript}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

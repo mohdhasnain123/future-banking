@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { MapPin, Cloud, CheckCircle2, Car, Mic } from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CabBooking = ({
   listening,
@@ -18,6 +19,22 @@ const CabBooking = ({
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [cabBooked, setCabBooked] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("showConfirmation") === "true") {
+      handleConfirmBooking();
+      // Optional: remove the query param from URL after opening the modal
+      navigate("/cab-booking", { replace: true });
+    } else if (params.get("vehicleSelection") === "true") {
+      handleVehicleSelect(1);
+      // Optional: remove the query param from URL after opening the modal
+      navigate("/cab-booking", { replace: true });
+    }
+  }, [location.search, navigate]);
 
   // Keep a reference to the timeout so we can clean it up on unmount
   const timerRef = useRef<number | null>(null);
@@ -219,8 +236,12 @@ const CabBooking = ({
                   {/* Confirm Button */}
                   <div className="mt-8 flex justify-center">
                     <Button
-                      onClick={handleConfirmBooking}
-                      className="bg-green-600 hover:bg-green-700 text-white px-12 py-6 text-lg rounded-xl"
+                      onClick={() => handleConfirmBooking()}
+                      className={`bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg rounded-xl transition-all ${
+                        isSearching
+                          ? "ring-4 ring-green-400 ring-offset-2 ring-offset-black/50"
+                          : ""
+                      }`}
                       size="lg"
                       disabled={isSearching}
                     >

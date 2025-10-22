@@ -56,11 +56,7 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
   const TaskIcon = getTaskIcon();
 
   const handleClick = () => {
-    if (task.onClick) {
-      navigate(task.onClick);
-    } else {
-      setIsExpanded(!isExpanded);
-    }
+    setIsExpanded(!isExpanded);
   };
 
   return (

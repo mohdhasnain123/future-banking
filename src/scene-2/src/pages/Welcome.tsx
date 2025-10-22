@@ -1,12 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { MapWidget } from "../components/MapWidget";
 import { DateTimeDisplay } from "../components/DateTimeDisplay";
 import backgroundImage from "@/scene-2/src/assets/background.jpg";
+import { Mic } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-export default function Welcome() {
+const Welcome = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
-
   return (
     <div
       className="min-h-screen flex items-center justify-center relative"
@@ -18,6 +24,20 @@ export default function Welcome() {
     >
       <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
 
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
+
       <DateTimeDisplay />
       <MapWidget />
 
@@ -25,7 +45,6 @@ export default function Welcome() {
         <h1 className="text-7xl font-bold text-foreground tracking-wider">
           Welcome Vick!!
         </h1>
-
         <div className="flex gap-4 justify-center">
           <Button
             size="lg"
@@ -38,4 +57,6 @@ export default function Welcome() {
       </div>
     </div>
   );
-}
+};
+
+export default Welcome;

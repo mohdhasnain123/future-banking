@@ -1,9 +1,13 @@
-import { CheckCircle2, Circle, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { CheckCircle2, Circle, Mic} from 'lucide-react';
 import backgroundImage from "@/scene-2/src/assets/background.jpg"; // Ensure this path is correct
 
-const TaskDashboardScene = () => {
-  const navigate = useNavigate();
+const TaskDashboardScene = ({
+  listening,
+  browserSupportsSpeechRecognition
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
 
   return (
     <div
@@ -83,20 +87,26 @@ const TaskDashboardScene = () => {
         </div>
       </div>
 
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
+
       {/* Date/Time */}
       <div className="absolute top-8 left-8">
         <div className="text-xl font-light text-foreground">15 July 2035, Sun</div>
         <div className="text-sm text-muted-foreground">04:06 pm</div>
       </div>
 
-      {/* Back Arrow at Bottom Left */}
-      <button
-        className="absolute bottom-8 left-8 z-30 bg-card/80 border border-border rounded-full p-2 shadow-lg hover:bg-card/90 transition"
-        onClick={() => navigate('/paymentscene')}
-        aria-label="Go back to payment scene"
-      >
-        <ArrowLeft className="w-6 h-6 text-muted-foreground" />
-      </button>
     </div>
   );
 };

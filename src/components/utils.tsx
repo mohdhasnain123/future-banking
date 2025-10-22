@@ -4,7 +4,13 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-export const useVoiceNavigation = () => {
+export type VoiceNavigationHandlers = {
+  setSelectedCategory?: (category: string) => void;
+  handleVoiceConfirmation?: () => void;
+  selectedCategory?: string;
+};
+
+export const useVoiceNavigation = (handlers: VoiceNavigationHandlers = {}) => {
   const navigate = useNavigate();
 
   const commands = useMemo(
@@ -12,20 +18,67 @@ export const useVoiceNavigation = () => {
       { command: /home/, callback: () => navigate("/") },
       { command: /portfolio/, callback: () => navigate("/portfolio") },
       { command: /goals/, callback: () => navigate("/goals") },
-      { command: /bills/, callback: () => navigate("/bills") },
-      { command: /browse arts/, callback: () => navigate("/browse-arts") },
       {
         command: /wealth advisor/,
         callback: () => navigate("/wealth-advisor"),
       },
-
       { command: /book/, callback: () => navigate("/cab-booking") },
+      {
+        command: /confirm/,
+        callback: () => navigate("/cab-booking?showConfirmation=true"),
+      },
+      {
+        command: /tesla/,
+        callback: () => navigate("/cab-booking?vehicleSelection=true"),
+      },
       {
         command: /schedule/,
         callback: () => navigate("/goals?showCalendar=true"),
       },
+      {
+        command: /strategic/,
+        callback: () => navigate("/wealth-advisor?showStrategic=true"),
+      },
+      {
+        command: /aggressive/,
+        callback: () => navigate("/wealth-advisor?showAggressive=true"),
+      },
+      {
+        command: /comparison/,
+        callback: () => navigate("/wealth-advisor?showComparison=true"),
+      },
+      { command: /browse arts/, callback: () => navigate("/browse-arts") },
+      { command: /highest bid/, callback: () => navigate("/nft/:id") },
+      { command: /accept/, callback: () => navigate("/payment-method") },
+      { command: /CBDC/, callback: () => navigate("/payment-processing") },
+      { command: /destination/, callback: () => navigate("/destination") },
+      { command: /pet/, callback: () => navigate("/petinfo") },
+      { command: /payment/, callback: () => navigate("/paymentscene") },
+      {
+        command: [
+          "cryptocurrency",
+          "select cryptocurrency",
+          "crypto",
+          /crypto/,
+          /cryptocurrency/,
+        ],
+        callback: () => {
+          if (handlers.setSelectedCategory) {
+            handlers.setSelectedCategory("Cryptocurrency");
+          }
+        },
+      },
+      {
+        command: /authorise/,
+        callback: () => {
+          if (handlers.selectedCategory && handlers.handleVoiceConfirmation) {
+            handlers.handleVoiceConfirmation();
+          }
+        },
+      },
+      { command: /dashboard/, callback: () => navigate("/taskdashboard") },
     ],
-    [navigate]
+    [navigate, handlers]
   );
 
   const { transcript, listening, browserSupportsSpeechRecognition } =
@@ -42,5 +95,5 @@ export const useVoiceNavigation = () => {
     return () => SpeechRecognition.stopListening();
   }, []);
 
-  return { listening, browserSupportsSpeechRecognition };
+  return { listening, browserSupportsSpeechRecognition, transcript };
 };

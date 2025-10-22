@@ -3,7 +3,6 @@ import { GeometricOverlay } from "@/components/GeometricOverlay";
 import { Task } from "@/components/TaskCard";
 import { X } from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import { useState, useEffect } from "react";
 
 const mockTasks: Task[] = [
   {
@@ -40,50 +39,19 @@ const UpdatedCalendar = ({
   isModal = false,
   onClose,
 }: UpdatedCalendarProps) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "long" });
-    const year = date.getFullYear();
-    const dayName = date.toLocaleString("en-US", { weekday: "short" });
-    return `${day} ${month} ${year}, ${dayName}`;
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background Image */}
+    <div className="relative w-full h-full">
+      {/* Background Image and overlays as before */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${mountainBg})`,
         }}
       />
-
-      {/* Overlay for better text visibility */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
-
-      {/* Geometric Overlay */}
       <GeometricOverlay />
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen p-8 md:p-12 lg:p-16">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
         {isModal && (
           <button
             onClick={onClose}
@@ -93,29 +61,10 @@ const UpdatedCalendar = ({
             <X className="w-6 h-6" />
           </button>
         )}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-            {/* Left side - Date and Time */}
-            <div className="pt-8">
-              <header className="relative z-10 space-y-2 animate-fade-in">
-                <div className="flex items-center gap-3">
-                  <div className="space-y-1">
-                    <h2 className="text-xl font-medium tracking-wide text-white/90">
-                      {formatDate(currentTime)}
-                    </h2>
-                    <p className="text-lg text-white/70">
-                      {formatTime(currentTime)}
-                    </p>
-                  </div>
-                  {/* <CalendarPicker /> */}
-                </div>
-              </header>
-            </div>
-
-            {/* Right side - Tasks */}
-            <div className="flex flex-col gap-6 justify-end pt-8">
-              <TaskList tasks={mockTasks} />
-            </div>
+        <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center">
+          {/* Only TaskList scrolls if needed */}
+          <div className="w-full flex flex-col gap-6 items-center justify-center max-h-[80vh] overflow-y-auto">
+            <TaskList tasks={mockTasks} />
           </div>
         </div>
       </div>

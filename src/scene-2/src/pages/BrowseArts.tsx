@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { MapWidget } from "../components/MapWidget";
 import { DateTimeDisplay } from "../components/DateTimeDisplay";
 import { NFTCard } from "../components/NFTCard";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import backgroundImage from "@/scene-2/src/assets/background.jpg";
 import nft1 from "@/scene-2/src/assets/nft1.jpg";
 import nft2 from "@/scene-2/src/assets/nft2.jpg";
@@ -11,6 +8,9 @@ import nft3 from "@/scene-2/src/assets/nft3.jpg";
 import nft4 from "@/scene-2/src/assets/nft4.jpg";
 import nft5 from "@/scene-2/src/assets/nft5.jpg";
 import nft6 from "@/scene-2/src/assets/nft6.jpg";
+import { Mic } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const nfts = [
   {
@@ -79,6 +79,20 @@ const BrowseArts = ({
     >
       <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
 
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
+
       <DateTimeDisplay />
       <MapWidget />
 
@@ -98,7 +112,6 @@ const BrowseArts = ({
             />
           ))}
         </div>
-
         {nftWithBids && (
           <div className="flex justify-center">
             <Button
@@ -110,25 +123,6 @@ const BrowseArts = ({
             </Button>
           </div>
         )}
-
-        <div className="fixed bottom-8 left-0 right-0 flex justify-between px-8 z-20">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full w-12 h-12"
-            onClick={() => navigate("/")}
-          >
-            <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full w-12 h-12"
-            onClick={() => navigate(`/nft/${nftWithBids?.id}`)}
-          >
-            <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
-          </Button>
-        </div>
       </div>
     </div>
   );

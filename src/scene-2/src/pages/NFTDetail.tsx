@@ -4,18 +4,48 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapWidget } from "../components/MapWidget";
 import { DateTimeDisplay } from "../components/DateTimeDisplay";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mic } from "lucide-react";
 import backgroundImage from "../assets/background.jpg";
 import nft1 from "../assets/nft1.jpg";
 
 const bids = [
-  { id: 1, amount: 180, currency: "eUSD", bidder: "Mary (US)", isHighest: false },
-  { id: 2, amount: 200, currency: "eUSD", bidder: "Lisa (India)", isHighest: true },
-  { id: 3, amount: 160, currency: "eUSD", bidder: "Ayaan (India)", isHighest: false },
-  { id: 4, amount: 165, currency: "eUSD", bidder: "Emma (US)", isHighest: false },
+  {
+    id: 1,
+    amount: 180,
+    currency: "eUSD",
+    bidder: "Mary (US)",
+    isHighest: false,
+  },
+  {
+    id: 2,
+    amount: 200,
+    currency: "eUSD",
+    bidder: "Lisa (India)",
+    isHighest: true,
+  },
+  {
+    id: 3,
+    amount: 160,
+    currency: "eUSD",
+    bidder: "Ayaan (India)",
+    isHighest: false,
+  },
+  {
+    id: 4,
+    amount: 165,
+    currency: "eUSD",
+    bidder: "Emma (US)",
+    isHighest: false,
+  },
 ];
 
-export default function NFTDetail() {
+const NFTDetail = ({
+  listening,
+  browserSupportsSpeechRecognition,
+}: {
+  listening?: boolean;
+  browserSupportsSpeechRecognition?: boolean;
+}) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [selectedBid, setSelectedBid] = useState<number | null>(null);
@@ -26,7 +56,7 @@ export default function NFTDetail() {
   };
 
   // Calculate highest bid and average market price
-  const highestBid = Math.max(...bids.map(b => b.amount));
+  const highestBid = Math.max(...bids.map((b) => b.amount));
   const avgMarketPrice = Math.round(
     bids.reduce((sum, b) => sum + b.amount, 0) / bids.length
   );
@@ -42,6 +72,20 @@ export default function NFTDetail() {
     >
       <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
 
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
+
       <DateTimeDisplay />
       <MapWidget />
 
@@ -50,14 +94,20 @@ export default function NFTDetail() {
           {/* NFT Display */}
           <Card className="overflow-hidden">
             <div className="aspect-square relative overflow-hidden">
-              <img src={nft1} alt="Artificial Intelligence Lady" className="w-full h-full object-cover" />
+              <img
+                src={nft1}
+                alt="Artificial Intelligence Lady"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="p-4 space-y-2">
-              <h2 className="text-2xl font-bold text-foreground">Artificial Intelligence Lady</h2>
+              <h2 className="text-2xl font-bold text-foreground">
+                Artificial Intelligence Lady
+              </h2>
               <p className="text-sm text-muted-foreground">
-                A futuristic female figure embodies the elegance and power of artificial intelligence.
-                Her face is symmetrical and ethereal, a seamless blend of human features and advanced
-                machine elements.
+                A futuristic female figure embodies the elegance and power of
+                artificial intelligence. Her face is symmetrical and ethereal, a
+                seamless blend of human features and advanced machine elements.
               </p>
               <p className="text-lg font-bold text-success">4 Bids</p>
             </div>
@@ -66,27 +116,45 @@ export default function NFTDetail() {
           {/* Bids List */}
           <div className="space-y-2 flex flex-col">
             <div className="flex items-center justify-between mb-2">
-              {/* Binance label */}
-              <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+              {/* Binance label - more prominent */}
+              <span className="inline-block px-4 py-2 bg-primary/10 text-primary text-base font-bold rounded-full shadow-sm border border-primary">
                 Binance
               </span>
               {/* Bid Distribution (small and compact) */}
               <div className="flex gap-1 items-end h-6">
-                <div className="w-2 bg-muted rounded-t" style={{height: '40%'}}></div>
-                <div className="w-2 bg-muted rounded-t" style={{height: '65%'}}></div>
-                <div className="w-2 bg-muted rounded-t" style={{height: '80%'}}></div>
-                <div className="w-2 bg-success rounded-t" style={{height: '100%'}}></div>
+                <div
+                  className="w-2 bg-muted rounded-t"
+                  style={{ height: "40%" }}
+                ></div>
+                <div
+                  className="w-2 bg-muted rounded-t"
+                  style={{ height: "65%" }}
+                ></div>
+                <div
+                  className="w-2 bg-muted rounded-t"
+                  style={{ height: "80%" }}
+                ></div>
+                <div
+                  className="w-2 bg-success rounded-t"
+                  style={{ height: "100%" }}
+                ></div>
               </div>
             </div>
             {/* Highest and Avg Market Price */}
             <div className="flex gap-4 mb-2">
               <div>
                 <p className="text-xs text-muted-foreground">Highest Bid</p>
-                <p className="text-lg font-bold text-success">{highestBid} eUSD</p>
+                <p className="text-lg font-bold text-success">
+                  {highestBid} eUSD
+                </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Avg. Market Price</p>
-                <p className="text-lg font-bold text-foreground">{avgMarketPrice} eUSD</p>
+                <p className="text-xs text-muted-foreground">
+                  Avg. Market Price
+                </p>
+                <p className="text-lg font-bold text-foreground">
+                  {avgMarketPrice} eUSD
+                </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Price Trend</p>
@@ -113,9 +181,13 @@ export default function NFTDetail() {
                       )}
                       <p className="text-xl font-bold text-foreground">
                         {bid.amount}{" "}
-                        <span className="text-base text-muted-foreground">{bid.currency}</span>
+                        <span className="text-base text-muted-foreground">
+                          {bid.currency}
+                        </span>
                       </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{bid.bidder}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {bid.bidder}
+                      </p>
                     </div>
                     <Button
                       className="bg-success hover:bg-success/90 text-success-foreground"
@@ -128,29 +200,9 @@ export default function NFTDetail() {
               ))}
           </div>
         </div>
-
-        {/* Navigation Arrows */}
-        <div className="fixed bottom-8 left-8 z-20">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full w-12 h-12"
-            onClick={() => navigate("/browse-arts")}
-          >
-            <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-          </Button>
-        </div>
-        <div className="fixed bottom-8 right-8 z-20">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full w-12 h-12"
-            onClick={() => navigate("/payment-method")}
-          >
-            <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
-          </Button>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default NFTDetail;

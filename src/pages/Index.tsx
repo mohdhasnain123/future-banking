@@ -30,7 +30,6 @@ const Index = ({
   listening?: boolean;
   browserSupportsSpeechRecognition?: boolean;
 }) => {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen relative overflow-hidden">

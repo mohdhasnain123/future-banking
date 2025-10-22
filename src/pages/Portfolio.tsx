@@ -18,19 +18,15 @@ import {
   Plane,
   Mic,
   Send,
-  Heart,
-  Coffee,
-  ArrowLeft,
   Shield,
   Leaf,
   Home,
   Car,
-  Briefcase,
   Heart as HeartIcon,
-  TreePine,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
+import Bills from "./Bills";
 
 interface Activity {
   id: string;
@@ -85,7 +81,7 @@ const Portfolio = ({
     return date.toLocaleTimeString(undefined, {
       hour: "2-digit",
       minute: "2-digit",
-      hour12: true
+      hour12: true,
     });
   };
 
@@ -121,6 +117,14 @@ const Portfolio = ({
     },
     {
       id: "2",
+      name: "Unknown Merchant - Romania",
+      category: "Digital Assets-Blocked (Outside Spending Pattern)",
+      amount: -850.0,
+      time: "yesterday",
+      icon: Bitcoin,
+    },
+    {
+      id: "3",
       name: "Orbital Foods",
       category: "Groceries",
       amount: -150.23,
@@ -128,7 +132,7 @@ const Portfolio = ({
       icon: ShoppingCart,
     },
     {
-      id: "3",
+      id: "4",
       name: "Incoming Transfer",
       category: "Project payment",
       amount: 2500.0,
@@ -136,20 +140,12 @@ const Portfolio = ({
       icon: Send,
     },
     {
-      id: "4",
+      id: "5",
       name: "Mars Transit",
       category: "Transport",
       amount: -25.5,
       time: "yesterday",
       icon: Plane,
-    },
-    {
-      id: "5",
-      name: "Solana NFT Mint",
-      category: "Digital Assets",
-      amount: -350.0,
-      time: "yesterday",
-      icon: Bitcoin,
     },
   ];
 
@@ -303,22 +299,20 @@ const Portfolio = ({
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative z-10 min-h-screen p-3">
+        <div className="max-w-8xl mx-auto">
           {/* Header */}
 
-          <div className="mb-8 flex justify-between items-start text-white/90">
+          <div className="mb-1 flex justify-between items-start text-white/90 mt-8">
             {/* Date & Time on the left */}
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-4xl md:text-4xl font-bold text-white">
                 Portfolio
               </h1>
-
-              <p className="text-lg font-medium">
+              <p className="text-lg font-medium ml-4">
                 {formatTime(currentTime)} | {formatDate(currentTime)}
               </p>
             </div>
-
             {/* Mic status on the right */}
             {browserSupportsSpeechRecognition && (
               <div className="flex items-center gap-2 text-sm text-white/70 mt-2">
@@ -332,18 +326,14 @@ const Portfolio = ({
             )}
           </div>
 
-          <div className="mb-8">
-            <div className="flex items-center justify-between"></div>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <div className="grid md:grid-cols-4 gap-6 mt-8">
             {/* --- Net Worth small box --- */}
 
             <Dialog>
               <DialogTrigger asChild>
                 <Card className="bg-[hsl(142,76%,36%)]/90 hover:bg-[hsl(142,76%,36%)] transition-all backdrop-blur-sm border-none cursor-pointer">
                   <CardContent className="p-5">
-                    <p className="text-white/80 text-xs mb-1">Net Worth</p>
+                    <p className="text-white/80 text-xs">Net Worth</p>
 
                     <div className="flex items-start justify-between">
                       <h2 className="text-2xl font-bold text-white mr-3">
@@ -490,8 +480,8 @@ const Portfolio = ({
           </div>
 
           {/* Insurance Coverage Section */}
-          <div className="mt-8 mb-8">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mt-8 mb-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {insurances.map((insurance) => (
                 <Dialog key={insurance.name}>
                   <DialogTrigger asChild>
@@ -600,23 +590,23 @@ const Portfolio = ({
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid lg:grid-cols-3 gap-6 mb-4 mt-8">
             {/* Asset Allocation */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
-              <CardHeader className="pb-2">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col overflow-hidden">
+              <CardHeader className="pb-1 px-4">
                 <CardTitle className="text-white text-base">
                   Asset Allocation
                 </CardTitle>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/60 text-xs">
                   See How Your Money Moves
                 </p>
               </CardHeader>
 
-              <CardContent className="flex-1 flex flex-col justify-center px-4 py-2">
-                <div className="flex items-center justify-center py-4">
+              <CardContent className="flex-1 flex flex-col justify-between px-4 py-1">
+                <div className="flex items-center justify-center py-1">
                   <svg
-                    width="180"
-                    height="180"
+                    width="120"
+                    height="120"
                     viewBox="0 0 200 200"
                     className="cursor-pointer"
                   >
@@ -655,17 +645,17 @@ const Portfolio = ({
                   </svg>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(220,70%,50%)]" />
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-center gap-2 text-white/80">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(220,70%,50%)]" />
                     <span>Equities 46%</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(30,60%,70%)]" />
+                  <div className="flex items-center gap-2 text-white/80">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(30,60%,70%)]" />
                     <span>Crypto & NFTs 24%</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(142,76%,36%)]" />
+                  <div className="flex items-center gap-2 text-white/80">
+                    <div className="w-2 h-2 rounded-full bg-[hsl(142,76%,36%)]" />
                     <span>Digital RE 30%</span>
                   </div>
                 </div>
@@ -673,9 +663,9 @@ const Portfolio = ({
             </Card>
 
             {/* Expense Categories */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[400px] flex flex-col">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col">
               <CardHeader>
-                <CardTitle className="text-white">Expense Categories</CardTitle>
+                <CardTitle className="text-white text-base">Expense Categories</CardTitle>
                 <p className="text-white/60 text-sm">
                   Detailed breakdown with carbon footprint
                 </p>
@@ -689,7 +679,7 @@ const Portfolio = ({
                 </p>
               </CardHeader>
 
-              <CardContent className="flex-1 overflow-y-auto pr-2">
+              <CardContent className="flex-1 overflow-y-auto pr-5">
                 <div className="space-y-4 perspective-1000">
                   {expenseData.map((expense, index) => (
                     <div
@@ -712,10 +702,10 @@ const Portfolio = ({
                           {/* Category Info */}
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-3">
-                              <h3 className="text-white font-semibold text-lg">
+                              <h3 className="text-white font-semibold text-sm">
                                 {expense.category}
                               </h3>
-                              <span className="text-1xl font-bold text-white">
+                              <span className="text-1xl font-semibold text-white text-sm">
                                 ${expense.amount.toLocaleString()}
                               </span>
                             </div>
@@ -802,17 +792,23 @@ const Portfolio = ({
                 </div>
               </CardContent>
             </Card>
+
+            {/* Bills */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col">
+              <Bills />
+            </Card>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8 mt-8">
             {/* Recent Activity */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
-              <CardHeader className="pb-2">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col overflow-hidden">
+              <CardHeader className="pb-2 px-4">
                 <CardTitle className="text-white text-base">
                   Recent Activity
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 px-4 py-2">
+
+              <CardContent className="flex-1 overflow-y-auto space-y-3 px-4 py-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
                 {activities.map((activity) => (
                   <Dialog key={activity.id}>
                     <DialogTrigger asChild>
@@ -822,7 +818,12 @@ const Portfolio = ({
                             <activity.icon className="w-4 h-4 text-white" />
                           </div>
                           <div>
-                            <p className="text-white text-sm font-medium">
+                            <p className={`text-sm font-medium ${
+                              activity.id === "2"
+                                ? "text-red-400"
+                                : "text-white"
+                                
+                            }`}>
                               {activity.name}
                             </p>
                             <p className="text-white/60 text-xs">
@@ -833,7 +834,9 @@ const Portfolio = ({
                         <div className="text-right">
                           <p
                             className={`text-sm font-semibold ${
-                              activity.amount > 0
+                              activity.id === "2"
+                                ? "text-red-400"
+                                : activity.amount > 0
                                 ? "text-green-400"
                                 : "text-white"
                             }`}
@@ -886,18 +889,19 @@ const Portfolio = ({
             </Card>
 
             {/* 5-Year Wealth Projection */}
-            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-auto">
-              <CardHeader className="pb-2">
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col overflow-hidden">
+              <CardHeader className="pb-1 px-4">
                 <CardTitle className="text-white text-base">
                   5-Year Wealth Projection
                 </CardTitle>
               </CardHeader>
-              <CardContent className="mt-6 px-4 py-2">
-                <div className="relative h-[250px] w-full">
+
+              <CardContent className="flex-1 px-4 py-1">
+                <div className="relative h-[200px] w-full">
                   <svg
                     width="100%"
                     height="100%"
-                    viewBox="0 0 600 250"
+                    viewBox="0 0 600 200"
                     className="overflow-visible"
                   >
                     <defs>
@@ -914,13 +918,13 @@ const Portfolio = ({
                     </defs>
 
                     {/* Grid lines */}
-                    {[0, 90, 180, 270].map((y) => (
+                    {[0, 60, 120, 180].map((y) => (
                       <line
                         key={y}
                         x1="50"
-                        y1={250 - y}
+                        y1={200 - y}
                         x2="550"
-                        y2={250 - y}
+                        y2={200 - y}
                         stroke="white"
                         strokeOpacity="0.1"
                         strokeWidth="1"
@@ -928,11 +932,11 @@ const Portfolio = ({
                     ))}
 
                     {/* Y-axis labels */}
-                    {["0k", "90k", "180k", "270k", "360k"].map((label, i) => (
+                    {["0k", "60k", "120k", "180k", "240k"].map((label, i) => (
                       <text
                         key={label}
                         x="20"
-                        y={250 - i * 62}
+                        y={200 - i * 48}
                         fill="white"
                         opacity="0.5"
                         fontSize="10"
@@ -946,7 +950,7 @@ const Portfolio = ({
                       <text
                         key={data.year}
                         x={50 + (i * 500) / 5}
-                        y="270"
+                        y="210"
                         fill="white"
                         opacity="0.5"
                         fontSize="10"
@@ -961,7 +965,7 @@ const Portfolio = ({
                       points={projectionData
                         .map(
                           (data, i) =>
-                            `${50 + (i * 500) / 5},${250 - data.value * 0.7}`
+                            `${50 + (i * 500) / 5},${200 - data.value * 0.6}`
                         )
                         .join(" ")}
                       fill="none"
@@ -976,7 +980,7 @@ const Portfolio = ({
                       <circle
                         key={data.year}
                         cx={50 + (i * 500) / 5}
-                        cy={250 - data.value * 0.7}
+                        cy={200 - data.value * 0.6}
                         r="4"
                         fill="hsl(142, 76%, 36%)"
                         className="cursor-pointer hover:r-6 transition-all"
@@ -986,49 +990,49 @@ const Portfolio = ({
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Data Source Information */}
-          <Card className="mt-8 bg-glass-bg/60 backdrop-blur-md border-2 border-white/10">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-500/20 p-3 rounded-lg">
-                  <Shield className="w-6 h-6 text-blue-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-white font-semibold mb-2">
-                    Data Source & Security
-                  </h3>
-                  <p className="text-white/70 text-sm mb-3">
-                    All portfolio data is aggregated from verified sources and
-                    secured using blockchain technology. Information includes
-                    real-time market data, institutional holdings, and verified
-                    transactions.
-                  </p>
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
-                      Real-time Market Data
-                    </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
-                      Blockchain Verified
-                    </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
-                      Bank-Level Encryption
-                    </span>
-                    <span className="px-3 py-1 bg-white/10 text-white/80 text-xs rounded-full">
-                      Multi-Source Aggregation
-                    </span>
-                    <button
-                      onClick={() => navigate("/agentmesh")}
-                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg"
-                    >
-                      Agentic Mesh
-                    </button>
+            {/* Data Source Information */}
+            <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col overflow-hidden">
+              <CardContent className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                <div className="flex items-start gap-3">
+                  <div className="bg-blue-500/20 p-2 rounded-lg">
+                    <Shield className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-white font-semibold text-base mb-1">
+                      Data Source & Security
+                    </h3>
+                    <p className="text-white/70 text-sm mb-2 leading-snug">
+                      All portfolio data is aggregated from verified sources and
+                      secured using blockchain technology. Information includes
+                      real-time market data, institutional holdings, and
+                      verified transactions.
+                    </p>
+                    <div className="flex flex-wrap gap-1 items-center">
+                      <span className="px-2 py-1 bg-white/10 text-white/80 text-sm rounded-full">
+                        Real-time Market Data
+                      </span>
+                      <span className="px-2 py-1 bg-white/10 text-white/80 text-sm rounded-full">
+                        Blockchain Verified
+                      </span>
+                      <span className="px-2 py-1 bg-white/10 text-white/80 text-sm rounded-full">
+                        Bank-Level Encryption
+                      </span>
+                      <span className="px-2 py-1 bg-white/10 text-white/80 text-sm rounded-full">
+                        Multi-Source Aggregation
+                      </span>
+                      <button
+                        onClick={() => navigate("/agentmesh")}
+                        className="px-3 py-1 text-sm bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow"
+                      >
+                        Agentic Mesh
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

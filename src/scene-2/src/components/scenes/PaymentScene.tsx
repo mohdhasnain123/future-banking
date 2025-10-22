@@ -1,8 +1,8 @@
 import { CheckCircle2, Loader2, ArrowRight, ArrowLeft, Mic, Shield, FileCheck, Copy } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import backgroundImage from "@/scene-2/src/assets/background.jpg"; // Ensure this path is correct
+import backgroundImage from "@/scene-2/src/assets/background.jpg";
+import { useVoiceNavigation } from "@/components/utils"
 
 type PaymentStage =
   | 'claim-verification'
@@ -29,16 +29,13 @@ const PaymentScene = () => {
   const [stage, setStage] = useState<PaymentStage>('claim-verification');
   const [isListening, setIsListening] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [transactionHash] = useState<string>('0x3d8f...b2c1');
+  const [transactionHash] = useState<string>('0x01d2...3be656');
   const [copied, setCopied] = useState(false);
   const [copiedSummary, setCopiedSummary] = useState(false);
-  const navigate = useNavigate();
 
-  // Refs for each step to scroll into view
   const stepRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
-    // Timers for demo progression
     const timer1 = setTimeout(() => setStage('smart-contract-init'), 2000);
     const timer2 = setTimeout(() => setStage('payment-category'), 4000);
     return () => {
@@ -48,19 +45,16 @@ const PaymentScene = () => {
   }, []);
 
   useEffect(() => {
-    // Scroll to the current step
     const ref = stepRefs.current[stage];
     if (ref) {
       ref.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [stage]);
 
-  // Payment Category selection
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
   };
 
-  // Voice confirmation
   const handleVoiceConfirmation = () => {
     if (!selectedCategory) return;
     setIsListening(true);
@@ -73,17 +67,23 @@ const PaymentScene = () => {
     }, 2000);
   };
 
-  // Copy handlers
-  const handleCopy = () => {
-    navigator.clipboard.writeText(transactionHash);
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
+
   const handleCopySummary = () => {
     navigator.clipboard.writeText(transactionHash);
     setCopiedSummary(true);
     setTimeout(() => setCopiedSummary(false), 1500);
   };
+
+  const { listening, browserSupportsSpeechRecognition, transcript } = useVoiceNavigation({
+  setSelectedCategory,
+  handleVoiceConfirmation,
+  selectedCategory,
+});
 
   return (
     <div
@@ -94,34 +94,42 @@ const PaymentScene = () => {
         backgroundPosition: 'center',
       }}
     >
-      <div className="aspect-video w-full max-w-[1600px] flex items-center justify-center relative">
-        {/* Date/Time */}
-        <div className="absolute top-8 left-8 z-20">
-          <div className="text-xl font-light text-foreground">15 July 2035, Sun</div>
-          <div className="text-sm text-muted-foreground">03:50 pm</div>
+      {browserSupportsSpeechRecognition && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 bg-background/80 px-4 py-2 rounded shadow">
+          <div className="flex items-center gap-2">
+            <span className={`w-3 h-3 rounded-full ${listening ? "bg-success" : "bg-destructive"}`}></span>
+            <span className="text-xs text-muted-foreground">
+              Voice Command: Say "taskdashboard" to go to Task Dashboard screen
+            </span>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Transcript: {transcript}
+          </div>
         </div>
-        {/* Back Arrow at Bottom Left */}
-        <button
-          className="absolute bottom-8 left-8 z-30 bg-card/80 border border-border rounded-full p-2 shadow-lg hover:bg-card/90 transition"
-          onClick={() => navigate('/petinfo')}
-          aria-label="Go back to pet info"
-        >
-          <ArrowLeft className="w-6 h-6 text-muted-foreground" />
-        </button>
-        {/* Next Arrow at Bottom Right */}
-        <button
-          className="absolute bottom-8 right-8 z-30 bg-card/80 border border-border rounded-full p-2 shadow-lg hover:bg-card/90 transition"
-          onClick={() => navigate('/taskdashboard')}
-          aria-label="Go to task dashboard"
-        >
-          <ArrowRight className="w-6 h-6 text-muted-foreground" />
-        </button>
-        {/* Main Content: Steps and Summary Side by Side */}
+      )}
+
+      {/* Top right microphone status */}
+      {browserSupportsSpeechRecognition && (
+        <div className="absolute top-6 right-8 z-20">
+          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+            <Mic
+              className={`w-5 h-5 ${
+                listening ? "text-green-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{listening ? "Listening..." : "Mic off"}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="aspect-video w-full max-w-[1600px] flex items-center justify-center relative">
+        <div className="absolute top-8 left-8 z-20">
+          <div className="text-xl font-light text-foreground">15th July 2035, Sun</div>
+          <div className="text-sm text-muted-foreground">03:52 pm</div>
+        </div>
         <div className="flex flex-row gap-8 w-full h-full items-stretch justify-center px-8">
-          {/* Steps Block */}
           <div className="flex-1 flex flex-col justify-center">
             <div className="backdrop-blur-md bg-card/50 border border-primary/30 rounded-3xl p-12 shadow-2xl text-center animate-glow h-full flex flex-col">
-              {/* Dashboard Header */}
               <div className="border-b border-border/50 backdrop-blur-xl bg-card/30 px-8 py-4 mb-8">
                 <div className="flex items-center justify-between">
                   <div>
@@ -143,10 +151,8 @@ const PaymentScene = () => {
                   </div>
                 </div>
               </div>
-              {/* Steps - scrollable container */}
               <div className="flex-1 flex flex-col items-start justify-center">
                 <div className="w-full max-w-3xl space-y-3 mx-auto overflow-y-auto h-[430px] pr-2 scrollbar-hide">
-                  {/* Claim Verification */}
                   <div
                     ref={el => stepRefs.current['claim-verification'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -181,7 +187,6 @@ const PaymentScene = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Smart Contract Init */}
                   <div
                     ref={el => stepRefs.current['smart-contract-init'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -216,7 +221,6 @@ const PaymentScene = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Payment Category Selection & Voice Confirmation (Merged Step 3) */}
                   <div
                     ref={el => stepRefs.current['payment-category'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -286,7 +290,6 @@ const PaymentScene = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Blockchain Validation */}
                   <div
                     ref={el => stepRefs.current['blockchain-validation'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -321,7 +324,6 @@ const PaymentScene = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Fund Transfer */}
                   <div
                     ref={el => stepRefs.current['transferring'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -342,7 +344,8 @@ const PaymentScene = () => {
                         {stage === 'transferring' ? (
                           <div className="relative w-full h-full flex items-center justify-center">
                             <ArrowRight className="w-6 h-6 text-primary animate-pulse relative z-10" />
-                            <div className="absolute inset-0 border-2 border-primary/30 rounded-xl animate-ping" />
+                            <div className="absolute inset-0 border-2 border-primary/30 rounded-xl animate-ping"
+                                                      />
                           </div>
                         ) : (
                           <ArrowRight className="w-6 h-6 text-muted-foreground" />
@@ -374,7 +377,6 @@ const PaymentScene = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Complete */}
                   <div
                     ref={el => stepRefs.current['complete'] = el}
                     className={`relative backdrop-blur-md bg-card/50 border rounded-2xl p-6 transition-all duration-500 ${
@@ -413,85 +415,113 @@ const PaymentScene = () => {
               </div>
             </div>
           </div>
-          {/* Payment Summary Block */}
+          {/* Metamask Wallet Block */}
           <div className="w-96 flex flex-col justify-center">
             <div className="relative backdrop-blur-md bg-card/50 border border-primary/20 rounded-3xl p-8 shadow-[0_0_50px_rgba(var(--primary),0.15)]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-1 h-8 rounded-full bg-gradient-to-b from-primary to-primary/50" />
-                  <h2 className="text-2xl font-bold text-foreground">Payment Summary</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Metamask Wallet</h2>
                 </div>
                 <div className="space-y-3 mb-6">
-                  <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
-                    <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Claim Type</div>
-                    <div className="text-lg font-semibold text-foreground">Pet Therapy Service</div>
-                  </div>
-                  <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
-                    <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Insurance Provider</div>
-                    <div className="text-lg font-semibold text-foreground">DeFi Pet Health DAO</div>
-                  </div>
-                  <div className={`backdrop-blur-sm bg-background/40 rounded-xl p-5 border transition-all duration-500 ${
-                    stage === 'complete' ? 'border-primary/50 shadow-[0_0_20px_rgba(var(--primary),0.2)]' : 'border-border/30'
-                  }`}>
-                    <div className="text-xs font-mono text-muted-foreground mb-2 uppercase tracking-wider">Payment Amount</div>
-                    <div className={`text-4xl font-bold transition-all duration-500 ${stage === 'complete' ? 'text-primary' : 'text-foreground'}`}>
-                      {['payment-category', 'confirming', 'blockchain-validation', 'transferring', 'complete'].includes(stage) ? '150 ETH' : '...'}
+                  {['smart-contract-init', 'payment-category', 'confirming', 'blockchain-validation', 'transferring', 'complete'].includes(stage) && (
+                    <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">From</div>
+                          <div className="text-lg font-semibold text-foreground">0x4fa0...08fc77</div>
+                        </div>
+                        <button onClick={() => handleCopy('0x4fa0...08fc77')} className="text-muted-foreground hover:text-primary transition">
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1.5 font-mono">≈ $450,000 USD</div>
-                  </div>
-                  <div className={`backdrop-blur-sm bg-background/40 rounded-xl p-4 border transition-all duration-500 ${
-                    stage === 'complete' ? 'border-primary/30' : 'border-border/30'
-                  }`}>
-                    <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Wallet Balance</div>
-                    <div className={`text-2xl font-bold transition-all duration-1000 ${stage === 'complete' ? 'text-foreground' : 'text-muted-foreground'}`}>
-                      {stage === 'complete' ? '40,150 ETH' : '40,000 ETH'}
+                  )}
+                  {['payment-category', 'confirming', 'blockchain-validation', 'transferring', 'complete'].includes(stage) && (
+                    <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">To (You)</div>
+                          <div className="text-lg font-semibold text-foreground">0x9fd...e34d</div>
+                        </div>
+                        <button onClick={() => handleCopy('0x9fd...e34d')} className="text-muted-foreground hover:text-primary transition">
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  {/* Highlighted Transaction Hash with copy */}
-                  <div className={`flex items-center justify-center mt-4`}>
-                    {['transferring', 'complete'].includes(stage) && (
-                      <span
-                        className="bg-primary/20 text-primary font-mono font-bold px-3 py-2 rounded-lg border border-primary/40 shadow cursor-pointer flex items-center gap-1"
-                        onClick={handleCopySummary}
-                        title="Copy transaction hash"
-                        style={{ userSelect: 'all' }}
-                      >
-                        Transaction Hash: {transactionHash}
-                        <Copy className="w-4 h-4 ml-1" />
-                        {copiedSummary && (
-                          <span className="ml-2 text-xs text-primary bg-primary/30 px-2 py-0.5 rounded">Copied!</span>
-                        )}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className={`text-xs font-mono text-center py-3 px-4 rounded-lg transition-all duration-500 ${
-                  stage === 'complete'
-                    ? 'bg-primary/10 text-primary border border-primary/30 shadow-[0_0_20px_rgba(var(--primary),0.2)]'
-                    : 'bg-muted/30 text-muted-foreground border border-border/30'
-                }`}>
-                  {stage === 'complete'
-                    ? (
-                      <div className="space-y-1.5">
-                        <div>✓ Transaction Verified</div>
-                        <div className="text-[10px] opacity-80 flex items-center justify-center">
-                          <span
-                            className="bg-primary/20 text-primary font-mono font-bold px-2 py-1 rounded cursor-pointer flex items-center gap-1"
-                            onClick={handleCopy}
-                            title="Copy transaction hash"
-                            style={{ userSelect: 'all' }}
-                          >
-                            {transactionHash}
-                            <Copy className="w-3 h-3 ml-1" />
-                            {copied && (
-                              <span className="ml-2 text-xs text-primary bg-primary/30 px-2 py-0.5 rounded">Copied!</span>
-                            )}
-                          </span>
+                  )}
+                  {['confirming', 'blockchain-validation', 'transferring', 'complete'].includes(stage) && (
+                    <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Transaction Hash</div>
+                          <div className="text-lg font-semibold text-foreground">{transactionHash}</div>
+                        </div>
+                        <button onClick={() => handleCopy(transactionHash)} className="text-muted-foreground hover:text-primary transition">
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {['blockchain-validation', 'transferring', 'complete'].includes(stage) && (
+                    <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Transaction Fee</div>
+                      <div className="text-lg font-semibold text-foreground">0.001 ETH</div>
+                    </div>
+                  )}
+                  {['transferring', 'complete'].includes(stage) && (
+                    <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Received</div>
+                      <div className="text-lg font-semibold text-foreground">+0.001 ETH</div>
+                    </div>
+                  )}
+                  {stage === 'complete' && (
+                    <>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Status</div>
+                        <div className="text-lg font-semibold text-foreground">Success</div>
+                      </div>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Timestamp</div>
+                        <div className="text-lg font-semibold text-foreground">15th July 2035, Sun 03:52 pm</div>
+                      </div>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Block Number</div>
+                            <div className="text-lg font-semibold text-foreground">16633644</div>
+                          </div>
+                          <button onClick={() => handleCopy('16633644')} className="text-muted-foreground hover:text-primary transition">
+                            <Copy className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-                    )
-                    : 'DeFi payment processing...'}
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Block Hash</div>
+                            <div className="text-lg font-semibold text-foreground">0x660a...58836c</div>
+                          </div>
+                          <button onClick={() => handleCopy('0x660a...58836c')} className="text-muted-foreground hover:text-primary transition">
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Value</div>
+                        <div className="text-lg font-semibold text-foreground">0.001 ETH</div>
+                      </div>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Transaction Index</div>
+                        <div className="text-lg font-semibold text-foreground">22921955497</div>
+                      </div>
+                      <div className="backdrop-blur-sm bg-background/40 rounded-xl p-4 border border-border/30 hover:border-primary/30 transition-colors">
+                        <div className="text-xs font-mono text-muted-foreground mb-1.5 uppercase tracking-wider">Gas Price</div>
+                        <div className="text-lg font-semibold text-foreground">21000</div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

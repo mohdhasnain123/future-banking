@@ -9,15 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import {
-  Home,
-  Plane,
-  Sprout,
-  Cat,
-  Plus,
-  Minus,
-  Mic,
-} from "lucide-react";
+import { Home, Plane, Sprout, Cat, Plus, Minus, Mic } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
@@ -237,7 +229,7 @@ const Goals = ({
 
       {/* Content */}
       <div className="relative z-10 min-h-screen p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
@@ -456,9 +448,12 @@ const Goals = ({
 
       {/* Updated Calendar Modal */}
       <Dialog open={showCalendarModal} onOpenChange={setShowCalendarModal}>
-        <DialogContent className="max-w-4xl max-h-[85vh] max-w-[135vh] p-0 overflow-hidden bg-transparent border-none shadow-none">
-          <div className="h-[85vh] overflow-auto rounded-lg">
-            <UpdatedCalendar isModal={true} onClose={() => setShowCalendarModal(false)} />
+        <DialogContent className="max-w-4xl max-h-[80vh] p-2 overflow-hidden bg-transparent border-none shadow-none rounded-2xl">
+          <div className="h-[80vh] flex items-center justify-center">
+            <UpdatedCalendar
+              isModal={true}
+              onClose={() => setShowCalendarModal(false)}
+            />
           </div>
         </DialogContent>
       </Dialog>
