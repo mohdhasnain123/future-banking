@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import UpdatedCalendar from "./UpdatedCalendar";
+import { formatDate, formatTime } from "@/components/utils";
 
 interface Goal {
   id: string;
@@ -48,6 +49,21 @@ const Goals = ({
       // Optional: remove the query param from URL after opening the modal
       navigate("/goals", { replace: true });
     }
+    if (params.get("showSelectedGoal") === "true") {
+      setSelectedGoal({
+        id: "1",
+        name: "Buy a House",
+        icon: Home,
+        target: 50000,
+        saved: 35000,
+        percentage: 70,
+        targetDate: "Dec, 2046",
+        remaining: 15000,
+        color: "hsl(142, 76%, 36%)",
+      });
+      // Optional: remove the query param from URL after opening the modal
+      navigate("/goals", { replace: true });
+    }
   }, [location.search, navigate]);
 
   useEffect(() => {
@@ -57,23 +73,6 @@ const Goals = ({
 
     return () => clearInterval(timer);
   }, []);
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString(undefined, {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
 
   const [goals, setGoals] = useState<Goal[]>([
     {
@@ -237,12 +236,9 @@ const Goals = ({
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
                   My Goals
                 </h1>
-                <p className="text-white/70 text-lg">
-                  Track your financial objectives and celebrate your progress
-                </p>
                 <div className="mt-4 text-white/90">
                   <p className="text-lg font-medium">
-                    {formatTime(currentTime)} | {formatDate(currentTime)}
+                    {formatTime("8:00 AM", 30)} | {formatDate(currentTime)}
                   </p>
                 </div>
               </div>

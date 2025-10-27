@@ -28,6 +28,8 @@ import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import Bills from "./Bills";
 
+import { formatDate, formatTime } from "@/components/utils";
+
 interface Activity {
   id: string;
   name: string;
@@ -68,22 +70,22 @@ const Portfolio = ({
     return () => clearInterval(timer);
   }, []);
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString(undefined, {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  // const formatDate = (date: Date) => {
+  //   return date.toLocaleDateString(undefined, {
+  //     weekday: "long",
+  //     year: "numeric",
+  //     month: "long",
+  //     day: "numeric",
+  //   });
+  // };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
+  // const formatTime = (date: Date) => {
+  //   return date.toLocaleTimeString(undefined, {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     hour12: true,
+  //   });
+  // };
 
   const assets = [
     {
@@ -310,7 +312,7 @@ const Portfolio = ({
                 Portfolio
               </h1>
               <p className="text-lg font-medium ml-4">
-                {formatTime(currentTime)} | {formatDate(currentTime)}
+                {formatTime("8:00 AM", 15)} | {formatDate(currentTime)}
               </p>
             </div>
             {/* Mic status on the right */}
@@ -665,7 +667,9 @@ const Portfolio = ({
             {/* Expense Categories */}
             <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border h-[270px] flex flex-col">
               <CardHeader>
-                <CardTitle className="text-white text-base">Expense Categories</CardTitle>
+                <CardTitle className="text-white text-base">
+                  Expense Categories
+                </CardTitle>
                 <p className="text-white/60 text-sm">
                   Detailed breakdown with carbon footprint
                 </p>
@@ -818,12 +822,13 @@ const Portfolio = ({
                             <activity.icon className="w-4 h-4 text-white" />
                           </div>
                           <div>
-                            <p className={`text-sm font-medium ${
-                              activity.id === "2"
-                                ? "text-red-400"
-                                : "text-white"
-                                
-                            }`}>
+                            <p
+                              className={`text-sm font-medium ${
+                                activity.id === "2"
+                                  ? "text-red-400"
+                                  : "text-white"
+                              }`}
+                            >
                               {activity.name}
                             </p>
                             <p className="text-white/60 text-xs">

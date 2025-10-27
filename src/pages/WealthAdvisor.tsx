@@ -26,6 +26,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import dreamHouse from "@/assets/dream-house.jpg";
+import { formatDate, formatTime } from "@/components/utils";
 
 const WealthAdvisor = ({
   listening,
@@ -167,6 +168,16 @@ const WealthAdvisor = ({
     },
   ];
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="relative overflow-hidden max-w-8xl mx-auto w-full h-screen flex flex-col">
       {/* Background Image */}
@@ -188,9 +199,14 @@ const WealthAdvisor = ({
           <div className="mt-16">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-bold text-white">
-                  Wealth Advisor Consultation
-                </h1>
+                <div className="flex items-center mb-2">
+                  <h1 className="text-4xl md:text-4xl font-bold text-white">
+                    Wealth Advisor Consultation
+                  </h1>
+                  <p className="text-lg font-medium ml-8">
+                    {formatTime("8:00 AM", 180)} | {formatDate(currentTime)}
+                  </p>
+                </div>
                 <p className="text-white/70 text-lg">
                   Strategic planning for your dream home purchase
                 </p>
@@ -211,9 +227,9 @@ const WealthAdvisor = ({
           </div>
 
           {/* Video Call, Secure Data Access & Dream Home - Horizontal Layout */}
-          <div className="grid md:grid-cols-3 gap-4 mt-10 w-full">
+          <div className="grid grid-cols-4 gap-4 mt-10 w-full">
             {/* Video Call */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 col-span-1">
               <CardContent className="p-0">
                 <div className="relative aspect-video bg-black/40 rounded-lg overflow-hidden">
                   <video
@@ -241,7 +257,7 @@ const WealthAdvisor = ({
             </Card>
 
             {/* Blockchain Info */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-primary/30">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-primary/30 col-span-1">
               <CardHeader className="pb-2">
                 <CardTitle className="text-white flex items-center gap-2 text-base">
                   <Shield className="w-4 h-4 text-primary" />
@@ -290,13 +306,50 @@ const WealthAdvisor = ({
             </Card>
 
             {/* Dream Home Image */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 col-span-2 relative">
               <CardContent className="p-0">
+                {/* Action Buttons - Top Right */}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                  <Button
+                    onClick={() => setStrategicOpen(true)}
+                    className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      strategicOpen
+                        ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                        : ""
+                    }`}
+                    size="sm"
+                  >
+                    Strategic
+                  </Button>
+                  <Button
+                    onClick={() => setAggressiveOpen(true)}
+                    className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      aggressiveOpen
+                        ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                        : ""
+                    }`}
+                    size="sm"
+                  >
+                    Aggressive
+                  </Button>
+                  <Button
+                    onClick={() => setComparisonOpen(true)}
+                    className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      comparisonOpen
+                        ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                        : ""
+                    }`}
+                    size="sm"
+                  >
+                    Comparison
+                  </Button>
+                </div>
+                {/* Dream Home Image */}
                 <div className="relative rounded-lg overflow-hidden">
                   <img
                     src={dreamHouse}
                     alt="Your Dream House"
-                    className="w-full h-[200px] object-cover"
+                    className="w-full h-[250px] object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3">
                     <h3 className="text-white font-bold text-sm mb-0.5">
@@ -319,99 +372,6 @@ const WealthAdvisor = ({
         <div className="px-2 pt-2 h-full flex flex-col justify-between w-full">
           {/* Current Assets & Portfolio Data Management - Horizontal Layout */}
           <div className="grid md:grid-cols-2 gap-6 mb-8 w-full">
-            {/* Left Column: Current Assets + Buttons */}
-            <div className="flex flex-col gap-4">
-              {/* Current Assets Overview */}
-              <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 flex-1">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-white flex items-center gap-2 text-base">
-                    <PiggyBank className="w-4 h-4" />
-                    Current Asset Position
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="py-2">
-                  <div className="grid grid-cols-2 gap-2 mb-2">
-                    <div className="text-center">
-                      <Bitcoin className="w-5 h-5 text-orange-400 mx-auto mb-1" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.crypto.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-xs">Crypto Assets</p>
-                    </div>
-                    <div className="text-center">
-                      <Building2 className="w-5 h-5 text-blue-400 mx-auto mb-1" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.digitalRealEstate.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-xs">
-                        Digital Real Estate
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <DollarSign className="w-5 h-5 text-green-400 mx-auto mb-1" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.savings.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-xs">Savings</p>
-                    </div>
-                    <div className="text-center">
-                      <TrendingUp className="w-5 h-5 text-purple-400 mx-auto mb-1" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.total.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-xs">Total Assets</p>
-                    </div>
-                  </div>
-                  <Progress
-                    value={(currentAssets.total / houseGoal.target) * 100}
-                    className="h-2"
-                  />
-                  <p className="text-center text-white/70 mt-2 text-xs">
-                    You have{" "}
-                    {Math.round((currentAssets.total / houseGoal.target) * 100)}
-                    % of the required down payment
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Action Buttons - Vertical Stack */}
-              <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => setStrategicOpen(true)}
-                  className={`bg-transparent border-2 border-gray-400 hover:bg-gray-700/20 hover:border-gray-500 text-white hover:text-white px-8 py-6 text-lg rounded-xl transition-all ${
-                    strategicOpen
-                      ? "ring-4 ring-gray-300 ring-offset-2 ring-offset-black/50"
-                      : ""
-                  }`}
-                  size="lg"
-                >
-                  Strategic
-                </Button>
-                <Button
-                  onClick={() => setAggressiveOpen(true)}
-                  className={`bg-transparent border-2 border-gray-400 hover:bg-gray-700/20 hover:border-gray-500 text-white hover:text-white px-8 py-6 text-lg rounded-xl transition-all ${
-                    aggressiveOpen
-                      ? "ring-4 ring-gray-300 ring-offset-2 ring-offset-black/50"
-                      : ""
-                  }`}
-                  size="lg"
-                >
-                  Aggressive
-                </Button>
-                <Button
-                  onClick={() => setComparisonOpen(true)}
-                  className={`bg-transparent border-2 border-gray-400 hover:bg-gray-700/20 hover:border-gray-500 text-white hover:text-white px-8 py-6 text-lg rounded-xl transition-all ${
-                    comparisonOpen
-                      ? "ring-4 ring-gray-300 ring-offset-2 ring-offset-black/50"
-                      : ""
-                  }`}
-                  size="lg"
-                >
-                  Comparison
-                </Button>
-              </div>
-            </div>
-
             {/* Right Column: Vick's Portfolio Data Management */}
             <Card className="bg-white/10 backdrop-blur-md border-white/20 p-3">
               <h3 className="text-base font-bold text-white mb-2 flex items-center gap-1">
@@ -517,6 +477,61 @@ const WealthAdvisor = ({
                 </div>
               </div>
             </Card>
+            {/* Left Column: Current Assets + Buttons */}
+            <div className="flex flex-col gap-4">
+              {/* Current Assets Overview */}
+              <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 flex-1 flex flex-col justify-center">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white flex items-center gap-2 text-base">
+                    <PiggyBank className="w-8 h-8" />
+                    Current Asset Position
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="py-6 flex flex-col items-center justify-center flex-1">
+                  <div className="grid grid-cols-2 gap-2 mb-8">
+                    <div className="text-center">
+                      <Bitcoin className="w-8 h-8 text-orange-400 mx-auto mb-4" />
+                      <p className="text-base font-bold text-white">
+                        ${currentAssets.crypto.toLocaleString()}
+                      </p>
+                      <p className="text-white/60 text-sm">Crypto Assets</p>
+                    </div>
+                    <div className="text-center">
+                      <Building2 className="w-8 h-8 text-blue-400 mx-auto mb-4" />
+                      <p className="text-base font-bold text-white">
+                        ${currentAssets.digitalRealEstate.toLocaleString()}
+                      </p>
+                      <p className="text-white/60 text-sm">
+                        Digital Real Estate
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <DollarSign className="w-8 h-8 text-green-400 mx-auto mb-4" />
+                      <p className="text-base font-bold text-white">
+                        ${currentAssets.savings.toLocaleString()}
+                      </p>
+                      <p className="text-white/60 text-sm">Savings</p>
+                    </div>
+                    <div className="text-center">
+                      <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-4" />
+                      <p className="text-base font-bold text-white">
+                        ${currentAssets.total.toLocaleString()}
+                      </p>
+                      <p className="text-white/60 text-sm">Total Assets</p>
+                    </div>
+                  </div>
+                  <Progress
+                    value={(currentAssets.total / houseGoal.target) * 100}
+                    className="h-2"
+                  />
+                  <p className="text-center text-white/70 mt-2 text-sm">
+                    You have{" "}
+                    {Math.round((currentAssets.total / houseGoal.target) * 100)}
+                    % of the required down payment
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>

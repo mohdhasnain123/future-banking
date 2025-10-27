@@ -2,9 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { MapPin, Cloud, CheckCircle2, Car, Mic } from "lucide-react";
+import {
+  MapPin,
+  Cloud,
+  CheckCircle2,
+  Car,
+  Mic,
+  Navigation,
+} from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
+import { formatDate, formatTime } from "@/components/utils";
+import mapImage from "@/scene-2/src/assets/map.png";
 
 const CabBooking = ({
   listening,
@@ -94,7 +103,7 @@ const CabBooking = ({
     setTasks((prev) => {
       // Check if the cab task already exists
       const cabTaskExists = prev.some(
-        (task) => task.task === "Cab arriving in 10 mins"
+        (task) => task.task === "Cab arriving in 5 mins"
       );
       if (cabTaskExists) {
         return prev; // Don't add if already present
@@ -106,7 +115,7 @@ const CabBooking = ({
       // Create the new task (ensure unique id)
       const newTask = {
         id: Math.max(...prev.map((t) => t.id)) + 1, // avoid ID collision
-        task: "Cab arriving in 10 mins",
+        task: "Cab arriving in 5 mins",
         time: "Now",
         completed: false,
       };
@@ -142,6 +151,16 @@ const CabBooking = ({
     };
   }, []);
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image */}
@@ -162,6 +181,9 @@ const CabBooking = ({
             <h1 className="text-4xl md:text-5xl font-bold text-white text-center">
               Pet Therapy Appointment
             </h1>
+            <p className="text-lg font-medium ml-8">
+              {formatTime("8:00 AM", 360)} | {formatDate(currentTime)}
+            </p>
             {browserSupportsSpeechRecognition && (
               <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
                 <Mic
@@ -223,34 +245,66 @@ const CabBooking = ({
                   </div>
 
                   {/* Right Side - Map */}
-                  <div className="bg-gray-800/50 rounded-lg overflow-hidden h-[150px] flex items-center justify-center border border-white/10 mt-10">
-                    <div className="text-center">
-                      <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                      <p className="text-white/60 text-sm">Map View</p>
-                      <p className="text-white/40 text-xs">
-                        13th Street, New York
-                      </p>
-                    </div>
+                  <div className="bg-gray-800/50 rounded-lg overflow-hidden h-[150px] flex items-center justify-center border border-white/10 mt-10 relative">
+                    {cabBooked ? (
+                      <div className="w-full h-full flex items-center justify-center relative">
+                        {/* Map Image */}
+                        <img
+                          src={mapImage}
+                          alt="Navigation Map"
+                          className="w-full h-full object-cover absolute inset-0"
+                          style={{ zIndex: 1 }}
+                        />
+                        {/* Current Location Marker */}
+                        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+                          <div className="bg-primary rounded-full p-1 shadow-lg">
+                            <Navigation className="w-4 h-4 text-primary-foreground rotate-45" />
+                          </div>
+                          <span className="bg-card/95 px-2 py-0.5 rounded-full text-xs border border-border mt-1">
+                            Current Location
+                          </span>
+                        </div>
+                        {/* ETA Info */}
+                        <div className="absolute bottom-2 right-2 text-right z-10">
+                          <div className="text-base font-bold text-white mb-1">
+                            5 min
+                          </div>
+                          <div className="text-xs text-white/60">
+                            1 mile remaining
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center w-full">
+                        <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
+                        <p className="text-white/60 text-sm">Map View</p>
+                        <p className="text-white/40 text-xs">
+                          13th Street, New York
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Confirm Button */}
-                  <div className="mt-8 flex justify-center">
-                    <Button
-                      onClick={() => handleConfirmBooking()}
-                      className={`bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg rounded-xl transition-all ${
-                        isSearching
-                          ? "ring-4 ring-green-400 ring-offset-2 ring-offset-black/50"
-                          : ""
-                      }`}
-                      size="lg"
-                      disabled={isSearching}
-                    >
-                      {isSearching ? "Booking..." : "Confirm to book a cab"}
-                      {!isSearching && (
-                        <span className="ml-2 text-sm">(Approx. $10)</span>
-                      )}
-                    </Button>
-                  </div>
+                  {!cabBooked && (
+                    <div className="mt-8 flex justify-center">
+                      <Button
+                        onClick={() => handleConfirmBooking()}
+                        className={`bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg rounded-xl transition-all ${
+                          isSearching
+                            ? "ring-4 ring-green-400 ring-offset-2 ring-offset-black/50"
+                            : ""
+                        }`}
+                        size="lg"
+                        disabled={isSearching}
+                      >
+                        {isSearching ? "Booking..." : "Confirm to book a cab"}
+                        {!isSearching && (
+                          <span className="ml-2 text-sm">(Approx. $10)</span>
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
