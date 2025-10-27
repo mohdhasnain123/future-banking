@@ -12,6 +12,7 @@ import {
   Clock,
   FileText,
 } from "lucide-react";
+import mountainBg from "@/assets/mountain-bg.jpg";
 
 const ConsentFlow = ({
   listening,
@@ -102,157 +103,169 @@ const ConsentFlow = ({
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-12 h-12 text-indigo-600" />
-            <h1 className="text-4xl font-bold text-gray-900">
-              AI Financial Data Consent
-            </h1>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${mountainBg})` }}
+      />
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
+
+      {/* Content */}
+      <div className="relative z-10 min-h-screen p-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Brain className="w-10 h-10 text-primary" />
+              <h1 className="text-3xl font-bold text-white">
+                AI Financial Data Consent
+              </h1>
+            </div>
+            <p className="text-base text-white/80">
+              How users authorize their personal AI to access financial
+              information
+            </p>
           </div>
-          <p className="text-lg text-gray-600">
-            How users authorize their personal AI to access financial
-            information
-          </p>
-        </div>
 
-        {/* Flow Diagram */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="space-y-4">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              const isActive = activeStep === index;
+          {/* Flow Diagram */}
+          <div className="bg-glass-bg/60 backdrop-blur-md border-glass-border rounded-2xl p-4 mb-4">
+            <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+              {steps.map((step, index) => {
+                const Icon = step.icon;
+                const isActive = activeStep === index;
 
-              return (
-                <div key={step.id}>
-                  <div
-                    className={`flex items-start gap-4 p-6 rounded-xl cursor-pointer transition-all ${
-                      isActive
-                        ? "bg-indigo-100 border-2 border-indigo-500 shadow-md"
-                        : "bg-gray-50 border-2 border-transparent hover:border-indigo-200"
-                    }`}
-                    onClick={() => setActiveStep(index)}
-                  >
-                    {/* Step Number and Icon */}
-                    <div className="flex-shrink-0">
-                      <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          isActive ? "bg-indigo-600" : "bg-gray-300"
-                        }`}
-                      >
-                        <Icon
-                          className={`w-6 h-6 ${
-                            isActive ? "text-white" : "text-gray-600"
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span
-                          className={`font-mono text-sm ${
-                            isActive ? "text-indigo-700" : "text-gray-500"
+                return (
+                  <div key={step.id}>
+                    <div
+                      className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all ${
+                        isActive
+                          ? "bg-primary/20 border-2 border-primary shadow-md"
+                          : "bg-white/5 border-2 border-transparent hover:border-primary/30"
+                      }`}
+                      onClick={() => setActiveStep(index)}
+                    >
+                      {/* Step Number and Icon */}
+                      <div className="flex-shrink-0">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            isActive ? "bg-primary" : "bg-white/20"
                           }`}
                         >
-                          Step {index + 1}
-                        </span>
+                          <Icon
+                            className={`w-5 h-5 ${
+                              isActive ? "text-background" : "text-white/60"
+                            }`}
+                          />
+                        </div>
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-gray-600 mb-3">{step.description}</p>
 
-                      {isActive && (
-                        <ul className="space-y-2 mt-4">
-                          {step.details.map((detail, idx) => (
-                            <li key={idx} className="flex items-start gap-2">
-                              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span
+                            className={`font-mono text-xs ${
+                              isActive ? "text-primary" : "text-white/60"
+                            }`}
+                          >
+                            Step {index + 1}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-white mb-1">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm text-white/70 mb-2">{step.description}</p>
+
+                        {isActive && (
+                          <ul className="space-y-1 mt-2">
+                            {step.details.map((detail, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                                <span className="text-xs text-white/80">{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+
+                      {/* Arrow */}
+                      {index < steps.length - 1 && (
+                        <div className="flex-shrink-0 text-white/40">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                            />
+                          </svg>
+                        </div>
                       )}
                     </div>
 
-                    {/* Arrow */}
+                    {/* Connector Line */}
                     {index < steps.length - 1 && (
-                      <div className="flex-shrink-0 text-gray-400">
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                          />
-                        </svg>
+                      <div className="flex justify-center">
+                        <div className="w-0.5 h-2 bg-white/20"></div>
                       </div>
                     )}
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  {/* Connector Line */}
-                  {index < steps.length - 1 && (
-                    <div className="flex justify-center">
-                      <div className="w-0.5 h-4 bg-gray-300"></div>
-                    </div>
-                  )}
+          {/* Key Principles */}
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-glass-bg/60 backdrop-blur-md border-glass-border rounded-xl p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-accent" />
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Key Principles */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Clock className="w-6 h-6 text-green-600" />
+                <h3 className="text-base font-bold text-white">
+                  Granular Control
+                </h3>
               </div>
-              <h3 className="text-lg font-bold text-gray-900">
-                Granular Control
-              </h3>
+              <p className="text-sm text-white/70">
+                Users specify exactly what data is shared, for how long, and for
+                what purpose. Permissions can be modified or revoked anytime.
+              </p>
             </div>
-            <p className="text-gray-600">
-              Users specify exactly what data is shared, for how long, and for
-              what purpose. Permissions can be modified or revoked anytime.
-            </p>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-blue-600" />
+            <div className="bg-glass-bg/60 backdrop-blur-md border-glass-border rounded-xl p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-primary" />
+                </div>
+                <h3 className="text-base font-bold text-white">Transparency</h3>
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Transparency</h3>
+              <p className="text-sm text-white/70">
+                Complete audit logs show when and how the AI accessed data. Users
+                receive notifications for all access events.
+              </p>
             </div>
-            <p className="text-gray-600">
-              Complete audit logs show when and how the AI accessed data. Users
-              receive notifications for all access events.
-            </p>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-purple-600" />
+            <div className="bg-glass-bg/60 backdrop-blur-md border-glass-border rounded-xl p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-secondary/40 rounded-lg flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-base font-bold text-white">
+                  Standards-Based
+                </h3>
               </div>
-              <h3 className="text-lg font-bold text-gray-900">
-                Standards-Based
-              </h3>
+              <p className="text-sm text-white/70">
+                Uses OAuth 2.0, Open Banking APIs, and FIDO standards to ensure
+                security without sharing passwords.
+              </p>
             </div>
-            <p className="text-gray-600">
-              Uses OAuth 2.0, Open Banking APIs, and FIDO standards to ensure
-              security without sharing passwords.
-            </p>
           </div>
         </div>
       </div>
