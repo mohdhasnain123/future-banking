@@ -535,39 +535,41 @@ const WealthAdvisor = ({
 
                   {/* Right Side - Wealth Projection Graph */}
                   <div className="flex-1 flex flex-col">
-                    <h4 className="text-white text-xs font-semibold mb-3">Wealth Projection Over Years</h4>
                     <svg viewBox="0 0 300 150" className="w-full h-full">
                       {/* Grid lines */}
-                      <line x1="40" y1="10" x2="40" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-                      <line x1="40" y1="130" x2="290" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                      <line x1="40" y1="10" x2="40" y2="120" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                      <line x1="40" y1="120" x2="290" y2="120" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
                       
                       {/* Y-axis labels */}
-                      <text x="5" y="15" fill="rgba(255,255,255,0.6)" fontSize="8">$100k</text>
-                      <text x="10" y="55" fill="rgba(255,255,255,0.6)" fontSize="8">$75k</text>
-                      <text x="10" y="95" fill="rgba(255,255,255,0.6)" fontSize="8">$50k</text>
-                      <text x="10" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">$25k</text>
+                      <text x="5" y="15" fill="rgba(255,255,255,0.6)" fontSize="8">$360k</text>
+                      <text x="5" y="45" fill="rgba(255,255,255,0.6)" fontSize="8">$280k</text>
+                      <text x="5" y="75" fill="rgba(255,255,255,0.6)" fontSize="8">$200k</text>
+                      <text x="5" y="105" fill="rgba(255,255,255,0.6)" fontSize="8">$120k</text>
                       
                       {/* X-axis labels */}
-                      <text x="35" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2024</text>
-                      <text x="95" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2025</text>
-                      <text x="155" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2026</text>
-                      <text x="215" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2027</text>
-                      <text x="270" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2028</text>
+                      <text x="35" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2035</text>
+                      <text x="85" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2036</text>
+                      <text x="135" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2037</text>
+                      <text x="185" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2038</text>
+                      <text x="235" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2039</text>
+                      <text x="270" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">2040</text>
                       
-                      {/* Line graph - wealth projection */}
+                      {/* Line graph - wealth projection (180k, 200k, 240k, 280k, 320k, 360k) */}
+                      {/* Scale: 180k -> y=90, 200k -> y=80, 240k -> y=60, 280k -> y=40, 320k -> y=25, 360k -> y=10 */}
                       <polyline
-                        points="40,80 100,65 160,55 220,35 280,20"
+                        points="40,90 90,80 140,60 190,40 240,25 280,10"
                         fill="none"
                         stroke="url(#gradient)"
                         strokeWidth="2"
                       />
                       
                       {/* Data points */}
-                      <circle cx="40" cy="80" r="3" fill="#22c55e" />
-                      <circle cx="100" cy="65" r="3" fill="#22c55e" />
-                      <circle cx="160" cy="55" r="3" fill="#22c55e" />
-                      <circle cx="220" cy="35" r="3" fill="#22c55e" />
-                      <circle cx="280" cy="20" r="3" fill="#22c55e" />
+                      <circle cx="40" cy="90" r="3" fill="#22c55e" />
+                      <circle cx="90" cy="80" r="3" fill="#22c55e" />
+                      <circle cx="140" cy="60" r="3" fill="#22c55e" />
+                      <circle cx="190" cy="40" r="3" fill="#22c55e" />
+                      <circle cx="240" cy="25" r="3" fill="#22c55e" />
+                      <circle cx="280" cy="10" r="3" fill="#22c55e" />
                       
                       {/* Gradient definition */}
                       <defs>
@@ -579,7 +581,7 @@ const WealthAdvisor = ({
                       
                       {/* Area fill under line */}
                       <polygon
-                        points="40,80 100,65 160,55 220,35 280,20 280,130 40,130"
+                        points="40,90 90,80 140,60 190,40 240,25 280,10 280,120 40,120"
                         fill="url(#areaGradient)"
                         opacity="0.2"
                       />
@@ -591,6 +593,7 @@ const WealthAdvisor = ({
                         </linearGradient>
                       </defs>
                     </svg>
+                    <h4 className="text-white text-xs font-semibold text-center mt-2">5 Year Wealth Projection</h4>
                   </div>
                 </CardContent>
               </Card>
