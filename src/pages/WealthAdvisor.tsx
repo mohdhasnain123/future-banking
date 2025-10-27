@@ -487,48 +487,111 @@ const WealthAdvisor = ({
                     Current Asset Position
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="py-6 flex flex-col items-center justify-center flex-1">
-                  <div className="grid grid-cols-2 gap-2 mb-8">
-                    <div className="text-center">
-                      <Bitcoin className="w-8 h-8 text-orange-400 mx-auto mb-4" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.crypto.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-sm">Crypto Assets</p>
+                <CardContent className="py-4 flex gap-6 flex-1">
+                  {/* Left Side - Current Assets */}
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="grid grid-cols-2 gap-2 mb-6">
+                      <div className="text-center">
+                        <Bitcoin className="w-6 h-6 text-orange-400 mx-auto mb-2" />
+                        <p className="text-sm font-bold text-white">
+                          ${currentAssets.crypto.toLocaleString()}
+                        </p>
+                        <p className="text-white/60 text-xs">Crypto Assets</p>
+                      </div>
+                      <div className="text-center">
+                        <Building2 className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                        <p className="text-sm font-bold text-white">
+                          ${currentAssets.digitalRealEstate.toLocaleString()}
+                        </p>
+                        <p className="text-white/60 text-xs">
+                          Digital Real Estate
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <DollarSign className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                        <p className="text-sm font-bold text-white">
+                          ${currentAssets.savings.toLocaleString()}
+                        </p>
+                        <p className="text-white/60 text-xs">Savings</p>
+                      </div>
+                      <div className="text-center">
+                        <TrendingUp className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                        <p className="text-sm font-bold text-white">
+                          ${currentAssets.total.toLocaleString()}
+                        </p>
+                        <p className="text-white/60 text-xs">Total Assets</p>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <Building2 className="w-8 h-8 text-blue-400 mx-auto mb-4" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.digitalRealEstate.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-sm">
-                        Digital Real Estate
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <DollarSign className="w-8 h-8 text-green-400 mx-auto mb-4" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.savings.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-sm">Savings</p>
-                    </div>
-                    <div className="text-center">
-                      <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-4" />
-                      <p className="text-base font-bold text-white">
-                        ${currentAssets.total.toLocaleString()}
-                      </p>
-                      <p className="text-white/60 text-sm">Total Assets</p>
-                    </div>
+                    <Progress
+                      value={(currentAssets.total / houseGoal.target) * 100}
+                      className="h-2"
+                    />
+                    <p className="text-center text-white/70 mt-2 text-xs">
+                      You have{" "}
+                      {Math.round((currentAssets.total / houseGoal.target) * 100)}
+                      % of the required down payment
+                    </p>
                   </div>
-                  <Progress
-                    value={(currentAssets.total / houseGoal.target) * 100}
-                    className="h-2"
-                  />
-                  <p className="text-center text-white/70 mt-2 text-sm">
-                    You have{" "}
-                    {Math.round((currentAssets.total / houseGoal.target) * 100)}
-                    % of the required down payment
-                  </p>
+
+                  {/* Right Side - Wealth Projection Graph */}
+                  <div className="flex-1 flex flex-col">
+                    <h4 className="text-white text-xs font-semibold mb-3">Wealth Projection Over Years</h4>
+                    <svg viewBox="0 0 300 150" className="w-full h-full">
+                      {/* Grid lines */}
+                      <line x1="40" y1="10" x2="40" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                      <line x1="40" y1="130" x2="290" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                      
+                      {/* Y-axis labels */}
+                      <text x="5" y="15" fill="rgba(255,255,255,0.6)" fontSize="8">$100k</text>
+                      <text x="10" y="55" fill="rgba(255,255,255,0.6)" fontSize="8">$75k</text>
+                      <text x="10" y="95" fill="rgba(255,255,255,0.6)" fontSize="8">$50k</text>
+                      <text x="10" y="135" fill="rgba(255,255,255,0.6)" fontSize="8">$25k</text>
+                      
+                      {/* X-axis labels */}
+                      <text x="35" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2024</text>
+                      <text x="95" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2025</text>
+                      <text x="155" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2026</text>
+                      <text x="215" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2027</text>
+                      <text x="270" y="145" fill="rgba(255,255,255,0.6)" fontSize="8">2028</text>
+                      
+                      {/* Line graph - wealth projection */}
+                      <polyline
+                        points="40,80 100,65 160,55 220,35 280,20"
+                        fill="none"
+                        stroke="url(#gradient)"
+                        strokeWidth="2"
+                      />
+                      
+                      {/* Data points */}
+                      <circle cx="40" cy="80" r="3" fill="#22c55e" />
+                      <circle cx="100" cy="65" r="3" fill="#22c55e" />
+                      <circle cx="160" cy="55" r="3" fill="#22c55e" />
+                      <circle cx="220" cy="35" r="3" fill="#22c55e" />
+                      <circle cx="280" cy="20" r="3" fill="#22c55e" />
+                      
+                      {/* Gradient definition */}
+                      <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#22c55e" />
+                          <stop offset="100%" stopColor="#3b82f6" />
+                        </linearGradient>
+                      </defs>
+                      
+                      {/* Area fill under line */}
+                      <polygon
+                        points="40,80 100,65 160,55 220,35 280,20 280,130 40,130"
+                        fill="url(#areaGradient)"
+                        opacity="0.2"
+                      />
+                      
+                      <defs>
+                        <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.6" />
+                          <stop offset="100%" stopColor="#22c55e" stopOpacity="0.1" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
                 </CardContent>
               </Card>
             </div>

@@ -97,3 +97,22 @@ export const useVoiceNavigation = (handlers: VoiceNavigationHandlers = {}) => {
 
   return { listening, browserSupportsSpeechRecognition, transcript };
 };
+
+export const formatDate = (date: Date) => {
+  return date.toLocaleDateString(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+export const formatTime = (baseTime: string, minutesOffset: number) => {
+  const [hours, minutes] = baseTime.split(":").map(Number);
+  const totalMinutes = hours * 60 + minutes + minutesOffset;
+  const newHours = Math.floor(totalMinutes / 60) % 24;
+  const newMinutes = totalMinutes % 60;
+  const period = newHours >= 12 ? "PM" : "AM";
+  const displayHours = newHours % 12 || 12;
+  return `${displayHours}:${newMinutes.toString().padStart(2, "0")} ${period}`;
+};
