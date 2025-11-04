@@ -7,18 +7,17 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import managerImage from "./images/scene-3/managerImage.png";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
-// Import your audio files
-import welcomeAudio from "./audio/scene-3/managerWelcome.mp3";
-import welcomeBackAudio from "./audio/scene-3/WelcomeBack.mp3";
-import openingKycAudio from "./audio/scene-3/selectKycUpdate.mp3";
-import exitingAudio from "./audio/scene-3/exiting.mp3";
-import whoAreYouAudio from "./audio/scene-3/managerWho.mp3";
-import noImmediateActionAudio from "./audio/scene-3/NoImmediate.mp3";
-import whatShouldIDoAudio from "./audio/scene-3/managerWhatToDo.mp3";
-import immediateActionAudio from "./audio/scene-3/immediateAction.mp3";
+// Import your video files - PLACEHOLDER: Replace with actual video paths
+import welcomeVideo from "./videos/scene-3/managerWelcome.mp4";
+import welcomeBackVideo from "./videos/scene-3/WelcomeBack.mp4";
+import openingKycVideo from "./videos/scene-3/selectKycUpdate.mp4";
+import exitingVideo from "./videos/scene-3/exiting.mp4";
+import whoAreYouVideo from "./videos/scene-3/managerWho.mp4";
+import noImmediateActionVideo from "./videos/scene-3/NoImmediate.mp4";
+import whatShouldIDoVideo from "./videos/scene-3/managerWhatToDo.mp4";
+import immediateActionVideo from "./videos/scene-3/immediateAction.mp4";
 
 const options = [
   {
@@ -33,16 +32,17 @@ const options = [
   },
 ];
 
-// Helper: Play audio and call onEnd when finished
-const playAudio = (audioSrc, onEnd) => {
-  if (!audioSrc) {
+// Helper: Play video and call onEnd when finished
+const playVideo = (videoElement: HTMLVideoElement | null, videoSrc: string, onEnd?: () => void) => {
+  if (!videoElement || !videoSrc) {
     if (onEnd) onEnd();
     return;
   }
-  const audio = new window.Audio(audioSrc);
-  audio.onended = onEnd;
-  audio.play();
-  return audio;
+  videoElement.src = videoSrc;
+  videoElement.onended = () => {
+    if (onEnd) onEnd();
+  };
+  videoElement.play().catch(err => console.error("Video play error:", err));
 };
 
 const HolographicBankManagerScreen = ({
@@ -57,6 +57,7 @@ const HolographicBankManagerScreen = ({
   const [welcomePlayed, setWelcomePlayed] = useState(false);
   const scrollBoxRef = useRef(null);
   const listeningRef = useRef(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const {
     transcript,
@@ -73,20 +74,20 @@ const HolographicBankManagerScreen = ({
         response: selectedBank
           ? `I'm your relationship manager of ${selectedBank.name}, I'm here to help you!`
           : "I'm your relationship manager, I'm here to help you!",
-        audio: whoAreYouAudio,
+        video: whoAreYouVideo,
       },
       {
         pattern: /what should i do/i,
         response:
           "You can update your K.Y.C, check account details, view recent transactions, or contact customer support. What would you like to do?",
-        audio: whatShouldIDoAudio,
+        video: whatShouldIDoVideo,
       },
       {
         pattern: /immediate action/i,
         response: cameFromKYC
           ? "No immediate actions is required as of now."
           : "An immediate action is needed. Please update your K Y C as your biometric has been compromised for unknown reasons",
-        audio: cameFromKYC ? noImmediateActionAudio : immediateActionAudio,
+        video: cameFromKYC ? noImmediateActionVideo : immediateActionVideo,
       },
     ],
     [selectedBank, cameFromKYC]
@@ -113,7 +114,7 @@ const HolographicBankManagerScreen = ({
         ...prev,
         { sender: "manager", text: "Sure, preparing for KYC update..." },
       ]);
-      playAudio(openingKycAudio, () => {
+      playVideo(videoRef.current, openingKycVideo, () => {
         SpeechRecognition.stopListening();
         listeningRef.current = false;
         if (onOptionSelect) onOptionSelect("kyc");
@@ -127,7 +128,7 @@ const HolographicBankManagerScreen = ({
         ...prev,
         { sender: "manager", text: "Exiting..." },
       ]);
-      playAudio(exitingAudio, () => {
+      playVideo(videoRef.current, exitingVideo, () => {
         SpeechRecognition.stopListening();
         listeningRef.current = false;
         if (onExit) onExit();
@@ -143,7 +144,7 @@ const HolographicBankManagerScreen = ({
           ...prev,
           { sender: "manager", text: responseText },
         ]);
-        playAudio(patternObj.audio, () => {
+        playVideo(videoRef.current, patternObj.video, () => {
           if (listeningRef.current) {
             SpeechRecognition.startListening({
               continuous: true,
@@ -219,9 +220,9 @@ const HolographicBankManagerScreen = ({
         if (!welcomePlayed) {
           setWelcomePlayed(true);
           if (cameFromKYC) {
-            playAudio(welcomeBackAudio, () => startListening());
+            playVideo(videoRef.current, welcomeBackVideo, () => startListening());
           } else {
-            playAudio(welcomeAudio, () => startListening());
+            playVideo(videoRef.current, welcomeVideo, () => startListening());
           }
         } else {
           startListening();
@@ -608,19 +609,16 @@ const HolographicBankManagerScreen = ({
         </div>
       </div>
 
-      {/* Manager Image */}
-      <div
+      {/* Manager Video */}
+      <video
+        ref={videoRef}
         style={{
           position: "absolute",
           bottom: 20,
           left: 80,
-          opacity: "0.7",
           width: "35vw",
           height: "87vh",
-          backgroundImage: `url(${managerImage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          objectFit: "cover",
           zIndex: 1,
           filter: "drop-shadow(0 0 32px #00eaff88)",
           userSelect: "none",
@@ -630,7 +628,9 @@ const HolographicBankManagerScreen = ({
           backgroundColor: "rgba(175, 220, 255, 0.20)",
         }}
         aria-label="Relationship Manager"
-      ></div>
+        playsInline
+        muted={false}
+      />
 
       {/* Bank Relationship Manager Header */}
       <div

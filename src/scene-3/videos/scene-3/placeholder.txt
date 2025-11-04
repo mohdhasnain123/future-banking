@@ -1,0 +1,15 @@
+PLACEHOLDER FOR VIDEOS
+
+Place your relationship manager videos in this directory:
+
+Required videos:
+1. managerWelcome.mp4 - Welcome message video
+2. WelcomeBack.mp4 - Welcome back message video
+3. selectKycUpdate.mp4 - KYC update preparation video
+4. exiting.mp4 - Exit message video
+5. managerWho.mp4 - "Who are you" response video
+6. NoImmediate.mp4 - No immediate action needed video
+7. managerWhatToDo.mp4 - "What should I do" response video
+8. immediateAction.mp4 - Immediate action needed video
+
+All videos should sync with the conversation flow and match the audio transcript timing.
