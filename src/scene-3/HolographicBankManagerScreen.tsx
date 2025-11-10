@@ -10,14 +10,15 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 // Import your video files - PLACEHOLDER: Replace with actual video paths
-import welcomeVideo from "./videos/scene-3/managerWelcome.mp4";
-import welcomeBackVideo from "./videos/scene-3/WelcomeBack.mp4";
-import openingKycVideo from "./videos/scene-3/selectKycUpdate.mp4";
-import exitingVideo from "./videos/scene-3/exiting.mp4";
-import whoAreYouVideo from "./videos/scene-3/managerWho.mp4";
-import noImmediateActionVideo from "./videos/scene-3/NoImmediate.mp4";
-import whatShouldIDoVideo from "./videos/scene-3/managerWhatToDo.mp4";
-import immediateActionVideo from "./videos/scene-3/immediateAction.mp4";
+// Temporary placeholder strings until videos are uploaded
+const welcomeVideo = "";
+const welcomeBackVideo = "";
+const openingKycVideo = "";
+const exitingVideo = "";
+const whoAreYouVideo = "";
+const noImmediateActionVideo = "";
+const whatShouldIDoVideo = "";
+const immediateActionVideo = "";
 
 const options = [
   {

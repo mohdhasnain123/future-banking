@@ -41,38 +41,7 @@ const Goals = ({
   const [amount, setAmount] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showCalendarModal, setShowCalendarModal] = useState(false);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("showCalendar") === "true") {
-      setShowCalendarModal(true);
-      // Optional: remove the query param from URL after opening the modal
-      navigate("/goals", { replace: true });
-    }
-    if (params.get("showSelectedGoal") === "true") {
-      setSelectedGoal({
-        id: "1",
-        name: "Buy a House",
-        icon: Home,
-        target: 50000,
-        saved: 35000,
-        percentage: 70,
-        targetDate: "Dec, 2046",
-        remaining: 15000,
-        color: "hsl(142, 76%, 36%)",
-      });
-      // Optional: remove the query param from URL after opening the modal
-      navigate("/goals", { replace: true });
-    }
-  }, [location.search, navigate]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const [glowingIndex, setGlowingIndex] = useState(0);
 
   const [goals, setGoals] = useState<Goal[]>([
     {
@@ -131,6 +100,46 @@ const Goals = ({
       color: "hsl(0, 70%, 60%)",
     },
   ]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("showCalendar") === "true") {
+      setShowCalendarModal(true);
+      navigate("/goals", { replace: true });
+    }
+    if (params.get("showSelectedGoal") === "true") {
+      setSelectedGoal({
+        id: "1",
+        name: "Buy a House",
+        icon: Home,
+        target: 50000,
+        saved: 35000,
+        percentage: 70,
+        targetDate: "Dec, 2046",
+        remaining: 15000,
+        color: "hsl(142, 76%, 36%)",
+      });
+      navigate("/goals", { replace: true });
+    }
+  }, [location.search, navigate]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Cycle through cards for glowing effect when no card is selected
+  useEffect(() => {
+    if (!selectedGoal) {
+      const interval = setInterval(() => {
+        setGlowingIndex((prev) => (prev + 1) % goals.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedGoal, goals.length]);
 
   const handleAddFunds = () => {
     if (!selectedGoal || !amount || parseFloat(amount) <= 0) {
@@ -259,12 +268,17 @@ const Goals = ({
 
           {/* Goals Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {goals.map((goal) => {
+            {goals.map((goal, index) => {
               const Icon = goal.icon;
+              const isGlowing = selectedGoal 
+                ? selectedGoal.id === goal.id 
+                : index === glowingIndex;
               return (
                 <Card
                   key={goal.id}
-                  className="bg-glass-bg/60 backdrop-blur-md border-glass-border cursor-pointer hover:bg-glass-bg/80 transition-all"
+                  className={`bg-glass-bg/60 backdrop-blur-md border-2 cursor-pointer hover:bg-glass-bg/80 transition-all ${
+                    isGlowing ? "animate-glow-border" : "border-glass-border"
+                  }`}
                   onClick={() => setSelectedGoal(goal)}
                 >
                   <CardContent className="p-6 space-y-4">

@@ -160,6 +160,16 @@ export default {
             transform: "translateY(-10px)",
           },
         },
+        "glow-border": {
+          "0%, 100%": {
+            boxShadow: "0 0 5px hsl(var(--primary) / 0.5), 0 0 10px hsl(var(--primary) / 0.3)",
+            borderColor: "hsl(var(--primary) / 0.5)",
+          },
+          "50%": {
+            boxShadow: "0 0 20px hsl(var(--primary) / 0.8), 0 0 40px hsl(var(--primary) / 0.5)",
+            borderColor: "hsl(var(--primary) / 0.8)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -172,6 +182,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
         float: "float 3s ease-in-out infinite",
+        "glow-border": "glow-border 2s ease-in-out infinite",
       },
       rotate: {
         "y-6": "6deg",

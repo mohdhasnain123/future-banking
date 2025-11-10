@@ -11,6 +11,7 @@ import nft6 from "@/scene-2/src/assets/nft6.jpg";
 import { Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 const nfts = [
   {
@@ -67,6 +68,18 @@ const BrowseArts = ({
 }) => {
   const navigate = useNavigate();
   const nftWithBids = nfts.find((nft) => nft.id === 1);
+  const [selectedNFT, setSelectedNFT] = useState<number | null>(null);
+  const [glowingIndex, setGlowingIndex] = useState(0);
+
+  // Cycle through NFT cards for glowing effect when no card is selected
+  useEffect(() => {
+    if (!selectedNFT) {
+      const interval = setInterval(() => {
+        setGlowingIndex((prev) => (prev + 1) % nfts.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedNFT]);
 
   return (
     <div
@@ -100,17 +113,29 @@ const BrowseArts = ({
         <h2 className="text-4xl font-bold text-foreground mb-8">NFTs</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {nfts.map((nft) => (
-            <NFTCard
-              key={nft.id}
-              {...nft}
-              onClick={() => {
-                if (nft.bids > 0) {
-                  navigate(`/nft/${nft.id}`);
-                }
-              }}
-            />
-          ))}
+          {nfts.map((nft, index) => {
+            const isGlowing = selectedNFT 
+              ? selectedNFT === nft.id 
+              : index === glowingIndex;
+            return (
+              <div
+                key={nft.id}
+                className={`${
+                  isGlowing ? "animate-glow-border rounded-lg border-2 border-primary" : ""
+                }`}
+              >
+                <NFTCard
+                  {...nft}
+                  onClick={() => {
+                    setSelectedNFT(nft.id);
+                    if (nft.bids > 0) {
+                      navigate(`/nft/${nft.id}`);
+                    }
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
         {nftWithBids && (
           <div className="flex justify-center">
