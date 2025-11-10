@@ -162,12 +162,14 @@ export default {
         },
         "glow-border": {
           "0%, 100%": {
-            boxShadow: "0 0 5px hsl(var(--primary) / 0.5), 0 0 10px hsl(var(--primary) / 0.3)",
-            borderColor: "hsl(var(--primary) / 0.5)",
+            boxShadow: "0 0 15px hsl(var(--primary) / 0.4), 0 0 30px hsl(var(--primary) / 0.3), 0 0 45px hsl(var(--primary) / 0.2)",
+            borderColor: "hsl(var(--primary) / 0.6)",
+            transform: "scale(1.05)",
           },
           "50%": {
-            boxShadow: "0 0 20px hsl(var(--primary) / 0.8), 0 0 40px hsl(var(--primary) / 0.5)",
-            borderColor: "hsl(var(--primary) / 0.8)",
+            boxShadow: "0 0 25px hsl(var(--primary) / 0.6), 0 0 50px hsl(var(--primary) / 0.4), 0 0 75px hsl(var(--primary) / 0.3)",
+            borderColor: "hsl(var(--primary) / 1)",
+            transform: "scale(1.05)",
           },
         },
       },

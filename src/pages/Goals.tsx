@@ -276,7 +276,7 @@ const Goals = ({
               return (
                 <Card
                   key={goal.id}
-                  className={`bg-glass-bg/60 backdrop-blur-md border-2 cursor-pointer hover:bg-glass-bg/80 transition-all ${
+                  className={`bg-glass-bg/60 backdrop-blur-md border-2 cursor-pointer hover:bg-glass-bg/80 transition-all duration-300 ${
                     isGlowing ? "animate-glow-border" : "border-glass-border"
                   }`}
                   onClick={() => setSelectedGoal(goal)}

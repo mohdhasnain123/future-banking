@@ -120,7 +120,7 @@ const BrowseArts = ({
             return (
               <div
                 key={nft.id}
-                className={`${
+                className={`transition-all duration-300 ${
                   isGlowing ? "animate-glow-border rounded-lg border-2 border-primary" : ""
                 }`}
               >
