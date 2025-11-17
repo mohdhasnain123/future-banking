@@ -16,6 +16,7 @@ import Index from "./pages/Index.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
 import Goals from "./pages/Goals.tsx";
 import WealthAdvisor from "./pages/WealthAdvisor.tsx";
+import StrategyComparison from "./pages/StrategyComparison.tsx";
 import CabBooking from "./pages/CabBooking.tsx";
 import AgentsDashboard from "./pages/agents.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -206,6 +207,10 @@ function AppContent() {
               }
             />
           }
+        />
+        <Route
+          path="/strategy-comparison"
+          element={<StrategyComparison />}
         />
         <Route
           path="/cab-booking"
