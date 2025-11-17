@@ -333,15 +333,11 @@ const WealthAdvisor = ({
                     Aggressive
                   </Button>
                   <Button
-                    onClick={() => setComparisonOpen(true)}
-                    className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
-                      comparisonOpen
-                        ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
-                        : ""
-                    }`}
+                    onClick={() => navigate("/strategy-comparison")}
+                    className="bg-black border border-blue-400 hover:bg-blue-700/20 hover:border-blue-500 text-blue-400 hover:text-blue-500 px-3 py-1 text-sm rounded-lg transition-all"
                     size="sm"
                   >
-                    Comparison
+                    Full Comparison
                   </Button>
                 </div>
                 {/* Dream Home Image */}
