@@ -282,7 +282,7 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
   }, []);
 
   return (
-    <div className="relative overflow-hidden max-w-8xl mx-auto w-full h-screen flex flex-col mb-8">
+    <div className="relative overflow-hidden max-w-8xl mx-auto w-full h-screen flex flex-col">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -293,19 +293,19 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
       {/* Header Section */}
-      <div className="w-full z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm pt-4 pb-2">
-        <div className="px-4">
+      <div className="w-full z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm pt-2 pb-1">
+        <div className="px-3">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <div className="flex items-center mb-2">
-                <h1 className="text-3xl md:text-4xl font-bold text-white">
+              <div className="flex items-center mb-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-white">
                   Wealth Advisor Consultation
                 </h1>
-                <p className="text-lg font-medium ml-8">
+                <p className="text-base font-medium ml-6">
                   {formatTime("8:00 AM", 180)} | {formatDate(currentTime)}
                 </p>
               </div>
-              <p className="text-white/70 text-lg">
+              <p className="text-white/70 text-sm">
                 Strategic planning for your dream home purchase
               </p>
             </div>
@@ -314,19 +314,19 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
       </div>
 
       {/* Main Content - Three Column Layout */}
-      <div className="relative z-10 flex-1 px-4 py-4">
-        <div className="grid grid-cols-[1.2fr_0.8fr] gap-4 h-full">
+      <div className="relative z-10 flex-1 px-3 py-2 overflow-hidden">
+        <div className="grid grid-cols-[1.2fr_0.8fr] gap-3 h-full">
           {/* Left Column: Portfolio Management + House Image */}
-          <div className="flex flex-col gap-4 h-full">
+          <div className="flex flex-col gap-2 h-full">
             {/* Top Half: Vick's Portfolio Data Management (now includes asset info) */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20 border-b-2 border-b-primary p-3 flex-1 overflow-y-auto">
-              <h3 className="text-base font-bold text-white mb-2 flex items-center gap-1">
-                <Database className="h-4 w-4 text-primary" />
+            <Card className="bg-white/10 backdrop-blur-md border-white/20 border-b-2 border-b-primary p-2 flex-1 overflow-y-auto">
+              <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-1">
+                <Database className="h-3 w-3 text-primary" />
                 Vick's Portfolio Data Management
               </h3>
-              <div className="bg-black/30 rounded-lg p-3 border border-primary/30">
+              <div className="bg-black/30 rounded-lg p-2 border border-primary/30">
                 {/* Top Layer - Data Sources */}
-                <div className="flex justify-around items-center mb-1">
+                <div className="flex justify-around items-center mb-0.5">
                   {[
                     {
                       icon: "🏦",
@@ -344,21 +344,21 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                   ].map((source, i) => (
                     <div key={i} className="flex flex-col items-center">
                       <div
-                        className={`bg-blue-600/30 border border-blue-400 rounded p-1 transition-all duration-300 ${
+                        className={`bg-blue-600/30 border border-blue-400 rounded p-0.5 transition-all duration-300 ${
                           highlightIndex === i
-                            ? "ring-2 ring-blue-400 ring-offset-2 ring-offset-black/50 scale-110"
+                            ? "ring-1 ring-blue-400 ring-offset-1 ring-offset-black/50 scale-110"
                             : ""
                         }`}
                       >
-                        <div className="text-lg mb-0.5">{source.icon}</div>
-                        <div className="text-white text-xs font-semibold text-center">
+                        <div className="text-sm mb-0.5">{source.icon}</div>
+                        <div className="text-white text-[10px] font-semibold text-center">
                           {source.label}
                         </div>
-                        <div className="text-white/70 text-xs text-center">
+                        <div className="text-white/70 text-[9px] text-center">
                           {source.sub}
                         </div>
                       </div>
-                      <div className="w-0.5 h-3 bg-gradient-to-b from-blue-400 to-purple-500"></div>
+                      <div className="w-0.5 h-2 bg-gradient-to-b from-blue-400 to-purple-500"></div>
                     </div>
                   ))}
                 </div>
@@ -366,64 +366,64 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                 {/* Middle Layer - Account Aggregator */}
                 <div className="flex justify-center">
                   <div
-                    className={`bg-primary/40 border-2 border-primary rounded-lg p-3 shadow-lg shadow-primary/50 transition-all duration-300 ${
+                    className={`bg-primary/40 border border-primary rounded-lg p-1.5 shadow-lg shadow-primary/50 transition-all duration-300 ${
                       highlightIndex === 5
-                        ? "ring-2 ring-primary ring-offset-2 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-primary ring-offset-1 ring-offset-black/50 scale-110"
                         : ""
                     }`}
                   >
-                    <div className="text-white text-xs font-bold text-center">
+                    <div className="text-white text-[10px] font-bold text-center">
                       Account Aggregator
                     </div>
-                    <div className="text-white/80 text-xs text-center">
+                    <div className="text-white/80 text-[9px] text-center">
                       Open API Gateway
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center mb-1">
-                  <div className="w-0.5 h-3 bg-gradient-to-b from-purple-500 to-purple-600"></div>
+                <div className="flex justify-center mb-0.5">
+                  <div className="w-0.5 h-2 bg-gradient-to-b from-purple-500 to-purple-600"></div>
                 </div>
 
                 {/* Blockchain Layer with horizontal arrows */}
-                <div className="flex justify-center items-center gap-2 mb-1">
+                <div className="flex justify-center items-center gap-1 mb-0.5">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-purple-400"></div>
+                    <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-purple-400"></div>
                   </div>
                   <div
-                    className={`bg-purple-600/40 border-2 border-purple-400 rounded-lg p-3 shadow-lg shadow-purple-500/50 transition-all duration-300 ${
+                    className={`bg-purple-600/40 border border-purple-400 rounded-lg p-1.5 shadow-lg shadow-purple-500/50 transition-all duration-300 ${
                       highlightIndex === 6
-                        ? "ring-2 ring-purple-400 ring-offset-2 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-purple-400 ring-offset-1 ring-offset-black/50 scale-110"
                         : ""
                     }`}
                   >
-                    <div className="text-white text-xs font-bold text-center">
+                    <div className="text-white text-[10px] font-bold text-center">
                       🔗 Blockchain Layer
                     </div>
-                    <div className="text-white/80 text-xs text-center">
+                    <div className="text-white/80 text-[9px] text-center">
                       Immutable Records
                     </div>
                   </div>
                   <div className="flex-1">
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-purple-400 to-transparent"></div>
+                    <div className="w-8 h-0.5 bg-gradient-to-r from-purple-400 to-transparent"></div>
                   </div>
                 </div>
-                <div className="flex justify-center mb-1">
-                  <div className="w-0.5 h-3 bg-gradient-to-b from-purple-600 to-pink-600"></div>
+                <div className="flex justify-center mb-0.5">
+                  <div className="w-0.5 h-2 bg-gradient-to-b from-purple-600 to-pink-600"></div>
                 </div>
 
                 {/* AI Wealth Manager - with processing animation */}
-                <div className="flex justify-center mb-1">
+                <div className="flex justify-center mb-0.5">
                   <div
-                    className={`bg-pink-600/40 border-2 border-pink-400 rounded-lg p-3 shadow-lg shadow-pink-500/50 transition-all duration-300 ${
+                    className={`bg-pink-600/40 border border-pink-400 rounded-lg p-1.5 shadow-lg shadow-pink-500/50 transition-all duration-300 ${
                       highlightIndex === 7
-                        ? "ring-2 ring-pink-400 ring-offset-2 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-pink-400 ring-offset-1 ring-offset-black/50 scale-110"
                         : ""
                     } ${isProcessing ? "animate-pulse" : ""}`}
                   >
-                    <div className="text-white text-xs font-bold text-center">
+                    <div className="text-white text-[10px] font-bold text-center">
                       🤖 AI Wealth Manager
                     </div>
-                    <div className="text-white/80 text-xs text-center">
+                    <div className="text-white/80 text-[9px] text-center">
                       Intelligence Engine
                       {highlightIndex === 7 && <span className="ml-1">⚡</span>}
                     </div>
@@ -431,29 +431,29 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                 </div>
 
                 {/* Arrow from AI to outputs */}
-                <div className="flex justify-center mb-1">
-                  <div className="w-0.5 h-3 bg-gradient-to-b from-pink-600 to-green-500"></div>
+                <div className="flex justify-center mb-0.5">
+                  <div className="w-0.5 h-2 bg-gradient-to-b from-pink-600 to-green-500"></div>
                 </div>
 
                 {/* Bottom Layer - Analytics Outputs (moved to separate row) */}
-                <div className="grid grid-cols-2 gap-2 mb-3">
+                <div className="grid grid-cols-2 gap-1 mb-2">
                   {[
                     { icon: "📊", label: "Cash Flow", sub: "Analysis" },
                     { icon: "🛡️", label: "Risk", sub: "Profiling" },
                   ].map((output, i) => (
                     <div key={i} className="flex flex-col items-center">
                       <div
-                        className={`bg-green-600/30 border border-green-400 rounded p-2 transition-all duration-300 ${
+                        className={`bg-green-600/30 border border-green-400 rounded p-1 transition-all duration-300 ${
                           highlightIndex === 8
-                            ? "ring-2 ring-green-400 ring-offset-2 ring-offset-black/50 scale-110"
+                            ? "ring-1 ring-green-400 ring-offset-1 ring-offset-black/50 scale-110"
                             : ""
                         }`}
                       >
-                        <div className="text-lg mb-0.5">{output.icon}</div>
-                        <div className="text-white text-xs font-semibold text-center">
+                        <div className="text-sm mb-0.5">{output.icon}</div>
+                        <div className="text-white text-[10px] font-semibold text-center">
                           {output.label}
                         </div>
-                        <div className="text-white/70 text-xs text-center">
+                        <div className="text-white/70 text-[9px] text-center">
                           {output.sub}
                         </div>
                       </div>
@@ -462,51 +462,51 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                 </div>
               </div>
 
-              <div className="bg-black/30 rounded-lg p-3 border border-primary/30">
-                <h4 className="text-white text-xs font-bold mb-2 flex items-center gap-1">
-                  <PiggyBank className="w-3 h-3" />
+              <div className="bg-black/30 rounded-lg p-2 border border-primary/30 mt-2">
+                <h4 className="text-white text-[10px] font-bold mb-1 flex items-center gap-1">
+                  <PiggyBank className="w-2.5 h-2.5" />
                   Current Asset Allocation
                 </h4>
 
                 {/* Make all info appear in a single horizontal row */}
-                <div className="flex justify-between items-center text-center gap-3">
+                <div className="flex justify-between items-center text-center gap-2">
                   <div className="flex flex-col items-center">
-                    <Bitcoin className="w-4 h-4 text-orange-400 mb-0.5" />
-                    <p className="text-xs font-bold text-white">
+                    <Bitcoin className="w-3 h-3 text-orange-400 mb-0.5" />
+                    <p className="text-[10px] font-bold text-white">
                       ${currentAssets.crypto.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-xs">Crypto</p>
+                    <p className="text-white/60 text-[9px]">Crypto</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Building2 className="w-4 h-4 text-blue-400 mb-0.5" />
-                    <p className="text-xs font-bold text-white">
+                    <Building2 className="w-3 h-3 text-blue-400 mb-0.5" />
+                    <p className="text-[10px] font-bold text-white">
                       ${currentAssets.digitalRealEstate.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-xs">Real Estate</p>
+                    <p className="text-white/60 text-[9px]">Real Estate</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <DollarSign className="w-4 h-4 text-green-400 mb-0.5" />
-                    <p className="text-xs font-bold text-white">
+                    <DollarSign className="w-3 h-3 text-green-400 mb-0.5" />
+                    <p className="text-[10px] font-bold text-white">
                       ${currentAssets.savings.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-xs">Savings</p>
+                    <p className="text-white/60 text-[9px]">Savings</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <TrendingUp className="w-4 h-4 text-purple-400 mb-0.5" />
-                    <p className="text-xs font-bold text-white">
+                    <TrendingUp className="w-3 h-3 text-purple-400 mb-0.5" />
+                    <p className="text-[10px] font-bold text-white">
                       ${currentAssets.total.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-xs">Total</p>
+                    <p className="text-white/60 text-[9px]">Total</p>
                   </div>
                 </div>
               </div>
             </Card>
 
             {/* Bottom: Dream Home Image with action buttons */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 relative flex-1">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 relative h-[35%]">
               <CardContent className="p-0 h-full">
                 {/* Action Buttons - appear after processing */}
                 {showButtons && (
@@ -642,14 +642,14 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
 
             {/* Video Call - Takes Remaining Space */}
             <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 flex-1">
-              <CardContent className="p-2 h-full">
-                <div className="flex flex-col w-full h-full gap-2">
+              <CardContent className="p-1.5 h-full">
+                <div className="flex flex-col w-full h-full gap-1.5">
                   {/* Pat's Video - Main participant */}
                   <div
-                    className={`relative flex-[0.65] bg-black/40 rounded-lg overflow-hidden transition-all duration-300
+                    className={`relative flex-[0.7] bg-black/40 rounded-lg overflow-hidden transition-all duration-300
                     ${
                       isVideoPlaying
-                        ? "shadow-[0_0_20px_6px_rgba(200,21,100,1)]"
+                        ? "shadow-[0_0_15px_4px_rgba(200,21,100,1)]"
                         : ""
                     }
                   `}
@@ -725,30 +725,30 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                       </div>
                       <p className="text-white font-semibold text-sm">Dot</p>
                     </div> */}
-                    <div className="relative flex flex-col items-center justify-center h-24 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-lg border border-primary/30 backdrop-blur-sm">
-                      <div className="relative w-10 h-10 rounded-full bg-secondary/30 flex items-center justify-center mb-1.5 border-2 border-secondary/50">
+                    <div className="relative flex flex-col items-center justify-center h-16 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-lg border border-primary/30 backdrop-blur-sm">
+                      <div className="relative w-7 h-7 rounded-full bg-secondary/30 flex items-center justify-center mb-1 border border-secondary/50">
                         {/* Waveform - positioned to the LEFT of the circle, vertically centered */}
                         {dot && (
-                          <div className="absolute -right-10 top-1/2 -translate-y-1/2 flex gap-1 items-end">
+                          <div className="absolute -right-7 top-1/2 -translate-y-1/2 flex gap-0.5 items-end">
                             {[...Array(5)].map((_, i) => (
                               <motion.div
                                 key={i}
                                 animate={{
-                                  height: ["0.4rem", "1.2rem", "0.4rem"],
+                                  height: ["0.3rem", "0.8rem", "0.3rem"],
                                 }}
                                 transition={{
                                   duration: 0.8,
                                   repeat: Infinity,
                                   delay: i * 0.1,
                                 }}
-                                className="w-1 bg-green-400 rounded-full"
+                                className="w-0.5 bg-green-400 rounded-full"
                               />
                             ))}
                           </div>
                         )}
-                        <span className="text-white font-bold text-lg">D</span>
+                        <span className="text-white font-bold text-sm">D</span>
                       </div>
-                      <p className="text-white font-semibold text-sm">Dot</p>
+                      <p className="text-white font-semibold text-[10px]">Dot</p>
                     </div>
                   </div>
                 </div>

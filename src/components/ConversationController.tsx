@@ -762,11 +762,15 @@ export const ConversationController: React.FC<ConversationControllerProps> = ({
     if (started && !paused && dynamicSteps[step]?.type === "pat") {
       resetTranscript();
       console.log("in pat=", videoEndedIndex);
-      console.log("in pat mp4=", dynamicSteps[step].mp4);
-      if (current.mp4 === 6) {
-        videoRef7.current.play().catch(() => {});
-      } else {
-        videoRefs[current.mp4].current.play().catch(() => {});
+      const currentStep = dynamicSteps[step];
+      if (currentStep && currentStep.type === "pat") {
+        const patStep = currentStep as PatStep;
+        console.log("in pat mp4=", patStep.mp4);
+        if (patStep.mp4 === 6) {
+          videoRef7.current.play().catch(() => {});
+        } else {
+          videoRefs[patStep.mp4].current.play().catch(() => {});
+        }
       }
     }
     // Stop listening if not Vick's turn or paused
@@ -893,10 +897,12 @@ export const ConversationController: React.FC<ConversationControllerProps> = ({
 
   // Handles pause step
   useEffect(() => {
-    if (started && !paused && dynamicSteps[step]?.type === "pause") {
+    const currentStep = dynamicSteps[step];
+    if (started && !paused && currentStep && currentStep.type === "pause") {
+      const pauseStep = currentStep as PauseStep;
       const timer = setTimeout(() => {
         setStep((s) => Math.min(s + 1, dynamicSteps.length - 1));
-      }, dynamicSteps[step].duration);
+      }, pauseStep.duration);
       return () => clearTimeout(timer);
     }
     // eslint-disable-next-line
