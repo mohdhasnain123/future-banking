@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Shield,
   Lock,
@@ -11,6 +11,8 @@ import {
   Key,
   Clock,
   FileText,
+  Mic,
+  LucideAudioLines,
 } from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
 
@@ -22,6 +24,7 @@ const ConsentFlow = ({
   browserSupportsSpeechRecognition?: boolean;
 }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const steps = [
     {
@@ -102,6 +105,25 @@ const ConsentFlow = ({
     },
   ];
 
+  // Auto-tick and scroll steps
+  useEffect(() => {
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      if (currentStep < steps.length) {
+        setActiveStep(currentStep);
+        const ref = stepRefs.current[currentStep];
+        if (ref) {
+          ref.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        currentStep += 1;
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Image */}
@@ -138,7 +160,10 @@ const ConsentFlow = ({
                 const isActive = activeStep === index;
 
                 return (
-                  <div key={step.id}>
+                  <div
+                    key={step.id}
+                    ref={(el) => (stepRefs.current[index] = el)}
+                  >
                     <div
                       className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all ${
                         isActive
@@ -176,14 +201,18 @@ const ConsentFlow = ({
                         <h3 className="text-base font-bold text-white mb-1">
                           {step.title}
                         </h3>
-                        <p className="text-sm text-white/70 mb-2">{step.description}</p>
+                        <p className="text-sm text-white/70 mb-2">
+                          {step.description}
+                        </p>
 
                         {isActive && (
                           <ul className="space-y-1 mt-2">
                             {step.details.map((detail, idx) => (
                               <li key={idx} className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                                <span className="text-xs text-white/80">{detail}</span>
+                                <span className="text-xs text-white/80">
+                                  {detail}
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -247,8 +276,8 @@ const ConsentFlow = ({
                 <h3 className="text-base font-bold text-white">Transparency</h3>
               </div>
               <p className="text-sm text-white/70">
-                Complete audit logs show when and how the AI accessed data. Users
-                receive notifications for all access events.
+                Complete audit logs show when and how the AI accessed data.
+                Users receive notifications for all access events.
               </p>
             </div>
 
@@ -267,6 +296,23 @@ const ConsentFlow = ({
               </p>
             </div>
           </div>
+          {browserSupportsSpeechRecognition && (
+            <div className="absolute top-6 right-8 z-20">
+              <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
+                {listening ? (
+                  <>
+                    <Mic className={`w-5 h-5 text-green-400 animate-pulse`} />
+                    <span>Listening...</span>
+                  </>
+                ) : (
+                  <>
+                    <LucideAudioLines className="w-5 h-5 text-blue-400" />
+                    <span>Dot</span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

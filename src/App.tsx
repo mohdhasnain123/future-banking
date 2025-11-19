@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,27 +10,27 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 // --- Page imports (as in your first code)
 import Index from "./pages/Index.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
 import Goals from "./pages/Goals.tsx";
 import WealthAdvisor from "./pages/WealthAdvisor.tsx";
-import StrategyComparison from "./pages/StrategyComparison.tsx";
 import CabBooking from "./pages/CabBooking.tsx";
-import AgentsDashboard from "./pages/agents.tsx";
+import AgentsDashboard from "./pages/AgentMesh.tsx";
+import ConsentFlow from "./pages/consent.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import BrowseArts from "./scene-2/src/pages/BrowseArts.tsx";
 import NFTDetail from "./scene-2/src/pages/NFTDetail.tsx";
 import PaymentMethod from "./scene-2/src/pages/PaymentMethod.tsx";
 import PaymentProcessing from "./scene-2/src/pages/PaymentProcessing.tsx";
 import Welcome from "./scene-2/src/pages/Welcome.tsx";
-import HouseGoal from "./scene-2/src/pages/HouseGoal.tsx";
 
 // --- Scene imports
 import DestinationScene from "./scene-2/src/components/scenes/DestinationScene.tsx";
-import PaymentScene from "./scene-2/src/components/scenes/PaymentScene.tsx";
+import PaymentScene, {
+  PaymentStage,
+} from "./scene-2/src/components/scenes/PaymentScene.tsx";
 import PetInfoScene from "./scene-2/src/components/scenes/PetInfoScene.tsx";
 import TaskDashboardScene from "./scene-2/src/components/scenes/TaskDashboardScene.tsx";
 
@@ -46,7 +47,18 @@ import QuantumAuthScreen from "./scene-3/QuantumAuthScreen.tsx";
 import BankSelectionScreen from "./scene-3/BankSelectionScreen.tsx";
 import ConsentScreen from "./scene-3/consent.tsx";
 import AuthenticationChoiceScreen from "./scene-3/AutheticationChoiceScreen.tsx";
-import { useVoiceNavigation } from "@/components/utils";
+import HouseGoal from "./scene-2/src/pages/HouseGoal.tsx";
+import ConversationLayout from "./components/ConversationLayout.tsx";
+import FraudDetected from "./pages/FraudDetected.tsx";
+import TravelToBank from "./scene-3/TravelToBank.tsx";
+import StrategyComparison from "./pages/StrategyComparison.tsx";
+import IndexNexus from "./pages/Nexus/IndexNexus.tsx";
+import PortfolioNexus from "./pages/Nexus/PortfolioNexus.tsx";
+import FraudDetectedNexus from "./pages/Nexus/FraudDetectedNexus.tsx";
+import GoalsNexus from "./pages/Nexus/GoalsNexus.tsx";
+import WealthAdvisorNexus from "./pages/Nexus/WealthAdvisorNexus.tsx";
+import StrategyComparisonNexus from "./pages/Nexus/StrategyComparisonNexus.tsx";
+import CabBookingNexus from "./pages/Nexus/CabBookingNexus.tsx";
 
 // --- Controlled step path logic
 const controlledStepPaths = [
@@ -72,9 +84,39 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+  const videoRef3 = useRef<HTMLVideoElement>(null);
+  const videoRef4 = useRef<HTMLVideoElement>(null);
+  const videoRef5 = useRef<HTMLVideoElement>(null);
+  const videoRef6 = useRef<HTMLVideoElement>(null);
+  const videoRef7 = useRef<HTMLVideoElement>(null);
+  //const videoRef7: RefObject<HTMLVideoElement>
+
+  const videoRefs = [
+    videoRef1,
+    videoRef2,
+    videoRef3,
+    videoRef4,
+    videoRef5,
+    videoRef6,
+  ];
+
+  const [videoEndedIndex, setVideoEndedIndex] = useState<number | null>(null);
+
+  const handleVideoEnd = (index: number) => {
+    console.log(`🎬  video ${index + 1} ended`);
+    setVideoEndedIndex(index);
+  };
+
   // Start voice navigation at the app level
-  const { listening, browserSupportsSpeechRecognition, transcript } =
-    useVoiceNavigation();
+  // const { listening, browserSupportsSpeechRecognition, transcript } =
+  //   useConversationSpeechRecognition();
+
+  const [speakingState, setSpeakingState] = useState({
+    vick: false,
+    dot: false,
+  });
 
   // Controlled path logic
   const isControlledPath = controlledStepPaths.includes(location.pathname);
@@ -92,6 +134,7 @@ function AppContent() {
 
   // Keep URL in sync with step, only for controlled paths
   useEffect(() => {
+    console.log("useeefect 5");
     if (isControlledPath && step !== null) {
       const path = controlledStepPaths[step - 1];
       if (location.pathname !== path) {
@@ -113,6 +156,11 @@ function AppContent() {
   // Keyboard navigation, only for controlled paths
   useEffect(() => {
     const handleKeyDown = (e) => {
+      console.log("useeffect arrow key");
+      if (speakingState.vick) {
+        setStep((s) => Math.min(s + 1, 300));
+        return;
+      }
       if (!isControlledPath) return;
       if (e.key === "ArrowRight") {
         setStep((prev) => Math.min(prev + 1, controlledStepPaths.length));
@@ -135,7 +183,7 @@ function AppContent() {
         color: "#00eaff",
         padding: "8px 18px",
         borderRadius: 18,
-        fontFamily: "Orbitron, Arial, sans-serif",
+        fontFamily: "Outfit, system-ui, sans-serif",
         fontWeight: 600,
         letterSpacing: 1,
         boxShadow: "0 0 12px #00eaff44",
@@ -159,176 +207,109 @@ function AppContent() {
     </div>
   );
 
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  const [stage, setStage] = useState<PaymentStage>("claim-verification");
+
+  const [clockTargetTime, setClockTargetTime] = useState<
+    { hours: number; minutes: number } | undefined
+  >(undefined);
+
   return (
     <div>
-      {isControlledPath && step >= 4 && timerBar}
+      {isControlledPath && step >= 4}
       <Routes>
-        {/* Scene-1 pages */}
         <Route
-          path="/"
           element={
-            <Index
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
+            <ConversationLayout
+              onSetSelectedCategory={setSelectedCategory}
+              videoRefs={videoRefs}
+              videoEndedIndex={videoEndedIndex}
+              setSpeakingState={setSpeakingState}
+              videoRef7={videoRef7}
+              clockTargetTime={clockTargetTime}
+              setClockTargetTime={setClockTargetTime}
             />
           }
-        />
-        <Route
-          path="/portfolio"
-          element={
-            <Portfolio
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/goals"
-          element={
-            <Goals
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/wealth-advisor"
-          element={
-            <WealthAdvisor
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/strategy-comparison"
-          element={<StrategyComparison />}
-        />
-        <Route
-          path="/cab-booking"
-          element={
-            <CabBooking
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route path="/agentmesh" element={<AgentsDashboard />} />
+        >
+          {/* Scene-1 pages */}
+          {/* <Route path="/" element={<Index clockTargetTime={clockTargetTime} setClockTargetTime={setClockTargetTime}/>} /> */}
+          <Route
+            path="/"
+            element={
+              <IndexNexus
+                clockTargetTime={clockTargetTime}
+                setClockTargetTime={setClockTargetTime}
+              />
+            }
+          />
 
-        {/* Scene-2 pages */}
-        <Route
-          path="/welcomeScreen"
-          element={
-            <Welcome
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/browse-arts"
-          element={
-            <BrowseArts
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
+          {/* <Route path="/portfolio" element={<Portfolio />} /> */}
+          <Route path="/portfolio" element={<PortfolioNexus />} />
+          {/* <Route path="/portfolio-again" element={<Portfolio />} /> */}
+          <Route path="/portfolio-again" element={<PortfolioNexus />} />
+          {/* <Route path="/goals" element={<Goals />} /> */}
+          <Route path="/goals" element={<GoalsNexus />} />
 
-        <Route
-          path="/nft/:id"
-          element={
-            <NFTDetail
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/payment-method"
-          element={
-            <PaymentMethod
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/payment-processing"
-          element={
-            <PaymentProcessing
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/destination"
-          element={
-            <DestinationScene
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-              transcript={transcript}
-            />
-          }
-        />
-        <Route
-          path="/petinfo"
-          element={
-            <PetInfoScene
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-              transcript={transcript}
-            />
-          }
-        />
-        <Route path="/paymentscene" element={<PaymentScene />} />
-        <Route
-          path="/taskdashboard"
-          element={
-            <TaskDashboardScene
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
-        <Route
-          path="/house-goal"
-          element={
-            <HouseGoal
-              listening={listening}
-              browserSupportsSpeechRecognition={
-                browserSupportsSpeechRecognition
-              }
-            />
-          }
-        />
+          <Route path="/consent-for-dot" element={<ConsentFlow />} />
+          {/* <Route
+            path="/wealth-advisor"
+            element={
+              <WealthAdvisor
+                videoRefs={videoRefs}
+                onVideoEnd={handleVideoEnd}
+                speakingState={speakingState}
+              />
+            }
+          /> */}
+          <Route
+            path="/wealth-advisor"
+            element={
+              <WealthAdvisorNexus
+                videoRefs={videoRefs}
+                onVideoEnd={handleVideoEnd}
+                speakingState={speakingState}
+              />
+            }
+          />
+          {/* <Route path="/strategy-comparison" element={<StrategyComparison />} /> */}
+          <Route path="/strategy-comparison" element={<StrategyComparisonNexus />} />
+
+          <Route
+            path="/travel-to-bank"
+            element={
+              <TravelToBank onVideoEnd={handleVideoEnd} videoRef={videoRef7} />
+            }
+          />
+          {/* <Route path="/cab-booking" element={<CabBooking />} /> */}
+          <Route path="/cab-booking" element={<CabBookingNexus />} />
+          <Route path="/agentmesh" element={<AgentsDashboard />} />
+          {/* <Route path="/fraud-detected" element={<FraudDetected />} /> */}
+          <Route path="/fraud-detected" element={<FraudDetectedNexus />} />
+
+          {/* Scene-2 pages */}
+          <Route path="/welcomeScreen" element={<Welcome />} />
+          <Route path="/browse-arts" element={<BrowseArts />} />
+
+          <Route path="/nft/:id" element={<NFTDetail />} />
+          <Route path="/payment-method" element={<PaymentMethod />} />
+          <Route path="/payment-processing" element={<PaymentProcessing />} />
+          <Route path="/house-goal" element={<HouseGoal />} />
+          <Route path="/destination" element={<DestinationScene />} />
+          <Route path="/petinfo" element={<PetInfoScene />} />
+          <Route
+            path="/paymentscene"
+            element={
+              <PaymentScene
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                stage={stage}
+                setStage={setStage}
+              />
+            }
+          />
+          <Route path="/taskdashboard" element={<TaskDashboardScene />} />
+        </Route>
 
         {/* Scene-3 controlled screens */}
         <Route

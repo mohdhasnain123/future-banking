@@ -40,7 +40,7 @@ const Bills = () => {
       id: "1",
       name: "Credit Card",
       amount: 2850.0,
-      dueDate: "Nov 15, 2025",
+      dueDate: "Nov 15, 2035",
       provider: "Global Bank",
       icon: CreditCard,
       status: "pending",
@@ -50,7 +50,7 @@ const Bills = () => {
       id: "2",
       name: "Internet Bill",
       amount: 89.99,
-      dueDate: "Nov 20, 2025",
+      dueDate: "Nov 20, 2035",
       provider: "HyperFiber",
       icon: Wifi,
       status: "pending",
@@ -60,7 +60,7 @@ const Bills = () => {
       id: "3",
       name: "Mobile Bill",
       amount: 65.0,
-      dueDate: "Nov 18, 2025",
+      dueDate: "Nov 18, 2035",
       provider: "NeoTel",
       icon: Smartphone,
       status: "pending",
@@ -70,7 +70,7 @@ const Bills = () => {
       id: "4",
       name: "Water Bill",
       amount: 45.5,
-      dueDate: "Nov 25, 2025",
+      dueDate: "Nov 25, 2035",
       provider: "AquaPure",
       icon: Droplets,
       status: "pending",
@@ -80,7 +80,7 @@ const Bills = () => {
       id: "5",
       name: "Electricity Bill",
       amount: 156.75,
-      dueDate: "Nov 22, 2025",
+      dueDate: "Nov 22, 2035",
       provider: "PowerGrid",
       icon: Zap,
       status: "pending",
@@ -90,7 +90,7 @@ const Bills = () => {
       id: "6",
       name: "Insurance Premium",
       amount: 320.0,
-      dueDate: "Nov 30, 2025",
+      dueDate: "Nov 30, 2035",
       provider: "SecureLife",
       icon: Shield,
       status: "pending",
@@ -232,89 +232,96 @@ const Bills = () => {
     .reduce((sum, b) => sum + b.amount, 0);
 
   return (
-    <div className="h-full flex flex-col">
-      <CardHeader>
-        <CardTitle className="text-white text-base">Upcoming Bills</CardTitle>
-        <div className="grid grid-cols-2 gap-2 pt-2">
+    <Card className="bg-glass-bg/60 backdrop-blur-md border-glass-border flex flex-col overflow-hidden">
+      <CardHeader className="pb-0.5 px-1 pt-0.5">
+        <CardTitle className="text-white font-semibold text-[10px]">
+          Upcoming Bills
+        </CardTitle>
+        <div className="grid grid-cols-2 gap-0.5 pt-0.5">
           <Card className="bg-[hsl(10,80%,60%)]/20 backdrop-blur-sm border-none text-white">
-            <CardContent className="p-2 text-center">
-              <p className="text-xs opacity-70">Pending</p>
-              <p className="text-lg font-bold">${totalPending.toFixed(2)}</p>
+            <CardContent className="p-0.5 text-center">
+              <p className="text-[6px] opacity-70">Pending</p>
+              <p className="text-[8px] font-bold">
+                ${totalPending.toFixed(2)}
+              </p>
             </CardContent>
           </Card>
           <Card className="bg-[hsl(142,76%,36%)]/20 backdrop-blur-sm border-none text-white">
-            <CardContent className="p-2 text-center">
-              <p className="text-xs opacity-70">Paid</p>
-              <p className="text-lg font-bold">${totalPaid.toFixed(2)}</p>
+            <CardContent className="p-0.5 text-center">
+              <p className="text-[6px] opacity-70">Paid</p>
+              <p className="text-[8px] font-bold">${totalPaid.toFixed(2)}</p>
             </CardContent>
           </Card>
         </div>
       </CardHeader>
-      <div className="flex-1 overflow-y-auto pr-2">
-        <CardContent className="space-y-4">
-          {bills.map((bill) => (
-            <div
-              key={bill.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
-            >
-              <div className="flex items-center gap-3 flex-1">
-                <div className="p-2 rounded-lg bg-white/10">
-                  <bill.icon className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="text-white font-semibold text-sm">
-                      {bill.name}
-                    </p>
-                    {bill.status === "paid" && (
-                      <Badge className="bg-[hsl(142,76%,36%)] text-white border-none text-xs px-1.5 py-0.5">
-                        <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
-                        Paid
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-white/60 text-xs">
-                    {bill.provider} • Due: {bill.dueDate}
-                  </p>
-                </div>
+      <CardContent className="flex-1 px-1 py-0.5 overflow-y-auto space-y-1 max-h-[80px] scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+        {bills.map((bill) => (
+          <div
+            key={bill.id}
+            className="flex items-center justify-between p-0.5 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
+          >
+            <div className="flex items-center gap-1 flex-1">
+              <div className="p-0.5 rounded-lg bg-white/10">
+                <bill.icon className="w-2.5 h-2.5 text-white" />
               </div>
-              <div className="flex items-center gap-3">
-                <p className="text-lg font-bold text-white">
-                  ${bill.amount.toFixed(2)}
+              <div className="flex-1">
+                <div className="flex items-center gap-0.5">
+                  <p className="text-white font-semibold text-[8px]">
+                    {bill.name}
+                  </p>
+                  {bill.status === "paid" && (
+                    <Badge className="bg-[hsl(142,76%,36%)] text-white border-none text-[7px] px-0.5 py-0">
+                      <CheckCircle2 className="w-1.5 h-1.5 mr-0.5" />
+                      Paid
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-white/60 text-[8px]">
+                  {bill.provider} • Due: {bill.dueDate}
                 </p>
-                {bill.status === "pending" && (
-                  <Button
-                    size="sm"
-                    onClick={() => handlePayBill(bill)}
-                    className="bg-[hsl(142,76%,36%)] hover:bg-[hsl(142,76%,30%)] text-white text-xs h-8"
-                  >
-                    Pay
-                  </Button>
-                )}
               </div>
             </div>
-          ))}
-        </CardContent>
-      </div>
-      {/* Dialogs need to be outside the scrolling content to render correctly */}
+            <div className="flex items-center gap-1">
+              <p className="text-[9px] font-bold text-white">
+                ${bill.amount.toFixed(2)}
+              </p>
+              {bill.status === "pending" && (
+                <Button
+                  size="sm"
+                  onClick={() => handlePayBill(bill)}
+                  className="bg-[hsl(142,76%,36%)] hover:bg-[hsl(142,76%,30%)] text-white text-[8px] h-4 px-1 min-w-0"
+                >
+                  Pay
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+      </CardContent>
+
+      {/* Dialogs (unchanged, outside of CardContent) */}
       <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-2xl">
+        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-xs p-1.5">
           <DialogHeader>
-            <DialogTitle>Choose Payment Method</DialogTitle>
-            <p className="text-sm text-muted-foreground">
+            <DialogTitle className="text-[10px]">
+              Choose Payment Method
+            </DialogTitle>
+            <p className="text-[8px] text-muted-foreground">
               Paying {selectedBill?.name} - ${selectedBill?.amount.toFixed(2)}
             </p>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-2 gap-1 mt-1">
             {paymentMethods.map((method) => (
               <button
                 key={method.id}
                 onClick={() => handlePaymentMethod(method.id)}
-                className="p-6 rounded-lg border-2 border-border hover:border-[hsl(142,76%,36%)] hover:bg-accent transition-all text-left group"
+                className="p-1 rounded-lg border border-border hover:border-[hsl(142,76%,36%)] hover:bg-accent transition-all text-left group"
               >
-                <method.icon className="w-8 h-8 mb-3 text-muted-foreground group-hover:text-[hsl(142,76%,36%)] transition-colors" />
-                <h3 className="font-semibold mb-1">{method.name}</h3>
-                <p className="text-sm text-muted-foreground">
+                <method.icon className="w-4 h-4 mb-0.5 text-muted-foreground group-hover:text-[hsl(142,76%,36%)] transition-colors" />
+                <h3 className="font-semibold mb-0.5 text-[9px]">
+                  {method.name}
+                </h3>
+                <p className="text-[8px] text-muted-foreground">
                   {method.description}
                 </p>
               </button>
@@ -327,32 +334,34 @@ const Bills = () => {
         open={showPaymentDetailsDialog}
         onOpenChange={setShowPaymentDetailsDialog}
       >
-        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-lg">
+        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-xs p-1.5">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-[10px]">
               Select{" "}
               {paymentMethods.find((m) => m.id === selectedPaymentType)?.name}
             </DialogTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[8px] text-muted-foreground">
               Choose from your saved payment methods
             </p>
           </DialogHeader>
-          <div className="space-y-3 mt-4">
+          <div className="space-y-1 mt-1">
             {selectedPaymentType &&
               savedPaymentDetails[selectedPaymentType]?.map((detail) => (
                 <button
                   key={detail.id}
                   onClick={handlePaymentDetailSelection}
-                  className="w-full p-4 rounded-lg border-2 border-border hover:border-[hsl(142,76%,36%)] hover:bg-accent transition-all text-left group"
+                  className="w-full p-1 rounded-lg border border-border hover:border-[hsl(142,76%,36%)] hover:bg-accent transition-all text-left group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold">{detail.name}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-semibold text-[9px]">
+                        {detail.name}
+                      </h3>
+                      <p className="text-[8px] text-muted-foreground">
                         {detail.details}
                       </p>
                     </div>
-                    <CreditCard className="w-6 h-6 text-muted-foreground group-hover:text-[hsl(142,76%,36%)] transition-colors" />
+                    <CreditCard className="w-3 h-3 text-muted-foreground group-hover:text-[hsl(142,76%,36%)] transition-colors" />
                   </div>
                 </button>
               ))}
@@ -361,19 +370,21 @@ const Bills = () => {
       </Dialog>
 
       <Dialog open={isProcessing} onOpenChange={() => {}}>
-        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-md">
+        <DialogContent className="bg-background/95 backdrop-blur-sm max-w-xs p-1.5">
           <DialogHeader>
-            <DialogTitle>Processing Payment</DialogTitle>
+            <DialogTitle className="text-[10px]">
+              Processing Payment
+            </DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="relative w-24 h-24 mb-6">
-              <div className="absolute inset-0 border-4 border-[hsl(142,76%,36%)]/20 rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-[hsl(142,76%,36%)] rounded-full border-t-transparent animate-spin"></div>
+          <div className="flex flex-col items-center justify-center py-2">
+            <div className="relative w-8 h-8 mb-2">
+              <div className="absolute inset-0 border border-[hsl(142,76%,36%)]/20 rounded-full"></div>
+              <div className="absolute inset-0 border border-[hsl(142,76%,36%)] rounded-full border-t-transparent animate-spin"></div>
             </div>
-            <p className="text-lg font-semibold mb-2">
+            <p className="text-[9px] font-semibold mb-1">
               Processing your payment...
             </p>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-[8px] text-muted-foreground text-center">
               Please wait while we securely process your transaction.
               <br />
               This may take a few moments.
@@ -381,7 +392,7 @@ const Bills = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </Card>
   );
 };
 

@@ -1,3 +1,10 @@
+:root {
+  /* Add risk score bar colors for FraudDetected screen */
+  --risk-low: 120, 70%, 40%;     /* green */
+  --risk-medium: 45, 90%, 55%;   /* yellow/orange */
+  --risk-high: 0, 80%, 60%;      /* red */
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

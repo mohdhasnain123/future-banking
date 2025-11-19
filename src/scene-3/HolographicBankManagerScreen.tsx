@@ -1,24 +1,54 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import backgroundImage from "./images/scene-3/Group2.png";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import welcomeVideo from "./videos/scene-3/RelationshipManagerVideo1.mp4";
+import welcomeBackVideo from "./videos/scene-3/RelationshipManagerVideo5.mp4";
+import openingKycVideo from "./videos/scene-3/RelationshipManagerVideo4.mp4";
+import whatShouldIDoVideo from "./videos/scene-3/RelationshipManagerVideo2.mp4";
+import dot1 from "./audio/scene-3/dot1.mp3";
+import dot2 from "./audio/scene-3/dot2.mp3";
+import { Mic, MicOff, LucideAudioLines } from "lucide-react";
 
-// Import your video files - PLACEHOLDER: Replace with actual video paths
-// Temporary placeholder strings until videos are uploaded
-const welcomeVideo = "";
-const welcomeBackVideo = "";
-const openingKycVideo = "";
-const exitingVideo = "";
-const whoAreYouVideo = "";
-const noImmediateActionVideo = "";
-const whatShouldIDoVideo = "";
-const immediateActionVideo = "";
+// Conversation steps template
+const getConversationSteps = (cameFromKYC) => [
+  {
+    type: "manager",
+    video: cameFromKYC ? welcomeBackVideo : welcomeVideo,
+    text: "How can I help you?",
+  },
+  {
+    type: "vick",
+    prompt: "Dot, is anything else required other than KYC?",
+    keyword: "other",
+  },
+  {
+    type: "dot",
+    mp3: dot1,
+    text: "hmm.. let me check. Sarah, what are the different things you can help us with?",
+  },
+  {
+    type: "manager",
+    video: whatShouldIDoVideo,
+    text: "You can update your K.Y.C, check account details, view recent transactions, or contact customer support. What would you like to do?",
+  },
+  { type: "dot", mp3: dot2, text: "ok.., then only KYC update is required" },
+  {
+    type: "vick",
+    prompt: "Sarah, please go for KYC update",
+    keyword: "update",
+  },
+  {
+    type: "manager",
+    video: openingKycVideo,
+    text: "Sure, preparing for KYC update...",
+  },
+  { type: "navigate", to: "kyc" },
+];
 
 const options = [
   {
@@ -33,18 +63,9 @@ const options = [
   },
 ];
 
-// Helper: Play video and call onEnd when finished
-const playVideo = (videoElement: HTMLVideoElement | null, videoSrc: string, onEnd?: () => void) => {
-  if (!videoElement || !videoSrc) {
-    if (onEnd) onEnd();
-    return;
-  }
-  videoElement.src = videoSrc;
-  videoElement.onended = () => {
-    if (onEnd) onEnd();
-  };
-  videoElement.play().catch(err => console.error("Video play error:", err));
-};
+const INITIAL_CONVERSATION = [
+  { sender: "manager", text: "How can I help you?" },
+];
 
 const HolographicBankManagerScreen = ({
   onOptionSelect,
@@ -52,47 +73,33 @@ const HolographicBankManagerScreen = ({
   selectedBank,
   cameFromKYC,
 }) => {
-  const [conversation, setConversation] = useState([
-    { sender: "manager", text: "Hi! What can I help you with?" },
-  ]);
-  const [welcomePlayed, setWelcomePlayed] = useState(false);
-  const scrollBoxRef = useRef(null);
-  const listeningRef = useRef(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // Conversation step state
+  const [step, setStep] = useState(0);
+  const [conversation, setConversation] = useState(INITIAL_CONVERSATION);
 
+  // UI states
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [videoPaused, setVideoPaused] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [mp3Paused, setMp3Paused] = useState(false);
+
+  // Refs
+  const videoRef = useRef(null);
+  const audioRef = useRef(null);
+  const scrollBoxRef = useRef(null);
+
+  // Speech recognition
   const {
     transcript,
-    finalTranscript,
-    resetTranscript,
     listening,
     browserSupportsSpeechRecognition,
+    resetTranscript,
   } = useSpeechRecognition();
 
-  const conversationPatterns = useMemo(
-    () => [
-      {
-        pattern: /who are you/i,
-        response: selectedBank
-          ? `I'm your relationship manager of ${selectedBank.name}, I'm here to help you!`
-          : "I'm your relationship manager, I'm here to help you!",
-        video: whoAreYouVideo,
-      },
-      {
-        pattern: /what should i do/i,
-        response:
-          "You can update your K.Y.C, check account details, view recent transactions, or contact customer support. What would you like to do?",
-        video: whatShouldIDoVideo,
-      },
-      {
-        pattern: /immediate action/i,
-        response: cameFromKYC
-          ? "No immediate actions is required as of now."
-          : "An immediate action is needed. Please update your K Y C as your biometric has been compromised for unknown reasons",
-        video: cameFromKYC ? noImmediateActionVideo : immediateActionVideo,
-      },
-    ],
-    [selectedBank, cameFromKYC]
-  );
+  // Conversation steps (dynamic based on cameFromKYC)
+  const conversationSteps = getConversationSteps(cameFromKYC);
+  const currentStep = conversationSteps[step];
+  const [playedStep, setPlayedStep] = useState({ video: null, mp3: null });
 
   // Scroll to bottom when conversation updates
   useEffect(() => {
@@ -101,138 +108,150 @@ const HolographicBankManagerScreen = ({
     }
   }, [conversation]);
 
-  // Handle finalTranscript changes (process only when user finishes speaking)
+  // Play video when manager step
   useEffect(() => {
-    if (!finalTranscript || !finalTranscript.trim()) return;
-
-    const userText = finalTranscript.trim().toLowerCase();
-    setConversation((prev) => [...prev, { sender: "user", text: userText }]);
-    resetTranscript();
-
-    // KYC command
-    if (userText.includes("kyc")) {
-      setConversation((prev) => [
-        ...prev,
-        { sender: "manager", text: "Sure, preparing for KYC update..." },
-      ]);
-      playVideo(videoRef.current, openingKycVideo, () => {
-        SpeechRecognition.stopListening();
-        listeningRef.current = false;
-        if (onOptionSelect) onOptionSelect("kyc");
-      });
-      return;
-    }
-
-    // Exit command
-    if (userText.includes("exit")) {
-      setConversation((prev) => [
-        ...prev,
-        { sender: "manager", text: "Exiting..." },
-      ]);
-      playVideo(videoRef.current, exitingVideo, () => {
-        SpeechRecognition.stopListening();
-        listeningRef.current = false;
-        if (onExit) onExit();
-      });
-      return;
-    }
-
-    // Pattern matching
-    for (const patternObj of conversationPatterns) {
-      if (patternObj.pattern.test(userText)) {
-        const responseText = patternObj.response;
-        setConversation((prev) => [
-          ...prev,
-          { sender: "manager", text: responseText },
-        ]);
-        playVideo(videoRef.current, patternObj.video, () => {
-          if (listeningRef.current) {
-            SpeechRecognition.startListening({
-              continuous: true,
-              language: "en-US",
-              interimResults: true,
-            });
-          }
-        });
-        return;
-      }
-    }
-
-    // Unknown command
-    setConversation((prev) => [
-      ...prev,
-      {
-        sender: "manager",
-        text: "Sorry, I didn't understand. Please try again.",
-      },
-    ]);
-    if (listeningRef.current) {
-      SpeechRecognition.startListening({
-        continuous: true,
-        language: "en-US",
-        interimResults: true,
-      });
-    }
-  }, [
-    finalTranscript,
-    resetTranscript,
-    onOptionSelect,
-    onExit,
-    conversationPatterns,
-  ]);
-
-  // Auto-restart listening if it stops and user hasn't stopped it
-  useEffect(() => {
-    if (!listening && listeningRef.current) {
-      SpeechRecognition.startListening({
-        continuous: true,
-        language: "en-US",
-        interimResults: true,
-      });
-    }
-  }, [listening]);
-
-  const startListening = () => {
-    listeningRef.current = true;
-    SpeechRecognition.startListening({
-      continuous: true,
-      language: "en-US",
-      interimResults: true,
-    });
-  };
-
-  const stopListening = () => {
-    listeningRef.current = false;
-    SpeechRecognition.stopListening();
-  };
-
-  const handleScreenClick = (e) => {
     if (
-      e.target.tagName === "BUTTON" ||
-      e.target.closest("button") ||
-      e.target.closest(".MuiSvgIcon-root")
-    )
-      return;
+      currentStep?.type === "manager" &&
+      videoRef.current &&
+      playedStep.video !== step
+    ) {
+      videoRef.current.src = currentStep.video;
+      videoRef.current.play().catch(() => {});
+      setIsVideoPlaying(true);
+      setVideoPaused(false);
+      setPlayedStep((prev) => ({ ...prev, video: step }));
+      SpeechRecognition.stopListening();
+      setConversation((prev) => [
+        ...prev,
+        { sender: "manager", text: currentStep.text },
+      ]);
+    }
+    // Pause video if paused
+    if (videoRef.current) {
+      if (videoPaused) videoRef.current.pause();
+      // Don't call play() here, only on click or step change
+    }
+    // eslint-disable-next-line
+  }, [step, videoPaused, currentStep?.video]);
 
-    const y = e.clientY;
-    const screenHeight = window.innerHeight;
-    if (y < screenHeight / 2) {
-      if (!listening) {
-        if (!welcomePlayed) {
-          setWelcomePlayed(true);
-          if (cameFromKYC) {
-            playVideo(videoRef.current, welcomeBackVideo, () => startListening());
-          } else {
-            playVideo(videoRef.current, welcomeVideo, () => startListening());
-          }
-        } else {
-          startListening();
-        }
-      }
+  // Play mp3 when dot step
+  useEffect(() => {
+    if (
+      currentStep?.type === "dot" &&
+      audioRef.current &&
+      playedStep.mp3 !== step
+    ) {
+      audioRef.current.src = currentStep.mp3;
+      audioRef.current.play().catch(() => {});
+      setIsAudioPlaying(true);
+      setMp3Paused(false);
+      setPlayedStep((prev) => ({ ...prev, mp3: step }));
+      SpeechRecognition.stopListening();
+      setConversation((prev) => [
+        ...prev,
+        { sender: "dot", text: currentStep.text },
+      ]);
+    }
+    // Pause mp3 if paused
+    if (audioRef.current) {
+      if (mp3Paused) audioRef.current.pause();
+      // Don't call play() here, only on click or step change
+    }
+    // eslint-disable-next-line
+  }, [step, mp3Paused, currentStep?.mp3]);
+
+  // Speech recognition ON only for Vick's turn
+  useEffect(() => {
+    if (currentStep?.type === "vick") {
+      SpeechRecognition.startListening({ continuous: true, language: "en-US" });
+      setConversation((prev) => [
+        ...prev,
+        { sender: "user", text: currentStep.prompt },
+      ]);
     } else {
-      stopListening();
+      SpeechRecognition.stopListening();
+      resetTranscript();
+    }
+    // eslint-disable-next-line
+  }, [step]);
+
+  // Next step on video end
+  const handleVideoEnd = () => {
+    setIsVideoPlaying(false);
+    setStep((s) => Math.min(s + 1, conversationSteps.length - 1));
+  };
+
+  // Next step on mp3 end
+  const handleAudioEnd = () => {
+    setIsAudioPlaying(false);
+    setStep((s) => Math.min(s + 1, conversationSteps.length - 1));
+  };
+
+  // Next step on Vick's keyword
+  useEffect(() => {
+    if (
+      currentStep?.type === "vick" &&
+      transcript &&
+      currentStep.keyword &&
+      transcript.toLowerCase().includes(currentStep.keyword.toLowerCase())
+    ) {
+      setStep((s) => Math.min(s + 1, conversationSteps.length - 1));
+      SpeechRecognition.stopListening();
+      resetTranscript();
+    }
+    // eslint-disable-next-line
+  }, [transcript, currentStep]);
+
+  // Handle navigation step
+  useEffect(() => {
+    if (currentStep?.type === "navigate") {
+      if (onOptionSelect) onOptionSelect(currentStep.to);
+    }
+  }, [currentStep, onOptionSelect]);
+
+  const handleVideoClick = () => {
+    // Disable video controls if mp3 is playing
+    if (isAudioPlaying) return;
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setVideoPaused(false);
+      setIsVideoPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setVideoPaused(true);
+      setIsVideoPlaying(false);
     }
   };
+
+  const handleMp3Click = () => {
+    // Disable mp3 controls if video is playing
+    if (isVideoPlaying) return;
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) {
+      audioRef.current.play();
+      setMp3Paused(false);
+      setIsAudioPlaying(true);
+    } else {
+      audioRef.current.pause();
+      setMp3Paused(true);
+      setIsAudioPlaying(false);
+    }
+  };
+
+  // Mic status: ON only for Vick's turn and not playing video/mp3
+  const micActive =
+    currentStep?.type === "vick" &&
+    !isVideoPlaying &&
+    !isAudioPlaying &&
+    !videoPaused &&
+    !mp3Paused;
+
+  useEffect(() => {
+    if (listening && transcript) {
+      console.log("Speech captured at manager:", transcript);
+    }
+  }, [transcript, listening]);
 
   if (!browserSupportsSpeechRecognition) {
     return <div>Your browser does not support speech recognition.</div>;
@@ -240,7 +259,6 @@ const HolographicBankManagerScreen = ({
 
   return (
     <div
-      onClick={handleScreenClick}
       style={{
         minHeight: "100vh",
         backgroundImage: `url(${backgroundImage})`,
@@ -252,7 +270,7 @@ const HolographicBankManagerScreen = ({
         alignItems: "center",
         justifyContent: "center",
         color: "#e3f2fd",
-        fontFamily: "Poppins",
+        fontFamily: "Outfit, system-ui, sans-serif",
         letterSpacing: 2,
         position: "relative",
       }}
@@ -269,7 +287,7 @@ const HolographicBankManagerScreen = ({
           zIndex: 10,
         }}
       >
-        <div
+        {/* <div
           style={{
             padding: "10px 22px",
             color: "#ffffffff",
@@ -278,8 +296,8 @@ const HolographicBankManagerScreen = ({
             letterSpacing: 1,
           }}
         >
-          Welcome, Vick
-        </div>
+          Welcome Vick
+        </div> */}
       </div>
 
       <div
@@ -326,7 +344,7 @@ const HolographicBankManagerScreen = ({
             left: "50%",
             transform: "translateX(-50%)",
             fontSize: 14,
-            fontFamily: "Poppins",
+            fontFamily: "Outfit, system-ui, sans-serif",
             color: "#ff1744",
             fontWeight: "bold",
             letterSpacing: 1,
@@ -357,11 +375,10 @@ const HolographicBankManagerScreen = ({
           flexDirection: "column",
           gap: 16,
           zIndex: 1001,
-          width: 800,
+          width: 640,
           maxHeight: "calc(100vh - 150px)",
         }}
       >
-        {/* KYC Update and Customer Support Buttons */}
         {options.map((opt) => {
           const isKYC = opt.id === "kyc";
           return (
@@ -611,35 +628,140 @@ const HolographicBankManagerScreen = ({
       </div>
 
       {/* Manager Video */}
-      <video
-        ref={videoRef}
+      <div
         style={{
           position: "absolute",
-          bottom: 20,
+          bottom: 160,
           left: 80,
-          width: "35vw",
-          height: "87vh",
-          objectFit: "cover",
-          zIndex: 1,
-          filter: "drop-shadow(0 0 32px #00eaff88)",
-          userSelect: "none",
-          pointerEvents: "none",
-          border: "1px solid #00eaff",
+          width: "55vw",
+          height: "73vh",
           borderRadius: "15px",
-          backgroundColor: "rgba(175, 220, 255, 0.20)",
+          overflow: "hidden",
+          boxShadow: isVideoPlaying
+            ? "0 0 24px 4px #00eaff99, 0 0 4px 2px #00eaffcc"
+            : undefined,
+          border: isVideoPlaying ? "2px solid #00eaff" : undefined,
+          transition: "box-shadow 0.2s, border 0.2s",
+          zIndex: 2,
+          cursor: isAudioPlaying ? "not-allowed" : "pointer", // <-- disables video click when mp3 is playing
         }}
-        aria-label="Relationship Manager"
-        playsInline
-        muted={false}
-      />
+        onClick={handleVideoClick}
+        title={
+          isAudioPlaying
+            ? "Cannot pause/resume video while DOT is speaking"
+            : undefined
+        }
+      >
+        <video
+          ref={videoRef}
+          id="manager-video"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "90% center",
+            filter: "drop-shadow(0 0 32px #00eaff88)",
+            userSelect: "none",
+            border: "1px solid #00eaff",
+            borderRadius: "15px",
+            backgroundColor: "rgba(175, 220, 255, 0.20)",
+            pointerEvents: "auto",
+          }}
+          onPlay={() => setIsVideoPlaying(true)}
+          onPause={() => setIsVideoPlaying(false)}
+          onEnded={handleVideoEnd}
+          aria-label="Relationship Manager"
+          playsInline
+          muted={false}
+        />
+      </div>
+
+      {/* DOT Attendee Box (mp3 play/pause) */}
+      <div
+        style={{
+          position: "absolute",
+          left: 80,
+          bottom: 50,
+          width: "55vw",
+          minWidth: 220,
+          height: 80,
+          background: "linear-gradient(135deg, #2e2e2e 60%, #00eaff33 100%)",
+          border: "2px solid #00eaff",
+          borderRadius: 16,
+          boxShadow: isAudioPlaying
+            ? "0 0 24px 4px #00eaff99, 0 0 4px 2px #00eaffcc"
+            : undefined,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 32,
+          padding: "18px 24px",
+          zIndex: 3,
+          cursor: isVideoPlaying
+            ? "not-allowed"
+            : currentStep?.type === "dot"
+            ? "pointer"
+            : "default",
+        }}
+        onClick={
+          isVideoPlaying
+            ? undefined
+            : currentStep?.type === "dot"
+            ? handleMp3Click
+            : undefined
+        }
+        title={
+          isVideoPlaying
+            ? "Cannot pause/resume DOT while video is playing"
+            : currentStep?.type === "dot"
+            ? mp3Paused
+              ? "Resume DOT voice"
+              : "Pause DOT voice"
+            : undefined
+        }
+      >
+        <div
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: "50%",
+            background: isAudioPlaying
+              ? "radial-gradient(circle, #00eaff 80%, #0df283 100%)"
+              : "radial-gradient(circle, #00eaff 60%, #222 100%)",
+            boxShadow: isAudioPlaying
+              ? "0 0 32px 8px #00eaffcc, 0 0 16px 4px #0df283cc"
+              : "0 0 16px #00eaff88",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 20,
+            color: "#fff",
+            fontWeight: "bold",
+            transition: "box-shadow 0.2s, background 0.2s",
+          }}
+        >
+          <LucideAudioLines size={30} color="#fff" strokeWidth={2.5} />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <span style={{ color: "#00eaff", fontWeight: "bold", fontSize: 18 }}>
+            DOT AI Assistant
+          </span>
+          <span style={{ color: "#0df283cc", fontSize: 12, marginTop: 1 }}>
+            Online...
+          </span>
+        </div>
+      </div>
+
+      {/* Audio element for mp3 */}
+      <audio ref={audioRef} onEnded={handleAudioEnd} />
 
       {/* Bank Relationship Manager Header */}
       <div
         style={{
           position: "absolute",
-          top: 110,
+          top: 140,
           left: 100,
-          fontSize: 24,
+          fontSize: 15,
           color: "#00eaff",
           fontWeight: "bold",
           textShadow: "0 0 16px #00eaff, 0 0 32px #00eaff44",
@@ -653,23 +775,23 @@ const HolographicBankManagerScreen = ({
       <div
         style={{
           position: "absolute",
-          top: 150,
+          top: 175,
           left: 100,
-          width: 340,
+          width: 250,
           background: "linear-gradient(135deg, #00eaff33 0%, #37fb0733 100%)",
           border: "2px solid #00eaff",
           borderRadius: 16,
-          padding: "16px",
+          padding: "10px",
           zIndex: 1002,
           boxShadow: "0 0 32px #00eaff44",
         }}
       >
         <div
           style={{
-            fontSize: 16,
+            fontSize: 12,
             color: "#00eaff",
             fontWeight: "bold",
-            marginBottom: 12,
+            marginBottom: 2,
           }}
         >
           Bank ID Card
@@ -679,24 +801,24 @@ const HolographicBankManagerScreen = ({
             display: "flex",
             flexDirection: "column",
             gap: 8,
-            fontSize: 13,
+            fontSize: 12,
             color: "#fff",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#b0eaff" }}>Name:</span>
-            <span style={{ fontWeight: "bold" }}>Rem Anderson</span>
+            <span style={{ color: "#00eaff" }}>Name:</span>
+            <span style={{ fontWeight: "bold" }}>Sarah Anderson</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#b0eaff" }}>Account ID:</span>
+            <span style={{ color: "#00eaff" }}>Account ID:</span>
             <span style={{ fontWeight: "bold" }}>BA-2025-4567</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#b0eaff" }}>Account Type:</span>
+            <span style={{ color: "#00eaff" }}>Account Type:</span>
             <span style={{ fontWeight: "bold" }}>Premium</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#b0eaff" }}>Member Since:</span>
+            <span style={{ color: "#00eaff" }}>Member Since:</span>
             <span style={{ fontWeight: "bold" }}>January 2020</span>
           </div>
           {selectedBank && (
@@ -732,23 +854,31 @@ const HolographicBankManagerScreen = ({
         ⏻
       </button>
 
-      {/* Listening indicator */}
+      {/* Mic status */}
       <div
-        style={{
-          position: "absolute",
-          bottom: 40,
-          left: 200,
-          fontSize: 12,
-          color: listening ? "#00eaff" : "#aaa",
-          background: "rgba(0,0,0,0.6)",
-          padding: "6px 16px",
-          borderRadius: 8,
-          zIndex: 1002,
-          fontWeight: "bold",
-          border: `1px solid ${listening ? "#00eaff" : "#aaa"}`,
-        }}
+        className={`
+					fixed top-6 right-6 px-6 py-3 rounded-full
+					backdrop-blur-md border transition-all duration-300
+					${
+            micActive
+              ? "bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_20px_rgba(0,234,255,0.5)]"
+              : "bg-white/10 border-white/20 text-white/60"
+          }
+				`}
       >
-        {listening ? "🎤 Listening" : "🎤 Not Listening"}
+        <div className="flex items-center gap-2 text-sm">
+          {micActive ? (
+            <>
+              <Mic className="w-5 h-5 text-green-400 animate-pulse" />
+              <span>Listening...</span>
+            </>
+          ) : (
+            <>
+              <MicOff className="w-5 h-5 text-red-400" />
+              <span>Mic off</span>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

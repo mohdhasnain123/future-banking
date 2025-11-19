@@ -1,16 +1,14 @@
 import { MapWidget } from "../components/MapWidget";
 import { DateTimeDisplay } from "../components/DateTimeDisplay";
 import { NFTCard } from "../components/NFTCard";
-import backgroundImage from "@/scene-2/src/assets/background.jpg";
+import backgroundImage from "@/scene-2/src/assets/dashboard-bg.jpg";
 import nft1 from "@/scene-2/src/assets/nft1.jpg";
 import nft2 from "@/scene-2/src/assets/nft2.jpg";
 import nft3 from "@/scene-2/src/assets/nft3.jpg";
 import nft4 from "@/scene-2/src/assets/nft4.jpg";
 import nft5 from "@/scene-2/src/assets/nft5.jpg";
 import nft6 from "@/scene-2/src/assets/nft6.jpg";
-import { Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 const nfts = [
@@ -59,27 +57,43 @@ const nfts = [
   },
 ];
 
-const BrowseArts = ({
-  listening,
-  browserSupportsSpeechRecognition,
-}: {
-  listening?: boolean;
-  browserSupportsSpeechRecognition?: boolean;
-}) => {
+const BrowseArts = () => {
   const navigate = useNavigate();
   const nftWithBids = nfts.find((nft) => nft.id === 1);
   const [selectedNFT, setSelectedNFT] = useState<number | null>(null);
   const [glowingIndex, setGlowingIndex] = useState(0);
+  const [glowStopped, setGlowStopped] = useState(false);
 
   // Cycle through NFT cards for glowing effect when no card is selected
   useEffect(() => {
-    if (!selectedNFT) {
-      const interval = setInterval(() => {
-        setGlowingIndex((prev) => (prev + 1) % nfts.length);
-      }, 2000);
-      return () => clearInterval(interval);
+    if (!selectedNFT && !glowStopped) {
+      if (glowingIndex < nfts.length - 1) {
+        const interval = setInterval(() => {
+          setGlowingIndex((prev) => prev + 1);
+        }, 1000);
+        return () => clearInterval(interval);
+      } else if (glowingIndex === nfts.length - 1) {
+        // After last card, wait, then reset to first and stop cycling
+        const timeout = setTimeout(() => {
+          setGlowingIndex(0);
+          setGlowStopped(true); // Stop further cycling
+        }, 1000);
+        return () => clearTimeout(timeout);
+      }
+    }
+  }, [selectedNFT, glowingIndex, nfts.length, glowStopped]);
+
+  useEffect(() => {
+    if (selectedNFT) {
+      setGlowStopped(false);
     }
   }, [selectedNFT]);
+
+  // Optionally, also reset when goals list changes
+  useEffect(() => {
+    setGlowingIndex(0);
+    setGlowStopped(false);
+  }, [nfts.length]);
 
   return (
     <div
@@ -91,38 +105,25 @@ const BrowseArts = ({
       }}
     >
       <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
-
-      {/* Top right microphone status */}
-      {browserSupportsSpeechRecognition && (
-        <div className="absolute top-6 right-8 z-20">
-          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
-            <Mic
-              className={`w-5 h-5 ${
-                listening ? "text-green-400 animate-pulse" : ""
-              }`}
-            />
-            <span>{listening ? "Listening..." : "Mic off"}</span>
-          </div>
-        </div>
-      )}
-
       <DateTimeDisplay />
       <MapWidget />
-
       <div className="relative z-10 container mx-auto px-8 pt-32">
-        <h2 className="text-4xl font-bold text-foreground mb-8">NFTs</h2>
-
+        <h2 className="text-4xl font-bold text-foreground mb-8 drop-shadow-lg">
+          NFTs
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {nfts.map((nft, index) => {
-            const isGlowing = selectedNFT 
-              ? selectedNFT === nft.id 
+            const isGlowing = selectedNFT
+              ? selectedNFT === nft.id
               : index === glowingIndex;
             return (
               <div
                 key={nft.id}
-                className={`transition-all duration-300 ${
-                  isGlowing ? "animate-glow-border rounded-lg border-2 border-primary" : ""
+                className={`transition-all duration-300 h-full flex${
+                  isGlowing
+                    ? "animate-glow-border rounded-lg" : "border border-white/10 rounded-lg"
                 }`}
+                style={isGlowing ? { boxShadow: "0 0 20px 5px #3a338aff, 0 0 50px 20px #426bbdff" } : {}}
               >
                 <NFTCard
                   {...nft}
@@ -137,17 +138,6 @@ const BrowseArts = ({
             );
           })}
         </div>
-        {nftWithBids && (
-          <div className="flex justify-center">
-            <Button
-              size="lg"
-              className="bg-success hover:bg-success/90 text-success-foreground font-semibold"
-              onClick={() => navigate(`/nft/${nftWithBids.id}`)}
-            >
-              Sell
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );

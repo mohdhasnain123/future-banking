@@ -1,117 +1,129 @@
-import React, { useEffect, useRef } from "react";
-import goodbyeImage from "./images/scene-3/managerImage.png";
+import { useRef, useEffect, useState } from "react";
 import backgroundImage from "./images/scene-3/Group2.png";
-import exitSpeechMp3 from "./audio/scene-3/goodBye.mp3";
+import goodByeVideo from "./videos/scene-3/RelationshipManagerVideo6.mp4";
 
 const ExitScreen = () => {
-	const audioRef = useRef(null);
+  const videoRef = useRef(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
-	const playAudio = (audioFile) => {
-		if (audioRef.current) {
-			audioRef.current.pause();
-			audioRef.current.currentTime = 0;
-			audioRef.current = null;
-		}
-		const audio = new window.Audio(audioFile);
-		audioRef.current = audio;
-		audio.play().catch(() => {});
-	};
+  useEffect(() => {
+    // Play video on mount
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+    // Pause video on unmount
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    };
+  }, []);
 
-	useEffect(() => {
-		playAudio(exitSpeechMp3);
-		// Cleanup on unmount
-		return () => {
-			if (audioRef.current) {
-				audioRef.current.pause();
-				audioRef.current.currentTime = 0;
-				audioRef.current = null;
-			}
-		};
-	}, []);
+  // Toggle play/pause on video container click
+  const handleVideoClick = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  };
 
-	// Handle click: play audio if click is in upper half
-	const handleScreenClick = (e) => {
-		const y = e.clientY;
-		const screenHeight = window.innerHeight;
-		if (y < screenHeight / 2) {
-			playAudio(exitSpeechMp3);
-		}
-	};
+  // Styles for the hologram circle, with conditional glow
+  const hologramStyle = {
+    width: 250,
+    height: 250,
+    borderRadius: "50%",
+    borderWidth: "2px",
+    background: "linear-gradient(135deg, #00eaff66 60%, #37fb0766 100%)",
+    boxShadow: isVideoPlaying
+      ? "0 0 24px 4px #00eaff99, 0 0 4px 2px #00eaffcc"
+      : "0 0 48px #00eaff88, 0 0 96px #00eaff44",
+    border: isVideoPlaying ? "2px solid #00eaff" : "1px solid white",
+    transition: "box-shadow 0.2s, border 0.2s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    animation: "holo-glow 2s infinite alternate",
+    overflow: "hidden",
+    cursor: "pointer",
+  };
 
-	return (
-		<div
-			onClick={handleScreenClick}
-			style={{
-				minHeight: "100vh",
-				backgroundImage: `url(${backgroundImage})`,
-				backgroundSize: "cover",
-				backgroundPosition: "center",
-				backgroundRepeat: "no-repeat",
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				justifyContent: "center",
-				color: "#ffffffff",
-				fontFamily: "Poppins",
-				letterSpacing: 2
-			}}
-		>
-			{/* Animated SVG or Emoji as Hologram */}
-			<div
-				style={{
-					width: 250,
-					height: 250,
-					borderRadius: "50%",
-					borderWidth: "2px",
-					background: "linear-gradient(135deg, #00eaff66 60%, #37fb0766 100%)",
-					boxShadow: "0 0 48px #00eaff88, 0 0 96px #00eaff44",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					border: "1px solid white",
-					animation: "holo-glow 2s infinite alternate",
-					overflow: "hidden" // ensures the image is clipped to the circle
-				}}
-			>
-				<img
-					src={goodbyeImage}
-					alt="Bank Manager"
-					style={{
-						width: "100%",
-						height: "100%",
-						objectFit: "cover"
-					}}
-				/>
-			</div>
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#ffffffff",
+        fontFamily: "Outfit, system-ui, sans-serif",
+        letterSpacing: 2,
+      }}
+    >
+      {/* Hologram Video */}
+      <div
+        style={hologramStyle}
+        onClick={handleVideoClick}
+        title="Click to pause/play video"
+      >
+        <video
+          ref={videoRef}
+          src={goodByeVideo}
+          autoPlay
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "72% center",
+            userSelect: "none",
+            backgroundColor: "rgba(175, 220, 255, 0.20)",
+            pointerEvents: "auto",
+          }}
+          onPlay={() => setIsVideoPlaying(true)}
+          onPause={() => setIsVideoPlaying(false)}
+          onEnded={() => setIsVideoPlaying(false)}
+          aria-label="Relationship Manager"
+        />
+      </div>
 
-			<div
-				style={{
-					fontSize: 32,
-					marginBottom: 32,
-					textAlign: "center",
-					marginTop: "40px"
-				}}
-			>
-				<span style={{ marginLeft: 16 }}>Thank you and goodbye, Vick.</span>
-			</div>
-			<div
-				style={{
-					fontSize: 22,
-					color: "#ffffffff"
-				}}
-			>
-				Session ended.
-			</div>
-			<style>
-				{`
-					@keyframes holo-glow-exit {
-						from { box-shadow: 0 0 32px 8px #00eaff, 0 0 64px 16px #00eaff44; }
-						to { box-shadow: 0 0 64px 24px #37fb07, 0 0 128px 32px #37fb0744; }
-					}
-				`}
-			</style>
-		</div>
-	);
+      <div
+        style={{
+          fontSize: 32,
+          marginBottom: 32,
+          textAlign: "center",
+          marginTop: "40px",
+        }}
+      >
+        <span style={{ marginLeft: 16 }}>Thank you and goodbye, Vick.</span>
+      </div>
+      <div
+        style={{
+          fontSize: 22,
+          color: "#ffffffff",
+        }}
+      >
+        Session ended.
+      </div>
+      <style>
+        {`
+          @keyframes holo-glow-exit {
+            from { box-shadow: 0 0 32px 8px #00eaff, 0 0 64px 16px #00eaff44; }
+            to { box-shadow: 0 0 64px 24px #37fb07, 0 0 128px 32px #37fb0744; }
+          }
+        `}
+      </style>
+    </div>
+  );
 };
 
 export default ExitScreen;

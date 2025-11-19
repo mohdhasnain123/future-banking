@@ -1,7 +1,19 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ChevronDown, MapPin, Clock, Briefcase, Coffee, Dumbbell, ShoppingCart, Users, Calendar as CalendarIcon, Video } from "lucide-react";
+import {
+  ChevronDown,
+  MapPin,
+  Clock,
+  Briefcase,
+  Coffee,
+  Dumbbell,
+  ShoppingCart,
+  Users,
+  Dog,
+  Calendar as CalendarIcon,
+  Video,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export interface Task {
@@ -46,10 +58,11 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
     if (task.icon && task.icon in taskIcons) {
       return taskIcons[task.icon as keyof typeof taskIcons];
     }
-    if (title.includes('meeting') || title.includes('team')) return Users;
-    if (title.includes('workout') || title.includes('gym')) return Dumbbell;
-    if (title.includes('coffee') || title.includes('lunch')) return Coffee;
-    if (title.includes('shopping')) return ShoppingCart;
+    if (title.includes("meeting") || title.includes("team")) return Users;
+    if (title.includes("workout") || title.includes("gym")) return Dumbbell;
+    if (title.includes("coffee") || title.includes("lunch")) return Coffee;
+    if (title.includes("shopping")) return ShoppingCart;
+    if (title.includes("pet")) return Dog;
     return Briefcase;
   };
 
@@ -60,19 +73,20 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
   };
 
   return (
-    <div className="relative pl-8 pb-8 last:pb-0">
-      {/* Timeline dot - now 3D */}
-      <div 
-        className="absolute left-0 top-2 w-3 h-3 rounded-full bg-timeline-dot shadow-lg shadow-timeline-dot/50"
+    <div className="relative pl-2 pb-1 last:pb-0">
+      {/* Timeline dot */}
+      <div
+        className="absolute left-0 top-0.5 w-1.5 h-1.5 rounded-full bg-timeline-dot shadow"
         style={{
-          transform: "translateZ(5px)",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.3), 0 0 10px hsl(var(--timeline-dot)/0.5)"
+          transform: "translateZ(1px)",
+          boxShadow:
+            "0 1px 2px rgba(0,0,0,0.15), 0 0 2px hsl(var(--timeline-dot)/0.4)",
         }}
       />
-      
+
       {/* Timeline line */}
       {!isLast && (
-        <div className="absolute left-[5px] top-5 bottom-0 w-0.5 bg-timeline-line/30" />
+        <div className="absolute left-[2px] top-2 bottom-0 w-0.5 bg-timeline-line/30" />
       )}
 
       {/* 3D Task card */}
@@ -84,78 +98,78 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
         className="w-full text-left perspective-1000"
         style={{ perspective: "1000px" }}
       >
-        <div 
+        <div
           className={cn(
-            "glass-card p-6 space-y-3 transition-all duration-300 animate-scale-in cursor-pointer group relative",
+            "glass-card p-1 space-y-0.5 transition-all duration-300 animate-scale-in cursor-pointer group relative rounded-sm",
             "hover:bg-[hsl(var(--glass-bg)/0.5)]",
-            isPressed ? "scale-[0.98]" : "hover:scale-[1.02]",
+            isPressed ? "scale-[0.98]" : "hover:scale-[1.01]",
             isExpanded && "bg-[hsl(var(--glass-bg)/0.6)]"
           )}
           style={{
             transformStyle: "preserve-3d",
-            transform: isPressed 
-              ? "translateZ(-5px)" 
-              : isExpanded 
-                ? "translateZ(10px) rotateX(-2deg)" 
-                : "translateZ(0) rotateX(0deg)",
+            transform: isPressed
+              ? "translateZ(-1px)"
+              : isExpanded
+              ? "translateZ(2px) rotateX(-1deg)"
+              : "translateZ(0) rotateX(0deg)",
             boxShadow: isExpanded
-              ? "0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1)"
-              : "0 10px 20px rgba(0,0,0,0.3)"
+              ? "0 4px 8px rgba(0,0,0,0.18), 0 0 4px rgba(255,255,255,0.05)"
+              : "0 2px 4px rgba(0,0,0,0.10)",
           }}
         >
           {/* 3D depth layer */}
-          <div 
-            className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl pointer-events-none"
-            style={{ transform: "translateZ(2px)" }}
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-sm pointer-events-none"
+            style={{ transform: "translateZ(0.5px)" }}
           />
 
-          <div className="flex items-start justify-between gap-4 relative z-10">
-            {/* Task Icon with futuristic glow */}
-            <div 
+          <div className="flex items-start justify-between gap-0.5 relative z-10">
+            {/* Task Icon */}
+            <div
               className="relative flex-shrink-0"
-              style={{ transform: "translateZ(8px)" }}
+              style={{ transform: "translateZ(1.5px)" }}
             >
-              <div className="absolute inset-0 bg-primary/50 blur-lg rounded-full animate-pulse" />
-              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center border border-primary/50">
-                <TaskIcon className="w-6 h-6 text-white" />
+              <div className="absolute inset-0 bg-primary/50 blur rounded-full animate-pulse" />
+              <div className="relative w-4 h-4 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center border border-primary/50">
+                <TaskIcon className="w-2.5 h-2.5 text-white" />
               </div>
             </div>
 
-            <div className="space-y-1 flex-1">
-              <h3 className="text-xl font-semibold text-white group-hover:text-glow transition-all">
+            <div className="space-y-0 flex-1">
+              <h3 className="text-[9px] font-semibold text-white group-hover:text-glow transition-all truncate">
                 {task.title}
               </h3>
-              <div className="flex items-center gap-2 text-sm text-white/60">
-                <MapPin className="w-4 h-4" />
-                <p>{task.location}</p>
+              <div className="flex items-center gap-0.5 text-[8px] text-white/60">
+                <MapPin className="w-2 h-2" />
+                <p className="truncate">{task.location}</p>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-2 text-lg font-medium text-white">
-                <Clock className="w-5 h-5" />
+            <div className="flex flex-col items-end gap-0.5">
+              <div className="flex items-center gap-0.5 text-[9px] font-medium text-white">
+                <Clock className="w-2 h-2" />
                 <span>{task.time}</span>
               </div>
               <Badge
                 className={cn(
-                  "px-3 py-1 font-medium capitalize shadow-lg transition-transform",
+                  "px-1 py-0.5 font-medium capitalize shadow transition-transform text-[8px]",
                   priorityColors[task.priority],
-                  isExpanded && "scale-110"
+                  isExpanded && "scale-105"
                 )}
                 style={{
-                  transform: "translateZ(5px)",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.3)"
+                  transform: "translateZ(1px)",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.12)",
                 }}
               >
-                {task.priority} Priority
+                {task.priority}
               </Badge>
             </div>
           </div>
 
           {/* Expand indicator */}
-          <div className="flex items-center justify-center pt-2 relative z-10">
-            <ChevronDown 
+          <div className="flex items-center justify-center pt-0.5 relative z-10">
+            <ChevronDown
               className={cn(
-                "w-5 h-5 text-white/50 transition-transform duration-300",
+                "w-2 h-2 text-white/50 transition-transform duration-300",
                 isExpanded && "rotate-180"
               )}
             />
@@ -163,16 +177,16 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
 
           {/* Expanded content */}
           {isExpanded && (
-            <div 
-              className="pt-4 border-t border-white/10 space-y-2 animate-fade-in relative z-10"
-              style={{ transform: "translateZ(3px)" }}
+            <div
+              className="pt-0.5 border-t border-white/10 space-y-0.5 animate-fade-in relative z-10"
+              style={{ transform: "translateZ(0.5px)" }}
             >
-              <p className="text-sm text-white/70">
+              <p className="text-[8px] text-white/70">
                 Click to mark as complete or edit task details
               </p>
-              <div className="flex gap-2">
-                <button 
-                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all hover:scale-105"
+              <div className="flex gap-0.5">
+                <button
+                  className="px-1.5 py-0.5 rounded-sm bg-white/10 hover:bg-white/20 text-white text-[8px] font-medium transition-all hover:scale-105"
                   onClick={(e) => {
                     e.stopPropagation();
                     // Add complete functionality
@@ -180,8 +194,8 @@ export const TaskCard = ({ task, isLast = false }: TaskCardProps) => {
                 >
                   Complete
                 </button>
-                <button 
-                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all hover:scale-105"
+                <button
+                  className="px-1.5 py-0.5 rounded-sm bg-white/10 hover:bg-white/20 text-white text-[8px] font-medium transition-all hover:scale-105"
                   onClick={(e) => {
                     e.stopPropagation();
                     // Add edit functionality

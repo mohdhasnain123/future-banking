@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapWidget } from "../components/MapWidget";
 import { DateTimeDisplay } from "../components/DateTimeDisplay";
-import { ArrowLeft, ArrowRight, Mic } from "lucide-react";
-import backgroundImage from "../assets/background.jpg";
+import backgroundImage from "@/scene-2/src/assets/dashboard-bg.jpg";
 import nft1 from "../assets/nft1.jpg";
 
 const bids = [
@@ -39,13 +38,7 @@ const bids = [
   },
 ];
 
-const NFTDetail = ({
-  listening,
-  browserSupportsSpeechRecognition,
-}: {
-  listening?: boolean;
-  browserSupportsSpeechRecognition?: boolean;
-}) => {
+const NFTDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [selectedBid, setSelectedBid] = useState<number | null>(null);
@@ -71,20 +64,6 @@ const NFTDetail = ({
       }}
     >
       <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
-
-      {/* Top right microphone status */}
-      {browserSupportsSpeechRecognition && (
-        <div className="absolute top-6 right-8 z-20">
-          <div className="flex items-center gap-2 text-sm text-white/70 ml-4">
-            <Mic
-              className={`w-5 h-5 ${
-                listening ? "text-green-400 animate-pulse" : ""
-              }`}
-            />
-            <span>{listening ? "Listening..." : "Mic off"}</span>
-          </div>
-        </div>
-      )}
 
       <DateTimeDisplay />
       <MapWidget />

@@ -4,151 +4,172 @@ import userPosition from "./images/scene-3/Group1.png";
 import entryPromptMp3 from "./audio/scene-3/entryPrompt.mp3";
 
 const EntryPromptScreen = () => {
-	const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-	const playAudio = (audioFile) => {
-		if (audioRef.current) {
-			audioRef.current.pause();
-			audioRef.current.currentTime = 0;
-			audioRef.current = null;
-		}
-		const audio = new window.Audio(audioFile);
-		audioRef.current = audio;
-		audio.play().catch(() => {});
-	};
+  // Auto-play audio on mount
+  useEffect(() => {
+    const audio = new Audio(entryPromptMp3);
+    audioRef.current = audio;
+    audio.play().catch(() => {});
 
-	useEffect(() => {
-		// playAudio(entryPromptMp3);
-		// Cleanup on unmount
-		return () => {
-			if (audioRef.current) {
-				audioRef.current.pause();
-				audioRef.current.currentTime = 0;
-				audioRef.current = null;
-			}
-		};
-	}, []);
+    // Cleanup on unmount
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
-	const handleScreenClick = (e) => {
-		const y = e.clientY;
-		const screenHeight = window.innerHeight;
-		if (y < screenHeight / 2) {
-			playAudio(entryPromptMp3);
-		}
-	};
+  // Handle screen click
+  const handleScreenClick = (e: React.MouseEvent) => {
+    const y = e.clientY;
+    const screenHeight = window.innerHeight;
 
-	return (
-		<div
-			role="main"
-			onClick={handleScreenClick}
-			style={{
-				height: "100vh",
-				backgroundImage: `url(${backgroundImage})`,
-				backgroundSize: "cover",
-				backgroundPosition: "center",
-				backgroundRepeat: "no-repeat",
-				position: "relative",
-				color: "#e3f2fd",
-				fontFamily: "Poppins",
-				letterSpacing: 2,
-				textShadow: "0 0 8px #00eaff, 0 0 16px #00eaff"
-			}}
-		>
-			{/* Welcome at the very top */}
-			<h1
-				style={{
-					position: "absolute",
-					top: 32,
-					left: 0,
-					width: "100%",
-					textAlign: "center",
-					fontSize: 50,
-					fontWeight: 700,
-					color: "#00eaff",
-					textShadow: "0 0 3px #00eaff, 0 0 2px #00eaff44",
-					zIndex: 2,
-					margin: 0,
-					letterSpacing: 2
-				}}
-			>
-				Welcome
-			</h1>
+    if (y < screenHeight / 2) {
+      // Upper half: Pause or resume audio
+      if (audioRef.current) {
+        if (audioRef.current.paused) {
+          audioRef.current.play().catch(() => {});
+        } else {
+          audioRef.current.pause();
+        }
+      }
+    }
+  };
 
-			{/* Centered content */}
-			<div
-				style={{
-					height: "100%",
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "center",
-					paddingTop: 100 // Ensures content doesn't overlap with Welcome
-				}}
-			>
-				<div
-					style={{
-						fontSize: 28,
-						paddingBottom: 20,
-						letterSpacing: 1,
-						textAlign: "center",
-						fontWeight: "bold",
-						textShadow: "0 0 12px #00eaff44"
-					}}
-				>
-					Experience the power of Omni-Channel Banking.
-					<br />
-					Please walk to the highlighted platform to proceed further.
-				</div>
+  return (
+    <div
+      role="main"
+      onClick={handleScreenClick}
+      className="relative h-screen w-full overflow-hidden bg-background"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Animated background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/80 pointer-events-none" />
 
-				<div
-					style={{
-						position: "relative",
-						height: 360,
-						width: 320,
-						maxWidth: "90vw"
-					}}
-				>
-					{/* Platform for user */}
-					<img
-						src={userPosition}
-						alt="Platform"
-						style={{
-							position: "absolute",
-							left: 0,
-							bottom: 0,
-							width: "100%",
-							height: "auto",
-							zIndex: 1,
-							filter: "drop-shadow(0 0 24px #00eaff) drop-shadow(0 0 8px #00eaff)",
-							pointerEvents: "none",
-							userSelect: "none",
-							animation: "holo-glow 1.5s alternate infinite"
-						}}
-					/>
-				</div>
+      {/* Particle effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-primary rounded-full animate-particle-float opacity-0"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 8}s`,
+              animationDuration: `${8 + Math.random() * 4}s`,
+            }}
+          />
+        ))}
+      </div>
 
-				<div
-					style={{
-						fontSize: 22,
-						marginTop: 24,
-						color: "#00eaff",
-						textShadow: "0 0 8px #00eaff"
-					}}
-				>
-					Awaiting user position
-				</div>
-			</div>
+      {/* Scanline effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent animate-scanline" />
+      </div>
 
-			<style>
-				{`
-          @keyframes holo-glow {
-            from { filter: drop-shadow(0 0 24px #00eaff) drop-shadow(0 0 8px #00eaff); }
-            to { filter: drop-shadow(0 0 48px #00eaff) drop-shadow(0 0 24px #00eaff); }
-          }
-        `}
-			</style>
-		</div>
-	);
+      {/* Grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-10"
+        style={{
+          backgroundImage: `
+						linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px),
+						linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)
+					`,
+          backgroundSize: "50px 50px",
+        }}
+      />
+
+      {/* Welcome at the very top */}
+      <h1 className="absolute top-8 left-0 w-full text-center text-5xl font-bold text-primary z-10 m-0 tracking-wider animate-quantum-glow">
+        Welcome
+      </h1>
+
+      {/* Centered content */}
+      <div className="h-full flex flex-col items-center justify-center pt-24 relative z-10">
+        {/* Holographic card container */}
+        <div className="relative mb-8 px-8 py-6 rounded-2xl backdrop-blur-md bg-card/30 border border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.3)]">
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 via-transparent to-accent/10 pointer-events-none" />
+          <div
+            className="absolute inset-0 rounded-2xl animate-shimmer pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.1), transparent)",
+              backgroundSize: "200% 100%",
+            }}
+          />
+
+          <div className="relative text-2xl text-center font-bold text-foreground tracking-wide">
+            <span className="text-primary animate-quantum-pulse">
+              Experience the power of Omni-Channel Banking.
+            </span>
+            <br />
+            <span className="text-foreground/90 text-xl mt-2 inline-block">
+              Please walk to the highlighted platform to proceed further.
+            </span>
+          </div>
+        </div>
+
+        {/* Platform container */}
+        <div className="relative h-[360px] w-[320px] max-w-[90vw]">
+          {/* Glow rings */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="absolute w-[280px] h-[280px] rounded-full border-2 border-primary/40 animate-quantum-pulse"
+              style={{ animationDuration: "3s" }}
+            />
+            <div
+              className="absolute w-[240px] h-[240px] rounded-full border-2 border-accent/30 animate-quantum-pulse"
+              style={{ animationDuration: "2.5s", animationDelay: "0.5s" }}
+            />
+          </div>
+
+          {/* Platform for user */}
+          <img
+            src={userPosition}
+            alt="Platform"
+            className="absolute left-0 bottom-0 w-full h-auto z-10 pointer-events-none select-none animate-quantum-glow"
+            style={{
+              filter:
+                "drop-shadow(0 0 24px hsl(var(--primary))) drop-shadow(0 0 8px hsl(var(--primary)))",
+            }}
+          />
+
+          {/* Holographic projection lines */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute bottom-0 left-1/2 w-px h-full origin-bottom bg-gradient-to-t from-primary/50 to-transparent"
+                style={{
+                  transform: `rotate(${i * 45}deg)`,
+                  animation: "quantum-pulse 3s ease-in-out infinite",
+                  animationDelay: `${i * 0.2}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Status indicator */}
+        <div className="mt-8 relative">
+          <div className="absolute inset-0 blur-xl bg-primary/30 rounded-full" />
+          <div className="relative flex items-center gap-3 px-6 py-3 rounded-full border border-primary/50 bg-card/50 backdrop-blur-sm">
+            <div className="w-2 h-2 rounded-full bg-primary animate-quantum-pulse" />
+            <span className="text-xl text-primary font-semibold tracking-wider">
+              Awaiting user position
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default EntryPromptScreen;

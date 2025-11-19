@@ -2,9 +2,7 @@ import { Header } from "@/components/Header";
 import { TaskList } from "@/components/TaskList";
 import { GeometricOverlay } from "@/components/GeometricOverlay";
 import { Task } from "@/components/TaskCard";
-import { useNavigate } from "react-router-dom";
 import mountainBg from "@/assets/mountain-bg.jpg";
-import { Mic } from "lucide-react";
 
 const mockTasks: Task[] = [
   {
@@ -24,15 +22,11 @@ const mockTasks: Task[] = [
 ];
 
 const Index = ({
-  listening,
-  browserSupportsSpeechRecognition,
-}: {
-  listening?: boolean;
-  browserSupportsSpeechRecognition?: boolean;
+  clockTargetTime,
+  setClockTargetTime,
 }) => {
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="h-full relative overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -48,28 +42,21 @@ const Index = ({
       <GeometricOverlay />
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen p-8 md:p-12 lg:p-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      <div className="relative z-10 h-full p-2 md:p-3 lg:p-4">
+        <div className="max-w-7xl mx-auto h-full">
+          <div className="grid lg:grid-cols-2 gap-2 lg:gap-3 items-start h-full">
             {/* Left side - Header */}
-            <div className="pt-8">
+            <div className="pt-2">
               <Header userName="Vick" />
             </div>
 
             {/* Right side - Tasks */}
-            <div className="flex flex-col items-end pt-8">
-              {/* Mic status on the right */}
-              {browserSupportsSpeechRecognition && (
-                <div className="flex items-center gap-2 text-sm text-white/70 mb-4">
-                  <Mic
-                    className={`w-4 h-4 ${
-                      listening ? "text-green-400 animate-pulse" : ""
-                    }`}
-                  />
-                  <span>{listening ? "Listening..." : "Mic off"}</span>
-                </div>
-              )}
-              <TaskList tasks={mockTasks} />
+            <div className="flex flex-col items-end pt-2">
+              <TaskList
+                tasks={mockTasks}
+                showClock={true}
+                clockTargetTime={clockTargetTime}
+              />
             </div>
           </div>
         </div>
