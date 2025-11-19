@@ -293,19 +293,19 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
       {/* Header Section */}
-      <div className="w-full z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm pt-2 pb-1">
-        <div className="px-3">
+      <div className="w-full z-20 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm pt-1 pb-0.5">
+        <div className="px-2">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <div className="flex items-center mb-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-white">
+              <div className="flex items-center mb-0.5">
+                <h1 className="text-xl md:text-2xl font-bold text-white">
                   Wealth Advisor Consultation
                 </h1>
-                <p className="text-base font-medium ml-6">
+                <p className="text-sm font-medium ml-4">
                   {formatTime("8:00 AM", 180)} | {formatDate(currentTime)}
                 </p>
               </div>
-              <p className="text-white/70 text-sm">
+              <p className="text-white/70 text-xs">
                 Strategic planning for your dream home purchase
               </p>
             </div>
@@ -314,17 +314,17 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
       </div>
 
       {/* Main Content - Three Column Layout */}
-      <div className="relative z-10 flex-1 px-3 py-2 overflow-hidden">
-        <div className="grid grid-cols-[1.2fr_0.8fr] gap-3 h-full">
+      <div className="relative z-10 flex-1 px-2 py-1 overflow-hidden">
+        <div className="grid grid-cols-[1.2fr_0.8fr] gap-2 h-full">
           {/* Left Column: Portfolio Management + House Image */}
-          <div className="flex flex-col gap-2 h-full">
+          <div className="flex flex-col gap-1.5 h-full">
             {/* Top Half: Vick's Portfolio Data Management (now includes asset info) */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20 border-b-2 border-b-primary p-2 flex-1 overflow-y-auto">
-              <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-1">
-                <Database className="h-3 w-3 text-primary" />
+            <Card className="bg-white/10 backdrop-blur-md border-white/20 border-b border-b-primary p-1.5 flex-1 overflow-y-auto">
+              <h3 className="text-xs font-bold text-white mb-0.5 flex items-center gap-0.5">
+                <Database className="h-2.5 w-2.5 text-primary" />
                 Vick's Portfolio Data Management
               </h3>
-              <div className="bg-black/30 rounded-lg p-2 border border-primary/30">
+              <div className="bg-black/30 rounded-lg p-1.5 border border-primary/30">
                 {/* Top Layer - Data Sources */}
                 <div className="flex justify-around items-center mb-0.5">
                   {[
@@ -346,19 +346,19 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                       <div
                         className={`bg-blue-600/30 border border-blue-400 rounded p-0.5 transition-all duration-300 ${
                           highlightIndex === i
-                            ? "ring-1 ring-blue-400 ring-offset-1 ring-offset-black/50 scale-110"
+                            ? "ring-1 ring-blue-400 ring-offset-1 ring-offset-black/50 scale-105"
                             : ""
                         }`}
                       >
-                        <div className="text-sm mb-0.5">{source.icon}</div>
-                        <div className="text-white text-[10px] font-semibold text-center">
+                        <div className="text-xs mb-0">{source.icon}</div>
+                        <div className="text-white text-[9px] font-semibold text-center">
                           {source.label}
                         </div>
-                        <div className="text-white/70 text-[9px] text-center">
+                        <div className="text-white/70 text-[8px] text-center">
                           {source.sub}
                         </div>
                       </div>
-                      <div className="w-0.5 h-2 bg-gradient-to-b from-blue-400 to-purple-500"></div>
+                      <div className="w-0.5 h-1.5 bg-gradient-to-b from-blue-400 to-purple-500"></div>
                     </div>
                   ))}
                 </div>
@@ -366,94 +366,94 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                 {/* Middle Layer - Account Aggregator */}
                 <div className="flex justify-center">
                   <div
-                    className={`bg-primary/40 border border-primary rounded-lg p-1.5 shadow-lg shadow-primary/50 transition-all duration-300 ${
+                    className={`bg-primary/40 border border-primary rounded-lg p-1 shadow-lg shadow-primary/50 transition-all duration-300 ${
                       highlightIndex === 5
-                        ? "ring-1 ring-primary ring-offset-1 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-primary ring-offset-1 ring-offset-black/50 scale-105"
                         : ""
                     }`}
                   >
-                    <div className="text-white text-[10px] font-bold text-center">
+                    <div className="text-white text-[9px] font-bold text-center">
                       Account Aggregator
                     </div>
-                    <div className="text-white/80 text-[9px] text-center">
+                    <div className="text-white/80 text-[8px] text-center">
                       Open API Gateway
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-center mb-0.5">
-                  <div className="w-0.5 h-2 bg-gradient-to-b from-purple-500 to-purple-600"></div>
+                  <div className="w-0.5 h-1.5 bg-gradient-to-b from-purple-500 to-purple-600"></div>
                 </div>
 
                 {/* Blockchain Layer with horizontal arrows */}
                 <div className="flex justify-center items-center gap-1 mb-0.5">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-purple-400"></div>
+                    <div className="w-6 h-0.5 bg-gradient-to-r from-transparent to-purple-400"></div>
                   </div>
                   <div
-                    className={`bg-purple-600/40 border border-purple-400 rounded-lg p-1.5 shadow-lg shadow-purple-500/50 transition-all duration-300 ${
+                    className={`bg-purple-600/40 border border-purple-400 rounded-lg p-1 shadow-lg shadow-purple-500/50 transition-all duration-300 ${
                       highlightIndex === 6
-                        ? "ring-1 ring-purple-400 ring-offset-1 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-purple-400 ring-offset-1 ring-offset-black/50 scale-105"
                         : ""
                     }`}
                   >
-                    <div className="text-white text-[10px] font-bold text-center">
+                    <div className="text-white text-[9px] font-bold text-center">
                       🔗 Blockchain Layer
                     </div>
-                    <div className="text-white/80 text-[9px] text-center">
+                    <div className="text-white/80 text-[8px] text-center">
                       Immutable Records
                     </div>
                   </div>
                   <div className="flex-1">
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-purple-400 to-transparent"></div>
+                    <div className="w-6 h-0.5 bg-gradient-to-r from-purple-400 to-transparent"></div>
                   </div>
                 </div>
                 <div className="flex justify-center mb-0.5">
-                  <div className="w-0.5 h-2 bg-gradient-to-b from-purple-600 to-pink-600"></div>
+                  <div className="w-0.5 h-1.5 bg-gradient-to-b from-purple-600 to-pink-600"></div>
                 </div>
 
                 {/* AI Wealth Manager - with processing animation */}
                 <div className="flex justify-center mb-0.5">
                   <div
-                    className={`bg-pink-600/40 border border-pink-400 rounded-lg p-1.5 shadow-lg shadow-pink-500/50 transition-all duration-300 ${
+                    className={`bg-pink-600/40 border border-pink-400 rounded-lg p-1 shadow-lg shadow-pink-500/50 transition-all duration-300 ${
                       highlightIndex === 7
-                        ? "ring-1 ring-pink-400 ring-offset-1 ring-offset-black/50 scale-110"
+                        ? "ring-1 ring-pink-400 ring-offset-1 ring-offset-black/50 scale-105"
                         : ""
                     } ${isProcessing ? "animate-pulse" : ""}`}
                   >
-                    <div className="text-white text-[10px] font-bold text-center">
+                    <div className="text-white text-[9px] font-bold text-center">
                       🤖 AI Wealth Manager
                     </div>
-                    <div className="text-white/80 text-[9px] text-center">
+                    <div className="text-white/80 text-[8px] text-center">
                       Intelligence Engine
-                      {highlightIndex === 7 && <span className="ml-1">⚡</span>}
+                      {highlightIndex === 7 && <span className="ml-0.5">⚡</span>}
                     </div>
                   </div>
                 </div>
 
                 {/* Arrow from AI to outputs */}
                 <div className="flex justify-center mb-0.5">
-                  <div className="w-0.5 h-2 bg-gradient-to-b from-pink-600 to-green-500"></div>
+                  <div className="w-0.5 h-1.5 bg-gradient-to-b from-pink-600 to-green-500"></div>
                 </div>
 
                 {/* Bottom Layer - Analytics Outputs (moved to separate row) */}
-                <div className="grid grid-cols-2 gap-1 mb-2">
+                <div className="grid grid-cols-2 gap-0.5 mb-1">
                   {[
                     { icon: "📊", label: "Cash Flow", sub: "Analysis" },
                     { icon: "🛡️", label: "Risk", sub: "Profiling" },
                   ].map((output, i) => (
                     <div key={i} className="flex flex-col items-center">
                       <div
-                        className={`bg-green-600/30 border border-green-400 rounded p-1 transition-all duration-300 ${
+                        className={`bg-green-600/30 border border-green-400 rounded p-0.5 transition-all duration-300 ${
                           highlightIndex === 8
-                            ? "ring-1 ring-green-400 ring-offset-1 ring-offset-black/50 scale-110"
+                            ? "ring-1 ring-green-400 ring-offset-1 ring-offset-black/50 scale-105"
                             : ""
                         }`}
                       >
-                        <div className="text-sm mb-0.5">{output.icon}</div>
-                        <div className="text-white text-[10px] font-semibold text-center">
+                        <div className="text-xs mb-0">{output.icon}</div>
+                        <div className="text-white text-[9px] font-semibold text-center">
                           {output.label}
                         </div>
-                        <div className="text-white/70 text-[9px] text-center">
+                        <div className="text-white/70 text-[8px] text-center">
                           {output.sub}
                         </div>
                       </div>
@@ -462,60 +462,60 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                 </div>
               </div>
 
-              <div className="bg-black/30 rounded-lg p-2 border border-primary/30 mt-2">
-                <h4 className="text-white text-[10px] font-bold mb-1 flex items-center gap-1">
-                  <PiggyBank className="w-2.5 h-2.5" />
+              <div className="bg-black/30 rounded-lg p-1.5 border border-primary/30 mt-1">
+                <h4 className="text-white text-[9px] font-bold mb-0.5 flex items-center gap-0.5">
+                  <PiggyBank className="w-2 h-2" />
                   Current Asset Allocation
                 </h4>
 
                 {/* Make all info appear in a single horizontal row */}
-                <div className="flex justify-between items-center text-center gap-2">
+                <div className="flex justify-between items-center text-center gap-1.5">
                   <div className="flex flex-col items-center">
-                    <Bitcoin className="w-3 h-3 text-orange-400 mb-0.5" />
-                    <p className="text-[10px] font-bold text-white">
+                    <Bitcoin className="w-2.5 h-2.5 text-orange-400 mb-0" />
+                    <p className="text-[9px] font-bold text-white">
                       ${currentAssets.crypto.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-[9px]">Crypto</p>
+                    <p className="text-white/60 text-[8px]">Crypto</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Building2 className="w-3 h-3 text-blue-400 mb-0.5" />
-                    <p className="text-[10px] font-bold text-white">
+                    <Building2 className="w-2.5 h-2.5 text-blue-400 mb-0" />
+                    <p className="text-[9px] font-bold text-white">
                       ${currentAssets.digitalRealEstate.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-[9px]">Real Estate</p>
+                    <p className="text-white/60 text-[8px]">Real Estate</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <DollarSign className="w-3 h-3 text-green-400 mb-0.5" />
-                    <p className="text-[10px] font-bold text-white">
+                    <DollarSign className="w-2.5 h-2.5 text-green-400 mb-0" />
+                    <p className="text-[9px] font-bold text-white">
                       ${currentAssets.savings.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-[9px]">Savings</p>
+                    <p className="text-white/60 text-[8px]">Savings</p>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <TrendingUp className="w-3 h-3 text-purple-400 mb-0.5" />
-                    <p className="text-[10px] font-bold text-white">
+                    <TrendingUp className="w-2.5 h-2.5 text-purple-400 mb-0" />
+                    <p className="text-[9px] font-bold text-white">
                       ${currentAssets.total.toLocaleString()}
                     </p>
-                    <p className="text-white/60 text-[9px]">Total</p>
+                    <p className="text-white/60 text-[8px]">Total</p>
                   </div>
                 </div>
               </div>
             </Card>
 
             {/* Bottom: Dream Home Image with action buttons */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 relative h-[35%]">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border border-white/20 relative h-[32%]">
               <CardContent className="p-0 h-full">
                 {/* Action Buttons - appear after processing */}
                 {showButtons && (
-                  <div className="absolute top-4 right-4 flex flex-col gap-2 z-10 animate-in fade-in slide-in-from-right duration-500">
+                  <div className="absolute top-1.5 right-1.5 flex flex-col gap-1 z-10 animate-in fade-in slide-in-from-right duration-500">
                     <Button
                       onClick={() => setStrategicOpen(true)}
-                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-1.5 py-0.5 text-[9px] rounded-lg transition-all ${
                         strategicOpen
-                          ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                          ? "ring-1 ring-green-300 ring-offset-1 ring-offset-black/50"
                           : ""
                       }`}
                       size="sm"
@@ -524,9 +524,9 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                     </Button>
                     <Button
                       onClick={() => setAggressiveOpen(true)}
-                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-1.5 py-0.5 text-[9px] rounded-lg transition-all ${
                         aggressiveOpen
-                          ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                          ? "ring-1 ring-green-300 ring-offset-1 ring-offset-black/50"
                           : ""
                       }`}
                       size="sm"
@@ -534,10 +534,10 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                       Aggressive
                     </Button>
                     <Button
-                      onClick={() => setComparisonOpen(true)}
-                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-3 py-1 text-sm rounded-lg transition-all ${
+                      onClick={() => navigate("/strategy-comparison")}
+                      className={`bg-black border border-green-400 hover:bg-green-700/20 hover:border-green-500 text-green-400 hover:text-green-500 px-1.5 py-0.5 text-[9px] rounded-lg transition-all ${
                         comparisonOpen
-                          ? "ring-2 ring-green-300 ring-offset-1 ring-offset-black/50"
+                          ? "ring-1 ring-green-300 ring-offset-1 ring-offset-black/50"
                           : ""
                       }`}
                       size="sm"
@@ -553,14 +553,11 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                     alt="Your Dream House"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3">
-                    <h3 className="text-white font-bold text-sm mb-0.5">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-1.5">
+                    <h3 className="text-white font-bold text-[10px] mb-0">
                       Your Dream Home
                     </h3>
-                    <p className="text-primary text-lg font-bold">
-                      ${houseGoal.target.toLocaleString()}
-                    </p>
-                    <p className="text-white/60 text-xs">Down Payment</p>
+                    <p className="text-white/80 text-[9px]">$50,000 Target</p>
                   </div>
                 </div>
               </CardContent>
@@ -568,71 +565,72 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
           </div>
 
           {/* Right Column: Secure Data Access + Home Goals + Video */}
-          <div className="flex flex-col gap-4 h-full">
-            {/* Top Row: Secure Data Access and Home Goals */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Secure Data Access */}
-              <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-primary/30">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-white flex items-center gap-2 text-sm">
-                    <Shield className="w-4 h-4 text-primary" />
-                    Secure Data Access
+          <div className="flex flex-col gap-1.5 h-full">
+            {/* Personal Info */}
+            <div className="flex gap-1.5">
+              <Card className="bg-glass-bg/80 backdrop-blur-md border border-primary/30 flex-1">
+                <CardHeader className="pb-0.5 pt-1 px-1.5">
+                  <CardTitle className="text-white flex items-center gap-0.5 text-[10px]">
+                    <Shield className="w-2.5 h-2.5 text-primary" />
+                    Personal Information
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-start gap-2">
-                    <div className="bg-primary/20 p-1 rounded-lg">
-                      <Shield className="w-3 h-3 text-primary" />
+                <CardContent className="p-1.5">
+                  <div className="space-y-0">
+                    <div className="flex justify-between text-[9px]">
+                      <span className="text-white/60">Name</span>
+                      <span className="text-white font-semibold">
+                        Vick Thompson
+                      </span>
                     </div>
-                    <div>
-                      <p className="text-white font-semibold mb-0.5 text-xs">
-                        Blockchain-Protected
-                      </p>
-                      <p className="text-white/70 text-xs">
-                        Time-bound read access
-                      </p>
+                    <div className="flex justify-between text-[9px]">
+                      <span className="text-white/60">Income</span>
+                      <span className="text-white font-semibold">
+                        $120,000/yr
+                      </span>
                     </div>
-                  </div>
-                  <div className="bg-black/20 rounded-lg p-2 border border-white/10">
-                    <p className="text-white/60 text-xs mb-0.5">Access Token</p>
-                    <p className="text-white text-xs font-mono break-all">
-                      0x7a250d...F2488D
+                    <div className="flex justify-between text-[9px]">
+                      <span className="text-white/60">Credit Score</span>
+                      <span className="text-white font-semibold">780</span>
+                    </div>
+                    <p className="text-white/60 text-[8px] mt-0.5">
+                      Financial Profile: Excellent
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 text-green-400 text-xs">
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Verified & Encrypted</span>
+                  <div className="flex items-center gap-0.5 text-green-400 text-[8px] mt-0.5">
+                    <CheckCircle2 className="w-2 h-2" />
+                    <span>Verified</span>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Buy a House Goal */}
-              <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-primary/30">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-white flex items-center gap-2 text-sm">
-                    <Home className="w-4 h-4 text-primary" />
+              <Card className="bg-glass-bg/80 backdrop-blur-md border border-primary/30">
+                <CardHeader className="pb-0.5 pt-1 px-1.5">
+                  <CardTitle className="text-white flex items-center gap-0.5 text-[10px]">
+                    <Home className="w-2.5 h-2.5 text-primary" />
                     Buy a House
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-0.5 p-1.5">
                   <div>
-                    <p className="text-white/60 text-xs">Target Amount</p>
-                    <p className="text-white text-lg font-bold">
+                    <p className="text-white/60 text-[8px]">Target Amount</p>
+                    <p className="text-white text-xs font-bold">
                       ${houseGoal.target.toLocaleString()}
                     </p>
                   </div>
-                  <Progress value={70} className="h-2" />
-                  <div className="flex justify-between text-xs">
+                  <Progress value={70} className="h-1" />
+                  <div className="flex justify-between text-[8px]">
                     <span className="text-white/60">Saved</span>
                     <span className="text-green-400 font-bold">
                       $35,000 (70%)
                     </span>
                   </div>
-                  <div className="flex justify-between text-xs">
+                  <div className="flex justify-between text-[8px]">
                     <span className="text-white/60">Target Date</span>
                     <span className="text-white">Dec, 2046</span>
                   </div>
-                  <div className="flex justify-between text-xs">
+                  <div className="flex justify-between text-[8px]">
                     <span className="text-white/60">Remaining</span>
                     <span className="text-white">$15,000</span>
                   </div>
@@ -641,15 +639,15 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
             </div>
 
             {/* Video Call - Takes Remaining Space */}
-            <Card className="bg-glass-bg/80 backdrop-blur-md border-2 border-white/20 flex-1">
-              <CardContent className="p-1.5 h-full">
-                <div className="flex flex-col w-full h-full gap-1.5">
+            <Card className="bg-glass-bg/80 backdrop-blur-md border border-white/20 flex-1 overflow-hidden">
+              <CardContent className="p-1 h-full">
+                <div className="flex flex-col w-full h-full gap-1">
                   {/* Pat's Video - Main participant */}
                   <div
-                    className={`relative flex-[0.7] bg-black/40 rounded-lg overflow-hidden transition-all duration-300
+                    className={`relative flex-[0.72] bg-black/40 rounded-lg overflow-hidden transition-all duration-300
                     ${
                       isVideoPlaying
-                        ? "shadow-[0_0_15px_4px_rgba(200,21,100,1)]"
+                        ? "shadow-[0_0_12px_3px_rgba(200,21,100,1)]"
                         : ""
                     }
                   `}
@@ -725,16 +723,16 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                       </div>
                       <p className="text-white font-semibold text-sm">Dot</p>
                     </div> */}
-                    <div className="relative flex flex-col items-center justify-center h-16 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-lg border border-primary/30 backdrop-blur-sm">
-                      <div className="relative w-7 h-7 rounded-full bg-secondary/30 flex items-center justify-center mb-1 border border-secondary/50">
+                    <div className="relative flex flex-col items-center justify-center h-12 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-lg border border-primary/30 backdrop-blur-sm">
+                      <div className="relative w-6 h-6 rounded-full bg-secondary/30 flex items-center justify-center mb-0.5 border border-secondary/50">
                         {/* Waveform - positioned to the LEFT of the circle, vertically centered */}
                         {dot && (
-                          <div className="absolute -right-7 top-1/2 -translate-y-1/2 flex gap-0.5 items-end">
+                          <div className="absolute -right-6 top-1/2 -translate-y-1/2 flex gap-0.5 items-end">
                             {[...Array(5)].map((_, i) => (
                               <motion.div
                                 key={i}
                                 animate={{
-                                  height: ["0.3rem", "0.8rem", "0.3rem"],
+                                  height: ["0.25rem", "0.6rem", "0.25rem"],
                                 }}
                                 transition={{
                                   duration: 0.8,
@@ -746,9 +744,9 @@ const WealthAdvisor: React.FC<WealthAdvisorProps> = ({
                             ))}
                           </div>
                         )}
-                        <span className="text-white font-bold text-sm">D</span>
+                        <span className="text-white font-bold text-xs">D</span>
                       </div>
-                      <p className="text-white font-semibold text-[10px]">Dot</p>
+                      <p className="text-white font-semibold text-[9px]">Dot</p>
                     </div>
                   </div>
                 </div>
